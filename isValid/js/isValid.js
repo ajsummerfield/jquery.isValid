@@ -71,8 +71,7 @@
                             break;
                             
                         case 'postcode':
-                            // To do
-                            self.isValid = false;
+                            self.isValid = (IsValid.isPostCodeValid(field)) ? IsValid.validAction(field) : IsValid.invalidAction(field);
                             break;
                             
                         default:
@@ -86,70 +85,98 @@
         },
         
         isEmpty: function (field) {
-            return ($(field).val() === "") ? true : false;
+            return ($(field).val() === "");
         },
         
         isLetters: function(field) {
             var letterMatcher = /^[A-Za-z ]+$/;
-            return (letterMatcher.test($(field).val())) ? true : false;
+            return (letterMatcher.test($(field).val()));
         },
         
         isNumbers: function(field) {
             var numberMatcher = /^[+-]?[0-9]{1,9}(?:\.[0-9]{1,2})?$/;
-            return (numberMatcher.test($(field).val())) ? true : false;
+            return (numberMatcher.test($(field).val()));
         },
         
         isUsernameValid: function (field) {
-            return (($(field).val().length >= self.options.username.minLength) && ($(field).val().length <= self.options.username.maxLength)) ? true : false;
+            return (($(field).val().length >= self.options.username.minLength) && ($(field).val().length <= self.options.username.maxLength));
         },
         
         isPasswordValid: function (field) {
             var passwordMatcher = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/;
             
             if (self.options.password.numbers && self.options.password.letters) { 
-                return ((passwordMatcher.test($(field).val())) && ($(field).val().length >= self.options.password.minLength) && ($(field).val().length <= self.options.password.maxLength)) ? true : false;
+                return ((passwordMatcher.test($(field).val())) && ($(field).val().length >= self.options.password.minLength) && ($(field).val().length <= self.options.password.maxLength));
             } else {
-                return (($(field).val().length >= self.options.password.minLength) && ($(field).val().length <= self.options.password.maxLength)) ? true : false;
+                return (($(field).val().length >= self.options.password.minLength) && ($(field).val().length <= self.options.password.maxLength));
             }
         },
         
         isDateOfBirthValid: function (field) {
-            var dbMatcher = /^\d+$/;
-            return (dbMatcher.test($(field).val())) ? true : false;
+            var date = $(field).val();
+            var count = date.match(/\//g);
+            
+            if(count === null || count.length < 2) {
+                return false;
+            } else {
+                var data = date.split('/');
+                return (Date.parse(data[2] + "-" + data[1] + "-" + data[0]) > 0);
+            }
         },
         
         isEmailValid: function (field) {
             var emailMatcher = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             
             if(self.options.email.domain === '') {
-                return (emailMatcher.test($(field).val())) ? true : false;
+                return (emailMatcher.test($(field).val()));
             } else {
-                return ((emailMatcher.test($(field).val())) && (($(field).val().indexOf(self.options.email.domain, $(field).val().length - self.options.email.domain.length) !== -1))) ? true : false;
+                return ((emailMatcher.test($(field).val())) && (($(field).val().indexOf(self.options.email.domain, $(field).val().length - self.options.email.domain.length) !== -1)));
             }
         },
         
         isPostCodeValid: function(field) {
-        
+            return (checkPostCode($(field).val()));
         },
 
         createErrorMessage: function (field) {
             
-            var name = $(field).attr("data-field-info");
+            var type = IsValid.changeToLowercase(field);
             
-            if(name === "username") {
-                if(self.options.username.showLengthError) {
-                    $(field).after('<div id="username-length-error" class="form-error username"></div>');
-                    $('#username-length-error').append(self.options.username.lengthErrorMessage);
-                }
-            } else if(name === "password") {
-                if(self.options.password.showLengthError) {
-                    $(field).after('<div id="password-length-error" class="form-error password"></div>');
-                    $('#password-length-error').append(self.options.password.lengthErrorMessage);
-                }
-                if(self.options.password.showPasswordMatchError) {
-                    $(field).after('<div id="password-match-error" class="form-error password"></div>');
-                    $('#password-match-error').append(self.options.password.passwordMatchErrorMessage);
-                }
+            switch(type) {
+            
+                    case 'username':
+                        if(self.options.username.showLengthError) {
+                            $(field).after('<div id="username-length-error" class="form-error username"></div>');
+                            $('#username-length-error').append(self.options.username.lengthErrorMessage);
+                        }
+                        break;
+                    
+                    case 'password':
+                        if(self.options.password.showPasswordMatchError) {
+                            $(field).after('<div id="password-match-error" class="form-error password"></div>');
+                            $('#password-match-error').append(self.options.password.passwordMatchErrorMessage);
+                        }
+                        break;
+                    
+                    case 'email':
+                    
+                        break;
+                    
+                    case 'letters':
+                    
+                        break;
+                    
+                    case 'numbers':
+                    
+                        break;
+                    
+                    case 'dateofbirth':
+                    
+                        break;
+                    
+                    case 'postcode':
+                    
+                        break;
             }
             
         },
@@ -158,15 +185,18 @@
             
             $(field).removeClass('invalid');
             
-            var data = ($(field).attr('data-field-info') !== undefined) ? $(field).attr('data-field-info').toLowerCase() : "";
+            var type = IsValid.changeToLowercase(field);
                     
-            switch(data) {
+            switch(type) {
+                    
                 case "username":
                     $('.form-error.username').hide();
                     break;
+                    
                 case "password":
                     $('.form-error.password').hide();
                     break;
+                    
                 default:
                     $('.form-error').hide();
                     break;
@@ -179,17 +209,25 @@
             
             $(field).addClass('invalid');
             
-            var data = ($(field).attr('data-field-info') !== undefined) ? $(field).attr('data-field-info').toLowerCase() : "";
+            var type = IsValid.changeToLowercase(field);
                     
-            switch(data) {
+            switch(type) {
+                    
                 case "username":
                     $('.form-error.username').show();
                     break;
+                    
                 case "password":
                     $('.form-error.password').show();
                     break;
             }
+            
             return false;
+        },
+            
+        changeToLowercase: function (field) {
+        
+            return ($(field).attr('data-field-info') !== undefined) ? $(field).attr('data-field-info').toLowerCase() : "";
         }
         
     };
@@ -244,6 +282,18 @@
         },
         email: {
             domain: ''
+        },
+        letters: {
+            showMatchError: true,
+            matchErrorMessage: "Field is letters only."
+        },
+        numbers: {
+            showMatchError: true,
+            matchErrorMessage: "Field is numbers only."
+        },
+        postcode: {
+            showMatchError: true,
+            matchErrorMessage: "Not a valid Post Code."
         }
     };
 

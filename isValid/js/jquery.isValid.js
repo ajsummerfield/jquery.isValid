@@ -12,15 +12,17 @@
             password: {
                 minLength: 1,
                 maxLength: 200,
-                numbers: false,
+                numbers: true,
                 letters: true,
                 showLengthError: true,
                 lengthErrorMessage: "Password must be be at least 1 character long.",
-                showPasswordMatchError: false,
-                passwordMatchErrorMessage: "Password must contain letters."
+                showMatchError: true,
+                matchErrorMessage: "Password must contain letters and numbers."
             },
             email: {
-                domain: ''
+                domain: '',
+                showDomainError: false,
+                domainErrorMessage: "Email domain entered is invalid, only @xxxx.xxx is accepted."
             },
             letters: {
                 showMatchError: true,
@@ -30,12 +32,18 @@
                 showMatchError: true,
                 matchErrorMessage: "Field is numbers only."
             },
+            dateofbirth: {
+                showFormatError: true,
+                formatErrorMessage: "Please enter Date format as DD/MM/YYYY as specified in the placeholder."
+            },
             postcode: {
-                showMatchError: true     
+                showMatchError: true,
+                matchErrorMessage: "Not a valid Post Code."
             }
         }
             
         var self = this;
+        self.options = {}
         
         self.init = function() {
             
@@ -46,96 +54,103 @@
             self.formID = "#" + self.$elem.attr('id');
             self.$elem.find(':submit').addClass('submit-btn');
             
-            self.options = $.extend({}, defaults, options);
+            self.options = $.extend(true, defaults, options);
             
             self.formArray = $(self.formID + ' :input[type="text"],' + self.formID + ' :input[type="password"],' + self.formID + ' :input[type="tel"],' + self.formID + ' textarea,' + self.formID + ' select');
             
             self.formArray.each(function (index, field) {
                 self.createErrorMessage(field);
             });
-        }
+        },
         
         self.isFormValidated = function() {
             return ($('.invalid').length) ? false : true;
-        }
+        },
   
         self.isValidField = function(field) {
             
             if (field.disabled || $(field).attr('data-field-info') === "notrequired") {
                 self.isValid = true;
             } else {
-                if(self.isEmpty(field)) {
-                    invalidAction(field);
-                } else {
+                var data = changeToLowercase(field);
                     
-                    var data = changeToLowercase(field);
+                switch(data) {
+                    case 'username':
+                        self.isValid = completeAction((self.isUsernameValid(field)), field);
+                        break;
+                       
+                    case 'password':
+                        self.isValid = completeAction((self.isPasswordValid(field)), field);
+                        break; 
+                       
+                    case 'email':
+                        self.isValid = completeAction((self.isEmailValid(field)), field);
+                        break;
                     
-                    switch(data) {
-                        case 'username':
-                            self.isValid = completeAction((self.isUsernameValid(field)), field);
-                            break;
-                           
-                        case 'password':
-                            self.isValid = completeAction((self.isPasswordValid(field)), field);
-                            break; 
-                           
-                        case 'email':
-                            self.isValid = completeAction((self.isEmailValid(field)), field);
-                            break;
+                    case 'dateofbirth':
+                        self.isValid = completeAction((self.isDateOfBirthValid(field)), field);
+                        break;
+                    
+                    case 'letters':
+                        self.isValid = completeAction((self.isLetters(field)), field);
+                        break;
                         
-                        case 'dateofbirth':
-                            self.isValid = completeAction((self.isDateOfBirthValid(field)), field);
-                            break;
+                    case 'numbers':
+                        self.isValid = completeAction((self.isNumbers(field)), field);
+                        break;
                         
-                        case 'letters':
-                            self.isValid = completeAction((self.isLetters(field)), field);
-                            break;
-                            
-                        case 'numbers':
-                            self.isValid = completeAction((self.isNumbers(field)), field);
-                            break;
-                            
-                        case 'postcode':
-                            self.isValid = completeAction((self.isPostCodeValid(field)), field);
-                            break;
-                            
-                        default:
-                            validAction(field);
-                            self.isValid = true;
-                    }
+                    case 'postcode':
+                        self.isValid = completeAction((self.isPostCodeValid(field)), field);
+                        break;
+                        
+                    default:
+                        self.isValid = completeAction((self.isEmpty(field)), field);
                 }
             }
             
             return self.isValid;
-        }
+        },
         
         self.isEmpty = function(field) {
             return ($(field).val() === "");
-        }
+        },
         
         self.isLetters = function(field) {
             var letterMatcher = /^[A-Za-z ]+$/;
             return (letterMatcher.test($(field).val()));
-        }
+        },
         
         self.isNumbers = function(field) {
             var numberMatcher = /^[+-]?[0-9]{1,9}(?:\.[0-9]{1,2})?$/;
             return (numberMatcher.test($(field).val()));
-        }
+        },
         
         self.isUsernameValid = function(field) {
-            return (($(field).val().length >= self.options.username.minLength) && ($(field).val().length <= self.options.username.maxLength));
-        }
+            var lengthResult = (($(field).val().length >= self.options.username.minLength) && ($(field).val().length <= self.options.username.maxLength));
+            
+            self.options.username.showLengthError = (lengthResult) ? false : true;
+            
+            return lengthResult;
+        },
         
         self.isPasswordValid = function(field) {
             var passwordMatcher = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/;
             
+            var lengthResult, matchResult;
+            
+            lengthResult = (($(field).val().length >= self.options.password.minLength) && ($(field).val().length <= self.options.password.maxLength));
+            
+            self.options.password.showLengthError = (lengthResult) ? false : true;
+            
             if (self.options.password.numbers && self.options.password.letters) { 
-                return ((passwordMatcher.test($(field).val())) && ($(field).val().length >= self.options.password.minLength) && ($(field).val().length <= self.options.password.maxLength));
-            } else {
-                return (($(field).val().length >= self.options.password.minLength) && ($(field).val().length <= self.options.password.maxLength));
+                matchResult = (passwordMatcher.test($(field).val()));
+                self.options.password.showMatchError = (matchResult) ? false : true;
+                
+                return matchResult;
             }
-        }
+
+            return lengthResult;
+        },
         
         self.isDateOfBirthValid = function(field) {
             var date = $(field).val();
@@ -147,7 +162,7 @@
                 var data = date.split('/');
                 return (Date.parse(data[2] + "-" + data[1] + "-" + data[0]) > 0);
             }  
-        }
+        },
         
         self.isEmailValid = function(field) {
             var emailMatcher = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -157,11 +172,11 @@
             } else {
                 return ((emailMatcher.test($(field).val())) && (($(field).val().indexOf(self.options.email.domain, $(field).val().length - self.options.email.domain.length) !== -1)));
             }
-        }
+        },
         
         self.isPostCodeValid = function(field) {
             return (checkPostCode($(field).val()));
-        }
+        },
         
         self.createErrorMessage = function(field) {
             
@@ -177,9 +192,14 @@
                         break;
                     
                     case 'password':
-                        if(self.options.password.showPasswordMatchError) {
+                        if(self.options.password.showMatchError) {
                             $(field).after('<div id="password-match-error" class="form-error password"></div>');
-                            $('#password-match-error').append(self.options.password.passwordMatchErrorMessage);
+                            $('#password-match-error').append(self.options.password.matchErrorMessage);
+                        }
+                    
+                        if(self.options.password.showLengthError) {
+                            $(field).after('<div id="password-length-error" class="form-error password"></div>');
+                            $('#password-length-error').append(self.options.password.lengthErrorMessage);
                         }
                         break;
                     
@@ -196,7 +216,10 @@
                         break;
                     
                     case 'dateofbirth':
-                    
+                        if(self.options.dateofbirth.showFormatError) {
+                            $(field).after('<div id="dateofbirth-format-error" class="form-error dateofbirth"></div>');
+                            $('#dateofbirth-format-error').append(self.options.dateofbirth.formatErrorMessage);
+                        }
                         break;
                     
                     case 'postcode':
@@ -218,22 +241,7 @@
             
             $(field).removeClass('invalid');
             
-            var type = changeToLowercase(field);
-                    
-            switch(type) {
-                    
-                case "username":
-                    $('.form-error.username').hide();
-                    break;
-                    
-                case "password":
-                    $('.form-error.password').hide();
-                    break;
-                    
-                default:
-                    $('.form-error').hide();
-                    break;
-            }
+            controlErrorMessages(field);
             
             return true;
         }
@@ -242,20 +250,49 @@
         
             $(field).addClass('invalid');
             
+            controlErrorMessages(field);
+            
+            return false;
+        }
+        
+        var controlErrorMessages = function(field) {
+        
             var type = changeToLowercase(field);
                     
             switch(type) {
                     
                 case "username":
-                    $('.form-error.username').show();
+                    if(self.options.username.showLengthError) {
+                        $('#username-length-error').show();
+                    } else {
+                        $('#username-length-error').hide();
+                    }
                     break;
                     
                 case "password":
-                    $('.form-error.password').show();
+                    
+                    if(self.options.password.showMatchError) {
+                        $('#password-match-error').show();
+                    } else {
+                        $('#password-match-error').hide();
+                    }
+                    
+                    if(self.options.password.showLengthError) {
+                        $('#password-length-error').show();
+                    } else {
+                        $('#password-length-error').hide();
+                    }
+                    
+                    break;
+                
+                case 'dateofbirth': 
+                    if(self.options.dateofbirth.showFormatError) {
+                        $('#dateofbirth-format-error').show();
+                    } else {
+                        $('#dateofbirth-format-error').hide();
+                    }
                     break;
             }
-            
-            return false;
         }
         
         self.init();

@@ -53,6 +53,13 @@ form .form-row input[type="checkbox"] {
     box-shadow: 0 0 10px #9ECAED;
 }
 
+form .form-row input.invalid:focus, 
+form .form-row textarea.invalid:focus,
+form .form-row input[type="checkbox"].invalid {
+    border-color: #c4c4c4;
+    box-shadow: 0 0 10px #c4c4c4;
+}
+
 form .form-row input[type="submit"]:focus {
     border-color: darkgray;
     box-shadow: none;
@@ -68,7 +75,7 @@ form .form-row input[type="submit"]:hover {
     background-color: darkgray;
 }
 
-form .form-row input.invalid {
+form .form-row .invalid {
     background: #FFBABA !important;
 }
 

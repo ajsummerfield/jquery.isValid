@@ -4,23 +4,25 @@
     
         var defaults = {
             username: {
-                minLength: 1,
-                maxLength: 200,
+                minLength: 6,
+                maxLength: 12,
                 showLengthError: true,
-                lengthErrorMessage: "Username must be be at least 1 character long."
+                lengthErrorMessage: "Username must be be at least 6 character long."
             },
             password: {
-                minLength: 1,
-                maxLength: 200,
+                minLength: 6,
+                maxLength: 20,
                 numbers: true,
                 letters: true,
                 showLengthError: true,
-                lengthErrorMessage: "Password must be be at least 1 character long.",
+                lengthErrorMessage: "Password must be at least 6 characters long.",
                 showMatchError: true,
                 matchErrorMessage: "Password must contain letters and numbers."
             },
             email: {
                 domain: '',
+                showInvalidError: true,
+                invalidErrorMessage: "Email is an invalid email address.",
                 showDomainError: false,
                 domainErrorMessage: "Email domain entered is invalid, only @xxxx.xxx is accepted."
             },
@@ -37,8 +39,8 @@
                 formatErrorMessage: "Please enter Date format as DD/MM/YYYY as specified in the placeholder."
             },
             postcode: {
-                showMatchError: true,
-                matchErrorMessage: "Not a valid Post Code."
+                showInvalidError: true,
+                invalidErrorMessage: "Not a valid Post Code."
             }
         };
             
@@ -126,7 +128,7 @@
         },
         
         self.isUsernameValid = function(field) {
-            var lengthResult = (($(field).val().length >= self.options.username.minLength) && ($(field).val().length <= self.options.username.maxLength));
+            var lengthResult = isBetween($(field).val().length, self.options.username.minLength, self.options.username.maxLength);
             
             self.options.username.showLengthError = (lengthResult) ? false : true;
             
@@ -138,7 +140,7 @@
             
             var lengthResult, matchResult;
             
-            lengthResult = (($(field).val().length >= self.options.password.minLength) && ($(field).val().length <= self.options.password.maxLength));
+            lengthResult = isBetween($(field).val().length, self.options.password.minLength, self.options.password.maxLength);
             
             self.options.password.showLengthError = (lengthResult) ? false : true;
             
@@ -186,44 +188,52 @@
             
                     case 'username':
                         if(self.options.username.showLengthError) {
-                            $(field).after('<div id="username-length-error" class="form-error username"></div>');
-                            $('#username-length-error').append(self.options.username.lengthErrorMessage);
+                            buildErrorContainer('username-length-error', field, self.options.username.lengthErrorMessage);
                         }
                         break;
                     
                     case 'password':
                         if(self.options.password.showMatchError) {
-                            $(field).after('<div id="password-match-error" class="form-error password"></div>');
-                            $('#password-match-error').append(self.options.password.matchErrorMessage);
+                            buildErrorContainer('password-match-error', field, self.options.password.matchErrorMessage);
                         }
                     
                         if(self.options.password.showLengthError) {
-                            $(field).after('<div id="password-length-error" class="form-error password"></div>');
-                            $('#password-length-error').append(self.options.password.lengthErrorMessage);
+                            buildErrorContainer('password-length-error', field, self.options.password.lengthErrorMessage);
                         }
                         break;
                     
                     case 'email':
+                        if(self.options.email.showInvalidError) {
+                            buildErrorContainer('email-invalid-error', field, self.options.email.invalidErrorMessage);
+                        }
                     
+                        if(self.options.email.showDomainError) {
+                            buildErrorContainer('email-domain-error', field, self.options.email.domainErrorMessage);
+                        }
                         break;
                     
                     case 'letters':
-                    
+                        if(self.options.letters.showMatchError) {
+                            buildErrorContainer('letters-match-error', field, self.options.letters.matchErrorMessage);
+                        }
                         break;
                     
                     case 'numbers':
-                    
+                        if(self.options.numbers.showMatchError) {
+                            buildErrorContainer('numbers-match-error', field, self.options.numbers.matchErrorMessage);
+                        }
                         break;
                     
                     case 'dateofbirth':
                         if(self.options.dateofbirth.showFormatError) {
-                            $(field).after('<div id="dateofbirth-format-error" class="form-error dateofbirth"></div>');
-                            $('#dateofbirth-format-error').append(self.options.dateofbirth.formatErrorMessage);
+                            buildErrorContainer('dateofbirth-format-error', field, self.options.dateofbirth.formatErrorMessage);
                         }
                         break;
                     
                     case 'postcode':
-                    
+                        if(self.options.postcode.showInvalidError) {
+                            buildErrorContainer('postcode-invalid-error', field, self.options.postcode.invalidErrorMessage);
+                        }
                         break;
             }
         }
@@ -231,6 +241,10 @@
         // Private Methods
         var changeToLowercase = function(field) {
             return ($(field).attr('data-field-info') !== undefined) ? $(field).attr('data-field-info').toLowerCase() : "";
+        }
+        
+        var isBetween = function (val, min, max) {
+            return (val >= min && val <= max);
         }
         
         var completeAction = function(isValid, field) {
@@ -255,6 +269,20 @@
             return false;
         }
         
+        var buildErrorContainer = function(id, field, error) {
+            $(field).after('<div id="' + id + '" class="form-error"></div>');
+            $('#' + id).append(error);
+        }
+        
+        var errorMessageDisplay = function(id, errorType) {
+        
+            if(errorType) {
+                $(id).show();
+            } else {
+                $(id).hide();
+            }
+        }
+        
         var controlErrorMessages = function(field) {
         
             var type = changeToLowercase(field);
@@ -262,35 +290,33 @@
             switch(type) {
                     
                 case "username":
-                    if(self.options.username.showLengthError) {
-                        $('#username-length-error').show();
-                    } else {
-                        $('#username-length-error').hide();
-                    }
+                    errorMessageDisplay('#username-length-error', self.options.username.showLengthError);
                     break;
                     
                 case "password":
-                    
-                    if(self.options.password.showMatchError) {
-                        $('#password-match-error').show();
-                    } else {
-                        $('#password-match-error').hide();
-                    }
-                    
-                    if(self.options.password.showLengthError) {
-                        $('#password-length-error').show();
-                    } else {
-                        $('#password-length-error').hide();
-                    }
-                    
+                    errorMessageDisplay('#password-length-error', self.options.password.showLengthError);
+                    errorMessageDisplay('#password-match-error', self.options.password.showMatchError);
                     break;
                 
+                case 'email':
+                    errorMessageDisplay('#email-invalid-error', self.options.email.showInvalidError);
+                    errorMessageDisplay('#email-domain-error', self.options.email.showDomainError);
+                    break;
+                    
+                case 'letters':
+                    errorMessageDisplay('#letters-match-error', self.options.letters.showMatchError);
+                    break;
+                
+                case 'numbers':
+                    errorMessageDisplay('#numbers-match-error', self.options.numbers.showMatchError);
+                    break;    
+                
                 case 'dateofbirth': 
-                    if(self.options.dateofbirth.showFormatError) {
-                        $('#dateofbirth-format-error').show();
-                    } else {
-                        $('#dateofbirth-format-error').hide();
-                    }
+                    errorMessageDisplay('#dateofbirth-format-error', self.options.dateofbirth.showFormatError);
+                    break;
+                    
+                case 'postcode':
+                    errorMessageDisplay('#postcode-invalid-error', self.options.postcode.showInvalidError);
                     break;
             }
         }

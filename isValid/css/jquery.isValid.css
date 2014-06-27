@@ -15,13 +15,10 @@
 }
 
 .form-wrapper {
-    font-family: 'aaarghnormal', sans-serif;
-}
-
-.form-wrapper {
     width: 960px;
     position: relative;
     margin: 0 auto;
+    font-family: 'aaarghnormal', sans-serif;
 }
 
 form .form-row {
@@ -32,7 +29,6 @@ form .form-row {
 form .form-row label {
     display: inline-block;
     min-width: 160px;
-    float: left;
     margin-right: 20px;
     font-size: 25px;
 }
@@ -100,7 +96,7 @@ form .form-row .form-error {
     background: url('../img/Error.png') no-repeat;
     margin-top: 10px;
     height: 35px;
-    font-size: 22px;
+    font-size: 18px;
     text-indent: 45px;
-    line-height: 35px;
+    line-height: 40px;
 }

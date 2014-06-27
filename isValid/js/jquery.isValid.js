@@ -40,7 +40,7 @@
                 showMatchError: true,
                 matchErrorMessage: "Not a valid Post Code."
             }
-        }
+        };
             
         var self = this;
         self.options = {}

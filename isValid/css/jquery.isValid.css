@@ -2,6 +2,22 @@
 /* Version 1.0 */
 /* Andy Summerfield */
 
+@font-face {
+    font-family: 'aaarghnormal';
+    src: url('../fonts/Aaargh-webfont.eot');
+    src: url('../fonts/Aaargh-webfont.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/Aaargh-webfont.svg#aaarghnormal') format('svg'),
+        url('../fonts/Aaargh-webfont.woff') format('woff'),
+        url('../fonts/Aaargh-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+.form-wrapper {
+    font-family: 'aaarghnormal', sans-serif;
+}
+
 .form-wrapper {
     width: 960px;
     position: relative;
@@ -15,7 +31,7 @@ form .form-row {
 
 form .form-row label {
     display: inline-block;
-    min-width: 130px;
+    min-width: 160px;
     float: left;
     margin-right: 20px;
     font-size: 25px;
@@ -39,7 +55,7 @@ form .form-row textarea {
     border: 1px solid #999999;
     border-radius: 5px;
     width: 475px;
-    height: 300px;
+    height: 300px;        
     font-size: 18px;
     padding: 10px;
     resize: none;

@@ -1,7 +1,20 @@
+@font-face {
+    font-family: 'aaarghnormal';
+    src: url('../fonts/Aaargh-webfont.eot');
+    src: url('../fonts/Aaargh-webfont.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/Aaargh-webfont.svg#aaarghnormal') format('svg'),
+        url('../fonts/Aaargh-webfont.woff') format('woff'),
+        url('../fonts/Aaargh-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
 html, body {
     margin: 0;
     padding: 0;
     height: 100%;
+    font-family: 'aaarghnormal', sans-serif;
 }
 
 #page-container {
@@ -12,12 +25,14 @@ html, body {
 
 #header {
     height: 150px;
+    background: lightgray;
     position: relative;
 }
 
 #main {
     min-height: 600px;
     position: relative;
+    padding: 30px 0;
 }
 
 #push {
@@ -31,7 +46,50 @@ html, body {
 }
 
 .wrapper {
-    width: 960px;
+    width: 990px;
     position: relative;
     margin: 0 auto;
+    padding: 15px;
+}
+
+.clear {
+    clear: both;
+}
+
+#header h1 {
+    font-size: 40px;
+    margin-bottom: 0;
+}
+
+.intro {
+    text-align: right;
+}
+
+.intro h2 {
+    margin-top: 0;
+}
+
+.intro p {
+    font-size: 18px;
+    line-height: 24px;
+}
+
+.left-col-50 {
+    float: left;
+    width: 50%;
+}
+
+.right-col-50 {
+    float: right;
+    width: 50%;
+}
+
+.left-col-75 {
+    float: left;
+    width: 75%;
+}
+
+.right-col-75 {
+    float: right;
+    width: 75%;
 }

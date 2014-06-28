@@ -2,23 +2,8 @@
 /* Version 1.0 */
 /* Andy Summerfield */
 
-@font-face {
-    font-family: 'aaarghnormal';
-    src: url('../fonts/Aaargh-webfont.eot');
-    src: url('../fonts/Aaargh-webfont.eot?#iefix') format('embedded-opentype'),
-        url('../fonts/Aaargh-webfont.svg#aaarghnormal') format('svg'),
-        url('../fonts/Aaargh-webfont.woff') format('woff'),
-        url('../fonts/Aaargh-webfont.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-.form-wrapper {
-    width: 960px;
-    position: relative;
-    margin: 0 auto;
-    font-family: 'aaarghnormal', sans-serif;
+form {
+    padding-bottom: 25px;
 }
 
 form .form-row {
@@ -72,17 +57,17 @@ form .form-row input[type="checkbox"].invalid {
     box-shadow: 0 0 10px #c4c4c4;
 }
 
-form .form-row input[type="submit"]:focus {
-    border-color: darkgray;
-    box-shadow: none;
-}
-
-form .form-row input[type="submit"] {
+form .form-row input.form-btn {
     min-width: 100px;
     background-color: buttonface;
 }
 
-form .form-row input[type="submit"]:hover {
+form .form-row input.form-btn:focus {
+    border-color: darkgray;
+    box-shadow: none;
+}
+
+form .form-row input.form-btn:hover {
     cursor: pointer;
     background-color: darkgray;
 }

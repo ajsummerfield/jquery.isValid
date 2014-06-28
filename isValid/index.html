@@ -15,50 +15,61 @@
             <div id="container">
                 <div id="header">
                     <div class="wrapper">
-                    
+                        <h1>jQuery.isValid</h1>
+                        <p>A simple jQuery form validation plugin</p>
                     </div>
                 </div>
                 <div id="main">
                     <div class="wrapper">
-                        <div class="form-wrapper">
-                            <form id="form-one" action="" method="post">
-                                <div class="form-row">
-                                    <label for="username">Username</label>
-                                    <input type="text" data-field-info="username" placeholder="Enter Username" name="username" />
-                                </div>
-                                <div class="form-row">
-                                    <label for="password">Password</label>
-                                    <input type="password" data-field-info="password" placeholder="Enter Password" name="password" />
-                                </div>
-                                <div class="form-row">
-                                    <label>&nbsp;</label>
-                                    <input type="submit" value="Log in" />
-                                </div>
-                            </form>
-                            
-                            <form id="form-two" action="" method="post">
-                                <div class="form-row">
-                                    <label for="name">Name</label>
-                                    <input type="text" data-field-info="letters"  placeholder="Enter Name" name="name" />
-                                </div>
-                                <div class="form-row">
-                                    <label for="email">Email</label>
-                                    <input type="text" data-field-info="email" placeholder="Enter Email" name="email" />
-                                </div>
-                                <div class="form-row">
-                                    <label for="dateofbirth">Date of Birth</label>
-                                    <input type="text" data-field-info="dateofbirth" placeholder="DD/MM/YY" name="dateofbirth" />
-                                </div>
-                                <div class="form-row">
-                                    <label for="postcode">Post Code</label>
-                                    <input type="text" data-field-info="postcode" placeholder="Enter PostCode" name="postcode" />
-                                </div>
-                                <div class="form-row">
-                                    <label>&nbsp;</label>
-                                    <input type="submit" value="Register" />
-                                </div>
-                            </form>
+                        <form id="form-one" action="" method="post" class="left-col-50">
+                            <div class="form-row">
+                                <label for="username">Username</label>
+                                <input type="text" data-field-info="username" placeholder="Enter Username" name="username" />
+                            </div>
+                            <div class="form-row">
+                                <label for="password">Password</label>
+                                <input type="password" data-field-info="password" placeholder="Enter Password" name="password" />
+                            </div>
+                            <div class="form-row">
+                                <label>&nbsp;</label>
+                                <input type="submit" value="Log in" class="form-btn" />
+                                <input type="reset" value="Reset" class="form-btn" />
+                            </div>
+                        </form>
+                        <div class="intro right-col-50">
+                            <h2>Welcome to jQuery.isValid</h2>
+                            <p>jQuery.isValid is a simple form validation plugin that has various options dependent on what type of form you are using. Some of the options range from usernames, date of births, emails etc etc.</p>
+                            <p>The 2 example forms on the left give an example or idea of the possibilities of jQuery.isValid.</p>
                         </div>
+                        
+                        <div class="clear"></div>
+                        <div class="divider"></div>
+                        
+                        <form id="form-two" action="" method="post" class="left-col-75">
+                            <div class="form-row">
+                                <label for="name">Name</label>
+                                <input type="text" data-field-info="letters"  placeholder="Enter Name" name="name" />
+                            </div>
+                            <div class="form-row">
+                                <label for="email">Email</label>
+                                <input type="text" data-field-info="email" placeholder="Enter Email" name="email" />
+                            </div>
+                            <div class="form-row">
+                                <label for="dateofbirth">Date of Birth</label>
+                                <input type="text" data-field-info="dateofbirth" placeholder="DD/MM/YY" name="dateofbirth" />
+                            </div>
+                            <div class="form-row">
+                                <label for="postcode">Post Code</label>
+                                <input type="text" data-field-info="postcode" placeholder="Enter PostCode" name="postcode" />
+                            </div>
+                            <div class="form-row">
+                                <label>&nbsp;</label>
+                                <input type="submit" value="Register" class="form-btn" />
+                                <input type="reset" value="Reset" class="form-btn" />
+                            </div>
+                        </form>
+                        
+                        <div class="clear"></div>
                     </div>
                 </div>
             </div>

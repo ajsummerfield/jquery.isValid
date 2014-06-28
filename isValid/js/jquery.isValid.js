@@ -35,13 +35,16 @@
                 matchErrorMessage: "Field is numbers only."
             },
             dateofbirth: {
+                showInvalidError: true,
+                invalidErrorMessage: "Please enter a valid Date.",
                 showFormatError: true,
                 formatErrorMessage: "Please enter Date format as DD/MM/YYYY as specified in the placeholder."
             },
             postcode: {
                 showInvalidError: true,
                 invalidErrorMessage: "Not a valid Post Code."
-            }
+            },
+            onFormValidated: function() {},
         };
             
         var self = this;
@@ -54,7 +57,6 @@
             self.isFormValid = false;
             self.isValid = false;
             self.formID = "#" + self.$elem.attr('id');
-            self.$elem.find(':submit').addClass('submit-btn');
             
             self.options = $.extend(true, defaults, options);
             
@@ -63,6 +65,8 @@
             self.formArray.each(function (index, field) {
                 self.createErrorMessage(field);
             });
+            
+            return self;
         },
         
         self.isFormValidated = function() {
@@ -119,12 +123,20 @@
         
         self.isLetters = function(field) {
             var letterMatcher = /^[A-Za-z ]+$/;
-            return (letterMatcher.test($(field).val()));
+            
+            var matchResult = letterMatcher.test($(field).val());
+            self.options.letters.showMatchError = (matchResult) ? false : true;
+            
+            return matchResult;
         },
         
         self.isNumbers = function(field) {
             var numberMatcher = /^[+-]?[0-9]{1,9}(?:\.[0-9]{1,2})?$/;
-            return (numberMatcher.test($(field).val()));
+            
+            var matchResult = numberMatcher.test($(field).val());
+            self.options.numbers.showMatchError = (matchResult) ? false : true;
+            
+            return matchResult;
         },
         
         self.isUsernameValid = function(field) {
@@ -154,32 +166,57 @@
             return lengthResult;
         },
         
+        self.isEmailValid = function(field) {
+            var emailMatcher = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            
+            var validResult, domainResult;
+            
+            validResult = emailMatcher.test($(field).val());
+            
+            self.options.email.showInvalidError = (validResult) ? false : true;
+            
+            if(self.options.email.domain !== '') {
+                domainResult = ($(field).val().indexOf(self.options.email.domain, $(field).val().length - self.options.email.domain.length) !== -1);
+                self.options.email.showDomainError = (domainResult) ? false : true;
+                
+                return domainResult;
+            }
+            
+            return validResult;
+        },
+            
         self.isDateOfBirthValid = function(field) {
             var date = $(field).val();
             var count = date.match(/\//g);
             
+            var validResult, formatResult;
+            
             if(count === null || count.length < 2) {
-                return false;
+                formatResult = false;
+                self.options.dateofbirth.showFormatError = (formatResult) ? false : true;
+                
+                return formatResult;
             } else {
                 var data = date.split('/');
-                return (Date.parse(data[2] + "-" + data[1] + "-" + data[0]) > 0);
+                
+                formatResult = true;
+                self.options.dateofbirth.showFormatError = (formatResult) ? false : true;
+                
+                validResult = isBetween(Date.parse(data[2] + "-" + data[1] + "-" + data[0]), 0, Date.now());
+                self.options.dateofbirth.showInvalidError = (validResult) ? false : true;
+                
+                return validResult;
             }  
         },
         
-        self.isEmailValid = function(field) {
-            var emailMatcher = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            
-            if(self.options.email.domain === '') {
-                return (emailMatcher.test($(field).val()));
-            } else {
-                return ((emailMatcher.test($(field).val())) && (($(field).val().indexOf(self.options.email.domain, $(field).val().length - self.options.email.domain.length) !== -1)));
-            }
-        },
-        
         self.isPostCodeValid = function(field) {
-            return (checkPostCode($(field).val()));
+            var validPostcode = checkPostCode($(field).val());
+            
+            self.options.postcode.showInvalidError = (validPostcode) ? false : true;
+            
+            return validPostcode;
         },
-        
+             
         self.createErrorMessage = function(field) {
             
             var type = changeToLowercase(field);
@@ -227,6 +264,7 @@
                     case 'dateofbirth':
                         if(self.options.dateofbirth.showFormatError) {
                             buildErrorContainer('dateofbirth-format-error', field, self.options.dateofbirth.formatErrorMessage);
+                            buildErrorContainer('dateofbirth-invalid-error', field, self.options.dateofbirth.invalidErrorMessage);
                         }
                         break;
                     
@@ -239,6 +277,7 @@
         }
         
         // Private Methods
+        
         var changeToLowercase = function(field) {
             return ($(field).attr('data-field-info') !== undefined) ? $(field).attr('data-field-info').toLowerCase() : "";
         }
@@ -248,7 +287,7 @@
         }
         
         var completeAction = function(isValid, field) {
-            (isValid) ? validAction(field) : invalidAction(field);
+            return (isValid) ? validAction(field) : invalidAction(field);
         }
         
         var validAction = function(field) {
@@ -312,6 +351,7 @@
                     break;    
                 
                 case 'dateofbirth': 
+                    errorMessageDisplay('#dateofbirth-invalid-error', self.options.dateofbirth.showInvalidError);
                     errorMessageDisplay('#dateofbirth-format-error', self.options.dateofbirth.showFormatError);
                     break;
                     
@@ -333,13 +373,20 @@
             $(this).data('isValid', newIsValid);
             
             $(newIsValid.formID + ' :input[type="submit"]').click(function (e) {
+                
                 newIsValid.formArray.each(function (index, field) {
+                    
                     newIsValid.isValid = newIsValid.isValidField(field);
                     newIsValid.isFormValid = newIsValid.isFormValidated();
+                    
                     if (!newIsValid.isFormValid) {
                         e.preventDefault();
                     }
                 });
+                
+                if(newIsValid.isFormValid) {
+                    newIsValid.options.onFormValidated();
+                }
             });
 			
             newIsValid.formArray.each(function (index, field) {
@@ -347,6 +394,11 @@
                     newIsValid.isValid = newIsValid.isValidField(field);
                 });
             });
+            
+            newIsValid.$elem.find(':reset').click(function() {
+                // To do
+            });
+            
         });
     }
   

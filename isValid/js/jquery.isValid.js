@@ -1,13 +1,20 @@
-(function($) {
+(function ($) {
+    "use strict";
 
-    $.isValid = function(element, options) {
+    $.isValid = function (element, options) {
     
+        // To do
+        // Add extra error messages in and make changes to min and max
+        // Look into similar changes to error message creation and display similar to the new way of calling the valid methods
+        
         var defaults = {
             username: {
                 minLength: 6,
                 maxLength: 12,
                 showLengthError: true,
-                lengthErrorMessage: "Username must be be at least 6 character long."
+                lengthErrorMessage: "Username must be be at least 6 character long.",
+                showMaxLengthError: true,
+                maxLengthErrorMessage: "Username must be no more than 12 characters long."
             },
             password: {
                 minLength: 6,
@@ -16,6 +23,8 @@
                 letters: true,
                 showLengthError: true,
                 lengthErrorMessage: "Password must be at least 6 characters long.",
+                showMaxLengthError: true,
+                maxLengthErrorMessage: "Username must be no more than 20 characters long.",
                 showMatchError: true,
                 matchErrorMessage: "Password must contain letters and numbers."
             },
@@ -44,11 +53,10 @@
                 showInvalidError: true,
                 invalidErrorMessage: "Not a valid Post Code."
             },
-            onFormValidated: function() {},
+            onFormValidated: function () {}
         };
             
-        var self = this;
-        self.options = {}
+        self = this, self.options = {};
         
         self.init = function() {
             
@@ -79,40 +87,43 @@
                 self.isValid = true;
             } else {
                 var data = changeToLowercase(field);
-                    
+                var valMethodName;
+                
                 switch(data) {
                     case 'username':
-                        self.isValid = completeAction((self.isUsernameValid(field)), field);
+                        valMethodName = "isUsernameValid";
                         break;
                        
                     case 'password':
-                        self.isValid = completeAction((self.isPasswordValid(field)), field);
+                        valMethodName = "isPasswordValid";
                         break; 
                        
                     case 'email':
-                        self.isValid = completeAction((self.isEmailValid(field)), field);
+                        valMethodName = "isEmailValid";
                         break;
                     
                     case 'dateofbirth':
-                        self.isValid = completeAction((self.isDateOfBirthValid(field)), field);
+                        valMethodName = "isDateOfBirthValid";
                         break;
                     
                     case 'letters':
-                        self.isValid = completeAction((self.isLetters(field)), field);
+                        valMethodName = "isLetters";
                         break;
                         
                     case 'numbers':
-                        self.isValid = completeAction((self.isNumbers(field)), field);
+                        valMethodName = "isNumbers";
                         break;
                         
                     case 'postcode':
-                        self.isValid = completeAction((self.isPostCodeValid(field)), field);
+                        valMethodName = "isPostCodeValid";
                         break;
                         
                     default:
                         self.isValid = completeAction((self.isEmpty(field)), field);
                 }
             }
+            
+            self.isValid = completeAction((self[valMethodName](field)), field);
             
             return self.isValid;
         },
@@ -396,7 +407,9 @@
             });
             
             newIsValid.$elem.find(':reset').click(function() {
-                // To do
+                $('.invalid').removeClass('invalid');
+                $('.form-error').hide();
+                newIsValid.isFormValid = newIsValid.isFormValidated();
             });
             
         });

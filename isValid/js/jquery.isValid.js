@@ -56,35 +56,35 @@
             onFormValidated: function () {}
         };
             
-        self = this, self.options = {};
+        self = this, this.options;
         
-        self.init = function() {
+        this.init = function() {
             
-            self.elem = element;
-            self.$elem = $(element);
-            self.isFormValid = false;
-            self.isValid = false;
-            self.formID = "#" + self.$elem.attr('id');
+            this.elem = element;
+            this.$elem = $(element);
+            this.isFormValid = false;
+            this.isValid = false;
+            this.formID = "#" + this.$elem.attr('id');
             
-            self.options = $.extend(true, defaults, options);
+            this.options = $.extend(true, defaults, options);
             
-            self.formArray = $(self.formID + ' :input[type="text"],' + self.formID + ' :input[type="password"],' + self.formID + ' :input[type="tel"],' + self.formID + ' textarea,' + self.formID + ' select');
+            this.formArray = $(this.formID + ' :input[type="text"],' + this.formID + ' :input[type="password"],' + this.formID + ' :input[type="tel"],' + this.formID + ' textarea,' + this.formID + ' select');
             
-            self.formArray.each(function (index, field) {
+            this.formArray.each(function (index, field) {
                 self.createErrorMessage(field);
             });
             
-            return self;
+            return this;
         },
         
-        self.isFormValidated = function() {
+        this.isFormValidated = function() {
             return ($('.invalid').length) ? false : true;
         },
   
-        self.isValidField = function(field) {
+        this.isValidField = function(field) {
             
             if (field.disabled || $(field).attr('data-field-info') === "notrequired") {
-                self.isValid = true;
+                this.isValid = true;
             } else {
                 var data = changeToLowercase(field);
                 var valMethodName;
@@ -119,57 +119,57 @@
                         break;
                         
                     default:
-                        self.isValid = completeAction((self.isEmpty(field)), field);
+                        this.isValid = completeAction((this.isEmpty(field)), field);
                 }
             }
             
-            self.isValid = completeAction((self[valMethodName](field)), field);
+            this.isValid = completeAction((this[valMethodName](field)), field);
             
-            return self.isValid;
+            return this.isValid;
         },
         
-        self.isEmpty = function(field) {
-            return ($(field).val() === "");
+        this.isEmpty = function(field) {
+            return ($(field).val().length);
         },
         
-        self.isLetters = function(field) {
+        this.isLetters = function(field) {
             var letterMatcher = /^[A-Za-z ]+$/;
             
             var matchResult = letterMatcher.test($(field).val());
-            self.options.letters.showMatchError = (matchResult) ? false : true;
+            this.options.letters.showMatchError = (matchResult) ? false : true;
             
             return matchResult;
         },
         
-        self.isNumbers = function(field) {
+        this.isNumbers = function(field) {
             var numberMatcher = /^[+-]?[0-9]{1,9}(?:\.[0-9]{1,2})?$/;
             
             var matchResult = numberMatcher.test($(field).val());
-            self.options.numbers.showMatchError = (matchResult) ? false : true;
+            this.options.numbers.showMatchError = (matchResult) ? false : true;
             
             return matchResult;
         },
         
-        self.isUsernameValid = function(field) {
-            var lengthResult = isBetween($(field).val().length, self.options.username.minLength, self.options.username.maxLength);
+        this.isUsernameValid = function(field) {
+            var lengthResult = isBetween($(field).val().length, this.options.username.minLength, this.options.username.maxLength);
             
-            self.options.username.showLengthError = (lengthResult) ? false : true;
+            this.options.username.showLengthError = (lengthResult) ? false : true;
             
             return lengthResult;
         },
         
-        self.isPasswordValid = function(field) {
+        this.isPasswordValid = function(field) {
             var passwordMatcher = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/;
             
             var lengthResult, matchResult;
             
-            lengthResult = isBetween($(field).val().length, self.options.password.minLength, self.options.password.maxLength);
+            lengthResult = isBetween($(field).val().length, this.options.password.minLength, this.options.password.maxLength);
             
-            self.options.password.showLengthError = (lengthResult) ? false : true;
+            this.options.password.showLengthError = (lengthResult) ? false : true;
             
-            if (self.options.password.numbers && self.options.password.letters) { 
+            if (this.options.password.numbers && this.options.password.letters) { 
                 matchResult = (passwordMatcher.test($(field).val()));
-                self.options.password.showMatchError = (matchResult) ? false : true;
+                this.options.password.showMatchError = (matchResult) ? false : true;
                 
                 return matchResult;
             }
@@ -177,18 +177,18 @@
             return lengthResult;
         },
         
-        self.isEmailValid = function(field) {
+        this.isEmailValid = function(field) {
             var emailMatcher = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             
             var validResult, domainResult;
             
             validResult = emailMatcher.test($(field).val());
             
-            self.options.email.showInvalidError = (validResult) ? false : true;
+            this.options.email.showInvalidError = (validResult) ? false : true;
             
-            if(self.options.email.domain !== '') {
-                domainResult = ($(field).val().indexOf(self.options.email.domain, $(field).val().length - self.options.email.domain.length) !== -1);
-                self.options.email.showDomainError = (domainResult) ? false : true;
+            if(this.options.email.domain !== '') {
+                domainResult = ($(field).val().indexOf(this.options.email.domain, $(field).val().length - this.options.email.domain.length) !== -1);
+                this.options.email.showDomainError = (domainResult) ? false : true;
                 
                 return domainResult;
             }
@@ -196,7 +196,7 @@
             return validResult;
         },
             
-        self.isDateOfBirthValid = function(field) {
+        this.isDateOfBirthValid = function(field) {
             var date = $(field).val();
             var count = date.match(/\//g);
             
@@ -204,26 +204,26 @@
             
             if(count === null || count.length < 2) {
                 formatResult = false;
-                self.options.dateofbirth.showFormatError = (formatResult) ? false : true;
+                this.options.dateofbirth.showFormatError = (formatResult) ? false : true;
                 
                 return formatResult;
             } else {
                 var data = date.split('/');
                 
                 formatResult = true;
-                self.options.dateofbirth.showFormatError = (formatResult) ? false : true;
+                this.options.dateofbirth.showFormatError = (formatResult) ? false : true;
                 
                 validResult = isBetween(Date.parse(data[2] + "-" + data[1] + "-" + data[0]), 0, Date.now());
-                self.options.dateofbirth.showInvalidError = (validResult) ? false : true;
+                this.options.dateofbirth.showInvalidError = (validResult) ? false : true;
                 
                 return validResult;
             }  
         },
         
-        self.isPostCodeValid = function(field) {
+        this.isPostCodeValid = function(field) {
             var validPostcode = checkPostCode($(field).val());
             
-            self.options.postcode.showInvalidError = (validPostcode) ? false : true;
+            this.options.postcode.showInvalidError = (validPostcode) ? false : true;
             
             return validPostcode;
         },
@@ -235,56 +235,97 @@
             switch(type) {
             
                     case 'username':
-                        if(self.options.username.showLengthError) {
-                            buildErrorContainer('username-length-error', field, self.options.username.lengthErrorMessage);
+                        if(this.options.username.showLengthError) {
+                            buildErrorContainer('username-length-error', field, this.options.username.lengthErrorMessage);
                         }
                         break;
                     
                     case 'password':
-                        if(self.options.password.showMatchError) {
-                            buildErrorContainer('password-match-error', field, self.options.password.matchErrorMessage);
+                        if(this.options.password.showMatchError) {
+                            buildErrorContainer('password-match-error', field, this.options.password.matchErrorMessage);
                         }
                     
-                        if(self.options.password.showLengthError) {
-                            buildErrorContainer('password-length-error', field, self.options.password.lengthErrorMessage);
+                        if(this.options.password.showLengthError) {
+                            buildErrorContainer('password-length-error', field, this.options.password.lengthErrorMessage);
                         }
                         break;
                     
                     case 'email':
-                        if(self.options.email.showInvalidError) {
-                            buildErrorContainer('email-invalid-error', field, self.options.email.invalidErrorMessage);
+                        if(this.options.email.showInvalidError) {
+                            buildErrorContainer('email-invalid-error', field, this.options.email.invalidErrorMessage);
                         }
                     
-                        if(self.options.email.showDomainError) {
-                            buildErrorContainer('email-domain-error', field, self.options.email.domainErrorMessage);
+                        if(this.options.email.showDomainError) {
+                            buildErrorContainer('email-domain-error', field, this.options.email.domainErrorMessage);
                         }
                         break;
                     
                     case 'letters':
-                        if(self.options.letters.showMatchError) {
-                            buildErrorContainer('letters-match-error', field, self.options.letters.matchErrorMessage);
+                        if(this.options.letters.showMatchError) {
+                            buildErrorContainer('letters-match-error', field, this.options.letters.matchErrorMessage);
                         }
                         break;
                     
                     case 'numbers':
-                        if(self.options.numbers.showMatchError) {
-                            buildErrorContainer('numbers-match-error', field, self.options.numbers.matchErrorMessage);
+                        if(this.options.numbers.showMatchError) {
+                            buildErrorContainer('numbers-match-error', field, this.options.numbers.matchErrorMessage);
                         }
                         break;
                     
                     case 'dateofbirth':
-                        if(self.options.dateofbirth.showFormatError) {
-                            buildErrorContainer('dateofbirth-format-error', field, self.options.dateofbirth.formatErrorMessage);
-                            buildErrorContainer('dateofbirth-invalid-error', field, self.options.dateofbirth.invalidErrorMessage);
+                        if(this.options.dateofbirth.showFormatError) {
+                            buildErrorContainer('dateofbirth-format-error', field, this.options.dateofbirth.formatErrorMessage);
+                            buildErrorContainer('dateofbirth-invalid-error', field, this.options.dateofbirth.invalidErrorMessage);
                         }
                         break;
                     
                     case 'postcode':
-                        if(self.options.postcode.showInvalidError) {
-                            buildErrorContainer('postcode-invalid-error', field, self.options.postcode.invalidErrorMessage);
+                        if(this.options.postcode.showInvalidError) {
+                            buildErrorContainer('postcode-invalid-error', field, this.options.postcode.invalidErrorMessage);
                         }
                         break;
             }
+        }
+        
+        self.controlErrorMessages = function(field) {
+
+            var type = changeToLowercase(field);
+            var errorID, showError;
+
+            switch(type) {
+
+                case "username":
+                    errorMessageDisplay('#username-length-error', this.options.username.showLengthError);
+                    break;
+
+                case "password":
+                    errorMessageDisplay('#password-length-error', this.options.password.showLengthError);
+                    errorMessageDisplay('#password-match-error', this.options.password.showMatchError);
+                    break;
+
+                case 'email':
+                    errorMessageDisplay('#email-invalid-error', this.options.email.showInvalidError);
+                    errorMessageDisplay('#email-domain-error', this.options.email.showDomainError);
+                    break;
+
+                case 'letters':
+                    errorMessageDisplay('#letters-match-error', this.options.letters.showMatchError);
+                    break;
+
+                case 'numbers':
+                    errorMessageDisplay('#numbers-match-error', this.options.numbers.showMatchError);
+                    break;    
+
+                case 'dateofbirth': 
+                    errorMessageDisplay('#dateofbirth-invalid-error', this.options.dateofbirth.showInvalidError);
+                    errorMessageDisplay('#dateofbirth-format-error', this.options.dateofbirth.showFormatError);
+                    break;
+
+                case 'postcode':
+                    errorMessageDisplay('#postcode-invalid-error', this.options.postcode.showInvalidError);
+                    break;
+            }
+
         }
         
         // Private Methods
@@ -305,7 +346,7 @@
             
             $(field).removeClass('invalid');
             
-            controlErrorMessages(field);
+            self.controlErrorMessages(field);
             
             return true;
         }
@@ -314,7 +355,7 @@
         
             $(field).addClass('invalid');
             
-            controlErrorMessages(field);
+            self.controlErrorMessages(field);
             
             return false;
         }
@@ -326,53 +367,10 @@
         
         var errorMessageDisplay = function(id, errorType) {
         
-            if(errorType) {
-                $(id).show();
-            } else {
-                $(id).hide();
-            }
+            (errorType) ? $(id).show() : $(id).hide();
         }
         
-        var controlErrorMessages = function(field) {
-        
-            var type = changeToLowercase(field);
-                    
-            switch(type) {
-                    
-                case "username":
-                    errorMessageDisplay('#username-length-error', self.options.username.showLengthError);
-                    break;
-                    
-                case "password":
-                    errorMessageDisplay('#password-length-error', self.options.password.showLengthError);
-                    errorMessageDisplay('#password-match-error', self.options.password.showMatchError);
-                    break;
-                
-                case 'email':
-                    errorMessageDisplay('#email-invalid-error', self.options.email.showInvalidError);
-                    errorMessageDisplay('#email-domain-error', self.options.email.showDomainError);
-                    break;
-                    
-                case 'letters':
-                    errorMessageDisplay('#letters-match-error', self.options.letters.showMatchError);
-                    break;
-                
-                case 'numbers':
-                    errorMessageDisplay('#numbers-match-error', self.options.numbers.showMatchError);
-                    break;    
-                
-                case 'dateofbirth': 
-                    errorMessageDisplay('#dateofbirth-invalid-error', self.options.dateofbirth.showInvalidError);
-                    errorMessageDisplay('#dateofbirth-format-error', self.options.dateofbirth.showFormatError);
-                    break;
-                    
-                case 'postcode':
-                    errorMessageDisplay('#postcode-invalid-error', self.options.postcode.showInvalidError);
-                    break;
-            }
-        }
-        
-        self.init();
+        //this.init();
   
     }
         
@@ -381,7 +379,8 @@
         return this.each(function() {
     
             var newIsValid = new $.isValid(this, options);
-            $(this).data('isValid', newIsValid);
+            
+            newIsValid.init();
             
             $(newIsValid.formID + ' :input[type="submit"]').click(function (e) {
                 

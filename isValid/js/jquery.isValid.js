@@ -11,8 +11,8 @@
             username: {
                 minLength: 6,
                 maxLength: 12,
-                showLengthError: true,
-                lengthErrorMessage: "Username must be be at least 6 character long.",
+                showLengthError: true, // showMinLengthError
+                lengthErrorMessage: "Username must be be at least 6 character long.", // minLengthErrorMessage
                 showMaxLengthError: true,
                 maxLengthErrorMessage: "Username must be no more than 12 characters long."
             },
@@ -21,8 +21,8 @@
                 maxLength: 20,
                 numbers: true,
                 letters: true,
-                showLengthError: true,
-                lengthErrorMessage: "Password must be at least 6 characters long.",
+                showLengthError: true, // showMinLengthError
+                lengthErrorMessage: "Password must be at least 6 characters long.", // minLengthErrorMessage
                 showMaxLengthError: true,
                 maxLengthErrorMessage: "Username must be no more than 20 characters long.",
                 showMatchError: true,
@@ -53,25 +53,29 @@
                 showInvalidError: true,
                 invalidErrorMessage: "Not a valid Post Code."
             },
-            onFormValidated: function () {}
-        };
+            onFormValidated: function () {},
+            onFormInValidated: function () {}
+        }, self;
             
         self = this, this.options;
         
         this.init = function() {
+            
+            var obj = this;
             
             this.elem = element;
             this.$elem = $(element);
             this.isFormValid = false;
             this.isValid = false;
             this.formID = "#" + this.$elem.attr('id');
+            this.formIDStr = this.$elem.attr('id');
             
             this.options = $.extend(true, defaults, options);
             
             this.formArray = $(this.formID + ' :input[type="text"],' + this.formID + ' :input[type="password"],' + this.formID + ' :input[type="tel"],' + this.formID + ' textarea,' + this.formID + ' select');
             
             this.formArray.each(function (index, field) {
-                self.createErrorMessage(field);
+                self.createErrorMessage(obj, field);
             });
             
             return this;
@@ -123,7 +127,7 @@
                 }
             }
             
-            this.isValid = completeAction((this[valMethodName](field)), field);
+            this.isValid = completeAction(this, (this[valMethodName](field)), field);
             
             return this.isValid;
         },
@@ -171,7 +175,7 @@
                 matchResult = (passwordMatcher.test($(field).val()));
                 this.options.password.showMatchError = (matchResult) ? false : true;
                 
-                return matchResult;
+                return (lengthResult) ? matchResult : false;
             }
 
             return lengthResult;
@@ -190,7 +194,7 @@
                 domainResult = ($(field).val().indexOf(this.options.email.domain, $(field).val().length - this.options.email.domain.length) !== -1);
                 this.options.email.showDomainError = (domainResult) ? false : true;
                 
-                return domainResult;
+                return (validResult) ? domainResult : false;
             }
             
             return validResult;
@@ -227,104 +231,142 @@
             
             return validPostcode;
         },
-             
-        self.createErrorMessage = function(field) {
-            
-            var type = changeToLowercase(field);
-            
-            switch(type) {
-            
-                    case 'username':
-                        if(this.options.username.showLengthError) {
-                            buildErrorContainer('username-length-error', field, this.options.username.lengthErrorMessage);
-                        }
-                        break;
-                    
-                    case 'password':
-                        if(this.options.password.showMatchError) {
-                            buildErrorContainer('password-match-error', field, this.options.password.matchErrorMessage);
-                        }
-                    
-                        if(this.options.password.showLengthError) {
-                            buildErrorContainer('password-length-error', field, this.options.password.lengthErrorMessage);
-                        }
-                        break;
-                    
-                    case 'email':
-                        if(this.options.email.showInvalidError) {
-                            buildErrorContainer('email-invalid-error', field, this.options.email.invalidErrorMessage);
-                        }
-                    
-                        if(this.options.email.showDomainError) {
-                            buildErrorContainer('email-domain-error', field, this.options.email.domainErrorMessage);
-                        }
-                        break;
-                    
-                    case 'letters':
-                        if(this.options.letters.showMatchError) {
-                            buildErrorContainer('letters-match-error', field, this.options.letters.matchErrorMessage);
-                        }
-                        break;
-                    
-                    case 'numbers':
-                        if(this.options.numbers.showMatchError) {
-                            buildErrorContainer('numbers-match-error', field, this.options.numbers.matchErrorMessage);
-                        }
-                        break;
-                    
-                    case 'dateofbirth':
-                        if(this.options.dateofbirth.showFormatError) {
-                            buildErrorContainer('dateofbirth-format-error', field, this.options.dateofbirth.formatErrorMessage);
-                            buildErrorContainer('dateofbirth-invalid-error', field, this.options.dateofbirth.invalidErrorMessage);
-                        }
-                        break;
-                    
-                    case 'postcode':
-                        if(this.options.postcode.showInvalidError) {
-                            buildErrorContainer('postcode-invalid-error', field, this.options.postcode.invalidErrorMessage);
-                        }
-                        break;
-            }
-        }
-        
-        self.controlErrorMessages = function(field) {
 
-            var type = changeToLowercase(field);
-            var errorID, showError;
-
-            switch(type) {
-
-                case "username":
-                    errorMessageDisplay('#username-length-error', this.options.username.showLengthError);
+        // Need a more effective/faster/efficient way of writing the method below
+        self.createErrorMessage = function(obj, field) {
+            
+            var data = changeToLowercase(field);
+            
+            var errorID, errorMessage;
+            
+            switch(data) {
+            
+                case 'username':
+                    if(obj.options.username.showLengthError) {
+                        errorID = '-username-length-error';
+                        errorMessage = obj.options.username.lengthErrorMessage;
+                    }
                     break;
 
-                case "password":
-                    errorMessageDisplay('#password-length-error', this.options.password.showLengthError);
-                    errorMessageDisplay('#password-match-error', this.options.password.showMatchError);
+                case 'password':
+                    if(obj.options.password.showMatchError) {
+                        errorID = '-password-match-error';
+                        errorMessage = obj.options.password.matchErrorMessage;
+                        
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                    }
+
+                    if(obj.options.password.showLengthError) {
+                        errorID = '-password-length-error';
+                        errorMessage = obj.options.password.lengthErrorMessage;
+                        
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                    }
                     break;
 
                 case 'email':
-                    errorMessageDisplay('#email-invalid-error', this.options.email.showInvalidError);
-                    errorMessageDisplay('#email-domain-error', this.options.email.showDomainError);
+                    if(obj.options.email.showInvalidError) {
+                        errorID = '-email-invalid-error';
+                        errorMessage = obj.options.email.invalidErrorMessage;
+                        
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                    }
+
+                    if(obj.options.email.showDomainError) {
+                        errorID = '-email-domain-error';
+                        errorMessage = obj.options.email.domainErrorMessage;
+                        
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                    }
                     break;
 
                 case 'letters':
-                    errorMessageDisplay('#letters-match-error', this.options.letters.showMatchError);
+                    if(obj.options.letters.showMatchError) {
+                        errorID = '-letters-match-error';
+                        errorMessage = obj.options.letters.matchErrorMessage;
+                    }
                     break;
 
                 case 'numbers':
-                    errorMessageDisplay('#numbers-match-error', this.options.numbers.showMatchError);
-                    break;    
+                    if(obj.options.numbers.showMatchError) {
+                        errorID = '-numbers-match-error';
+                        errorMessage = obj.options.numbers.matchErrorMessage;
+                    }
+                    break;
 
-                case 'dateofbirth': 
-                    errorMessageDisplay('#dateofbirth-invalid-error', this.options.dateofbirth.showInvalidError);
-                    errorMessageDisplay('#dateofbirth-format-error', this.options.dateofbirth.showFormatError);
+                case 'dateofbirth':
+                    if(obj.options.dateofbirth.showFormatError) {
+                        errorID = '-dateofbirth-format-error';
+                        errorMessage = obj.options.dateofbirth.formatErrorMessage;
+                        
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                    }
+                    
+                    if(obj.options.dateofbirth.showFormatError) {
+                        errorID = '-dateofbirth-invalid-error';
+                        errorMessage = obj.options.dateofbirth.invalidErrorMessage;
+                        
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                    }
                     break;
 
                 case 'postcode':
-                    errorMessageDisplay('#postcode-invalid-error', this.options.postcode.showInvalidError);
+                    if(obj.options.postcode.showInvalidError) {
+                        errorID = '-postcode-invalid-error';
+                        errorMessage = obj.options.postcode.invalidErrorMessage;
+                    }
                     break;
             }
+            
+            buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+        }
+        
+        // Need a more effective/faster/efficient way of writing the method below
+        self.controlErrorMessages = function(obj, field) {
+
+            var data = changeToLowercase(field);
+            
+            var errorID, showError;
+            
+            switch(data) {
+
+                case "username":
+                    errorID = '-username-length-error';
+                    showError = obj.options.username.showLengthError;
+                    break;
+
+                case "password":
+                    errorMessageDisplay(obj.formID + '-password-length-error', obj.options.password.showLengthError);
+                    errorMessageDisplay(obj.formID + '-password-match-error', obj.options.password.showMatchError);
+                    break;
+
+                case 'email':
+                    errorMessageDisplay(obj.formID + '-email-invalid-error', obj.options.email.showInvalidError);
+                    errorMessageDisplay(obj.formID + '-email-domain-error', obj.options.email.showDomainError);
+                    break;
+
+                case 'letters':
+                    errorID = '-letters-match-error';
+                    showError = obj.options.letters.showMatchError;
+                    break;
+
+                case 'numbers':
+                    errorID = '-numbers-match-error';
+                    showError = obj.options.numbers.showMatchError;
+                    break;    
+
+                case 'dateofbirth': 
+                    errorMessageDisplay(obj.formID + '-dateofbirth-invalid-error', obj.options.dateofbirth.showInvalidError);
+                    errorMessageDisplay(obj.formID + '-dateofbirth-format-error', obj.options.dateofbirth.showFormatError);
+                    break;
+
+                case 'postcode':
+                    errorID = '-postcode-invalid-error';
+                    showError = obj.options.postcode.showInvalidError;
+                    break;
+            }
+            
+            errorMessageDisplay(obj.formID + errorID, showError);
 
         }
         
@@ -338,24 +380,24 @@
             return (val >= min && val <= max);
         }
         
-        var completeAction = function(isValid, field) {
-            return (isValid) ? validAction(field) : invalidAction(field);
+        var completeAction = function(obj, isValid, field) {
+            return (isValid) ? validAction(obj, field) : invalidAction(obj, field);
         }
         
-        var validAction = function(field) {
+        var validAction = function(obj, field) {
             
             $(field).removeClass('invalid');
             
-            self.controlErrorMessages(field);
+            self.controlErrorMessages(obj, field);
             
             return true;
         }
         
-        var invalidAction = function(field) {
+        var invalidAction = function(obj, field) {
         
             $(field).addClass('invalid');
             
-            self.controlErrorMessages(field);
+            self.controlErrorMessages(obj, field);
             
             return false;
         }
@@ -366,11 +408,8 @@
         }
         
         var errorMessageDisplay = function(id, errorType) {
-        
             (errorType) ? $(id).show() : $(id).hide();
         }
-        
-        //this.init();
   
     }
         
@@ -379,6 +418,7 @@
         return this.each(function() {
     
             var newIsValid = new $.isValid(this, options);
+            $(this).data('isValid', newIsValid);
             
             newIsValid.init();
             
@@ -396,6 +436,8 @@
                 
                 if(newIsValid.isFormValid) {
                     newIsValid.options.onFormValidated();
+                } else {
+                    newIsValid.options.onFormInValidated();
                 }
             });
 			

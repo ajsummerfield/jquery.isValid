@@ -123,7 +123,7 @@
                         break;
                         
                     default:
-                        this.isValid = completeAction((this.isEmpty(field)), field);
+                        valMethodName = "isEmpty";
                 }
             }
             

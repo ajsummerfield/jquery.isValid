@@ -3,7 +3,7 @@ module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-
+        
         cssmin: {
             minify: {
                 expand: true,
@@ -48,14 +48,33 @@ module.exports = function(grunt) {
                 }
             }
         },
+        
+        connect: {
+            server: {
+                options: {
+                    port: 8080,
+                    hostname: 'localhost',
+                    base: '../isValid',
+                    keepalive: true
+                }
+            }
+        },
+        
+        watch: {
+            server: {
+                files: ['../isValid/**/*']
+            }
+        }
 
     });
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-contrib-watch');
 
     // Default task(s).
-    grunt.registerTask('default', ['uglify', 'cssmin']);
+    grunt.registerTask('default', ['uglify', 'cssmin', 'connect:server', 'watch:server']);
 
 };

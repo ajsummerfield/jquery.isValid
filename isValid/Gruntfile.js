@@ -64,13 +64,23 @@ module.exports = function(grunt) {
             server: {
                 files: ['../isValid/**/*']
             }
-        }
+        },
+        
+        build: {
+            tasks: ['default'],
+            packageConfig: 'pkg',
+            packages: '*.json',
+            jsonSpace: 2,
+            jsonReplacer: undefined,
+            gitAdd: '--all'
+        },
 
     });
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-bump-build-git');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-watch');
 

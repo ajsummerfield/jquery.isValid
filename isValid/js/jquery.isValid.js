@@ -82,7 +82,7 @@
         },
         
         this.isFormValidated = function() {
-            return ($('.invalid').length) ? false : true;
+            return ($(this.formID + ' .invalid').length) ? false : true;
         },
   
         this.isValidField = function(field) {
@@ -448,8 +448,8 @@
             });
             
             newIsValid.$elem.find(':reset').click(function() {
-                $('.invalid').removeClass('invalid');
-                $('.form-error').hide();
+                $(newIsValid.formID + ' .invalid').removeClass('invalid');
+                $(newIsValid.formID + ' .form-error').hide();
                 newIsValid.isFormValid = newIsValid.isFormValidated();
             });
             

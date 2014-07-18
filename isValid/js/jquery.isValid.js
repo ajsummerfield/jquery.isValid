@@ -125,9 +125,9 @@
                     default:
                         valMethodName = "isEmpty";
                 }
+                
+                this.isValid = completeAction(this, (this[valMethodName](field)), field);
             }
-            
-            this.isValid = completeAction(this, (this[valMethodName](field)), field);
             
             return this.isValid;
         },
@@ -245,6 +245,8 @@
                     if(obj.options.username.showLengthError) {
                         errorID = '-username-length-error';
                         errorMessage = obj.options.username.lengthErrorMessage;
+                        
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
                     }
                     break;
 
@@ -284,6 +286,8 @@
                     if(obj.options.letters.showMatchError) {
                         errorID = '-letters-match-error';
                         errorMessage = obj.options.letters.matchErrorMessage;
+                        
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
                     }
                     break;
 
@@ -291,6 +295,8 @@
                     if(obj.options.numbers.showMatchError) {
                         errorID = '-numbers-match-error';
                         errorMessage = obj.options.numbers.matchErrorMessage;
+                        
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
                     }
                     break;
 
@@ -314,11 +320,13 @@
                     if(obj.options.postcode.showInvalidError) {
                         errorID = '-postcode-invalid-error';
                         errorMessage = obj.options.postcode.invalidErrorMessage;
+                        
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
                     }
                     break;
             }
             
-            buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+            //buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
         }
         
         // Need a more effective/faster/efficient way of writing the method below

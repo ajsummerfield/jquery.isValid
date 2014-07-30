@@ -11,20 +11,16 @@
             username: {
                 minLength: 6,
                 maxLength: 12,
-                showLengthError: true, // showMinLengthError
-                lengthErrorMessage: "Username must be be at least 6 character long.", // minLengthErrorMessage
-                showMaxLengthError: true,
-                maxLengthErrorMessage: "Username must be no more than 12 characters long."
+                showLengthError: true,
+                lengthErrorMessage: "Username must be be at least 6 characters and no more than 12 characters.",
             },
             password: {
                 minLength: 6,
                 maxLength: 20,
                 numbers: true,
                 letters: true,
-                showLengthError: true, // showMinLengthError
-                lengthErrorMessage: "Password must be at least 6 characters long.", // minLengthErrorMessage
-                showMaxLengthError: true,
-                maxLengthErrorMessage: "Username must be no more than 20 characters long.",
+                showLengthError: true, 
+                lengthErrorMessage: "Password must be at least 6 characters and no more than 20 characters.",
                 showMatchError: true,
                 matchErrorMessage: "Password must contain letters and numbers."
             },
@@ -53,6 +49,8 @@
                 showInvalidError: true,
                 invalidErrorMessage: "Not a valid Post Code."
             },
+            turnOffErrors: false,
+            invalidClass: 'invalid',
             onFormValidated: function () {},
             onFormInValidated: function () {}
         }, self;
@@ -72,6 +70,8 @@
             
             this.options = $.extend(true, defaults, options);
             
+            showErrors(this.options.turnOffErrors);
+            
             this.formArray = $(this.formID + ' :input[type="text"],' + this.formID + ' :input[type="password"],' + this.formID + ' :input[type="tel"],' + this.formID + ' textarea,' + this.formID + ' select');
             
             this.formArray.each(function (index, field) {
@@ -82,7 +82,7 @@
         },
         
         this.isFormValidated = function() {
-            return ($(this.formID + ' .invalid').length) ? false : true;
+            return ($(this.formID + ' .' + this.options.invalidClass).length) ? false : true;
         },
   
         this.isValidField = function(field) {
@@ -388,13 +388,30 @@
             return (val >= min && val <= max);
         }
         
+        var showErrors = function(show) {
+            
+            if(show) {
+                this.options.username.showLengthError = false;
+                this.options.password.showLengthError = false;
+                this.options.password.showMatchError = false;
+                this.options.email.showInvalidError = false;
+                this.options.email.showDomainError = false;
+                this.options.letters.showMatchError = false;
+                this.options.numbers.showMatchError = false;
+                this.options.dateofbirth.showInvalidError = false;
+                this.options.dateofbirth.showFormatError = false;
+                this.options.postcode.showInvalidError = false;
+            }
+        }
+        
         var completeAction = function(obj, isValid, field) {
             return (isValid) ? validAction(obj, field) : invalidAction(obj, field);
         }
         
         var validAction = function(obj, field) {
             
-            $(field).removeClass('invalid');
+            $(field).removeClass(obj.options.invalidClass);
+            $('form .form-row  .' + obj.options.invalidClass).css('background-color', '#FFFFFF');
             
             self.controlErrorMessages(obj, field);
             
@@ -403,7 +420,8 @@
         
         var invalidAction = function(obj, field) {
         
-            $(field).addClass('invalid');
+            $(field).addClass(obj.options.invalidClass);
+            $('form .form-row  .' + obj.options.invalidClass).css('background-color', '#FFBABA');
             
             self.controlErrorMessages(obj, field);
             
@@ -442,11 +460,7 @@
                     }
                 });
                 
-                if(newIsValid.isFormValid) {
-                    newIsValid.options.onFormValidated();
-                } else {
-                    newIsValid.options.onFormInValidated();
-                }
+                newIsValid.isFormValid ? newIsValid.options.onFormValidated() : newIsValid.options.onFormInValidated();
             });
 			
             newIsValid.formArray.each(function (index, field) {
@@ -456,7 +470,7 @@
             });
             
             newIsValid.$elem.find(':reset').click(function() {
-                $(newIsValid.formID + ' .invalid').removeClass('invalid');
+                $(newIsValid.formID + ' .' + newIsValid.options.invalidClass).removeClass('invalid');
                 $(newIsValid.formID + ' .form-error').hide();
                 newIsValid.isFormValid = newIsValid.isFormValidated();
             });

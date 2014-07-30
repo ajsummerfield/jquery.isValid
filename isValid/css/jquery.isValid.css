@@ -80,8 +80,8 @@ form .form-row .form-error {
     display: none;
     background: url('../img/Error.png') no-repeat;
     margin-top: 10px;
-    height: 35px;
+    min-height: 35px;
     font-size: 18px;
-    text-indent: 45px;
+    padding-left: 45px;
     line-height: 40px;
 }

@@ -48,24 +48,6 @@ module.exports = function(grunt) {
                 }
             }
         },
-        
-        connect: {
-            server: {
-                options: {
-                    port: 8080,
-                    hostname: 'localhost',
-                    base: '../isValid',
-                    keepalive: true
-                }
-            }
-        },
-        
-        watch: {
-            server: {
-                files: ['../isValid/**/*']
-            }
-        },
-        
         build: {
             tasks: ['default'],
             packageConfig: 'pkg',
@@ -81,10 +63,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-bump-build-git');
-    grunt.loadNpmTasks('grunt-contrib-connect');
-    grunt.loadNpmTasks('grunt-contrib-watch');
 
     // Default task(s).
-    grunt.registerTask('default', ['uglify', 'cssmin', 'connect:server', 'watch:server']);
+    grunt.registerTask('default', ['uglify', 'cssmin']);
 
 };

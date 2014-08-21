@@ -50,7 +50,6 @@
                 invalidErrorMessage: "Not a valid Post Code."
             },
             turnOffErrors: false,
-            invalidClass: 'invalid',
             onFormValidated: function () {},
             onFormInValidated: function () {}
         }, self;
@@ -82,7 +81,7 @@
         },
         
         this.isFormValidated = function() {
-            return ($(this.formID + ' .' + this.options.invalidClass).length) ? false : true;
+            return ($(this.formID + ' .invalid').length) ? false : true;
         },
   
         this.isValidField = function(field) {
@@ -410,8 +409,7 @@
         
         var validAction = function(obj, field) {
             
-            $(field).removeClass(obj.options.invalidClass);
-            $('form .form-row  .' + obj.options.invalidClass).css('background-color', '#FFFFFF');
+            $(field).removeClass('invalid');
             
             self.controlErrorMessages(obj, field);
             
@@ -420,8 +418,7 @@
         
         var invalidAction = function(obj, field) {
         
-            $(field).addClass(obj.options.invalidClass);
-            $('form .form-row  .' + obj.options.invalidClass).css('background-color', '#FFBABA');
+            $(field).addClass('invalid');
             
             self.controlErrorMessages(obj, field);
             
@@ -470,7 +467,7 @@
             });
             
             newIsValid.$elem.find(':reset').click(function() {
-                $(newIsValid.formID + ' .' + newIsValid.options.invalidClass).removeClass('invalid');
+                $(newIsValid.formID + ' .invalid').removeClass('invalid');
                 $(newIsValid.formID + ' .form-error').hide();
                 newIsValid.isFormValid = newIsValid.isFormValidated();
             });

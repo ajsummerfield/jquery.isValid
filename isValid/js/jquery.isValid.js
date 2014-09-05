@@ -185,6 +185,12 @@
             
             var validResult, domainResult;
             
+            var whiteSpace = /\s/;
+            var isWhiteSpace = whiteSpace.test($(field).val());
+            if(isWhiteSpace) {
+                $(field).val($(field).val().replace(/\s/g, ''));
+            }
+            
             validResult = emailMatcher.test($(field).val());
             
             this.options.email.showInvalidError = (validResult) ? false : true;

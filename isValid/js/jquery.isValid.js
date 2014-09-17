@@ -4,7 +4,6 @@
     $.isValid = function (element, options) {
     
         // To do
-        // Add extra error messages in and make changes to min and max
         // Look into similar changes to error message creation and display similar to the new way of calling the valid methods
         
         var defaults = {
@@ -48,6 +47,11 @@
             postcode: {
                 showInvalidError: true,
                 invalidErrorMessage: "Not a valid Post Code."
+            },
+            mobile: {
+                showInvalidError: true,
+                numberLength: 11,
+                invalidErrorMessage: "Invalid mobile number."
             },
             turnOffErrors: false,
             onFormValidated: function () {},
@@ -119,6 +123,10 @@
                         
                     case 'postcode':
                         valMethodName = "isPostCodeValid";
+                        break;
+                        
+                    case 'mobile':
+                        valMethodName = "isMobileValid";
                         break;
                         
                     default:
@@ -236,6 +244,14 @@
             
             return validPostcode;
         },
+            
+        this.isMobileValid = function(field) {
+            var isNumbers = this.isNumbers(field);
+            
+            var lengthResult = $(field).val().length === this.options.mobile.numberLength;
+            this.options.mobile.showInvalidError = (isNumbers && lengthResult) ? false : true;
+            return isNumbers && lengthResult ? true : false;
+        },
 
         // Need a more effective/faster/efficient way of writing the method below
         self.createErrorMessage = function(obj, field) {
@@ -329,6 +345,15 @@
                         buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
                     }
                     break;
+                    
+                case 'mobile':
+                    if(obj.options.mobile.showInvalidError) {
+                        errorID = '-mobile-invalid-error';
+                        errorMessage = obj.options.mobile.invalidErrorMessage;
+
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                    }
+                    break;
             }
             
             //buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
@@ -377,6 +402,11 @@
                     errorID = '-postcode-invalid-error';
                     showError = obj.options.postcode.showInvalidError;
                     break;
+                    
+                case 'mobile':
+                    errorID = '-mobile-invalid-error';
+                    showError = obj.options.mobile.showInvalidError;
+                    break;
             }
             
             errorMessageDisplay(obj.formID + errorID, showError);
@@ -406,6 +436,7 @@
                 this.options.dateofbirth.showInvalidError = false;
                 this.options.dateofbirth.showFormatError = false;
                 this.options.postcode.showInvalidError = false;
+                this.options.mobile.showInvalidError = false;
             }
         }
         

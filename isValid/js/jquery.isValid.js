@@ -153,7 +153,7 @@
         },
         
         this.isNumbers = function(field) {
-            var numberMatcher = /^[+-]?[0-9]{1,9}(?:\.[0-9]{1,2})?$/;
+            var numberMatcher = /^\d+$/;
             
             var matchResult = numberMatcher.test($(field).val());
             this.options.numbers.showMatchError = (matchResult) ? false : true;
@@ -193,6 +193,7 @@
             
             var validResult, domainResult;
             
+            // Remove whitespace as some phones put a spacebar in if you use the autocomplete option on the phone
             var whiteSpace = /\s/;
             var isWhiteSpace = whiteSpace.test($(field).val());
             if(isWhiteSpace) {

@@ -4,12 +4,6 @@ $(document).ready(function() {
         username: {
             minLength: 8,
             lengthErrorMessage: "Username must be at least 8 characters and no more than 12 characters long."
-        },
-        onFormValidated: function() {
-            alert('Form valid!');
-        },
-        onFormInValidated: function() {
-            alert('Form invalid!');
         }
     });
     

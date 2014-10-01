@@ -14,20 +14,46 @@
 
         <!-- include source files here... -->
         <script type="text/javascript" src="../../../js/jquery.isValid.js"></script>
-
         <!-- include spec files here... -->
         <script type="text/javascript" src="spec/isValidSpec.js"></script>
     </head>
     <body>
-        <form id="form-three" action="" method="post" class="left-col-75" style="display: none;">
+        <form id="test-form" action="" method="post" class="left-col-75" style="display: none;">
             <div class="form-row">
-                <label for="test">Test</label>
-                <input type="text" id="test-input" placeholder="Enter something" name="test" />
+                <label>Test</label>
+                <input type="text" id="empty" placeholder="Enter something" />
             </div>
             <div class="form-row">
-                <label>&nbsp;</label>
-                <input type="submit" value="Register" class="form-btn" />
-                <input type="reset" value="Reset" class="form-btn" />
+                <label>Test</label>
+                <input type="text" id="letters" data-field-info="letters" placeholder="Enter something" />
+            </div>
+            <div class="form-row">
+                <label>Test</label>
+                <input type="text" id="numbers" data-field-info="numbers" placeholder="Enter something" />
+            </div>
+            <div class="form-row">
+                <label>Test</label>
+                <input type="text" id="email" data-field-info="email" placeholder="Enter something" />
+            </div>
+            <div class="form-row">
+                <label>Test</label>
+                <input type="text" id="username" data-field-info="username" placeholder="Enter something" />
+            </div>
+            <div class="form-row">
+                <label>Test</label>
+                <input type="text" id="password" data-field-info="password" placeholder="Enter something" />
+            </div>
+            <div class="form-row">
+                <label>Test</label>
+                <input type="text" id="dob" data-field-info="dateofbirth" placeholder="Enter something" />
+            </div>
+            <div class="form-row">
+                <label>Test</label>
+                <input type="text" id="postcode" data-field-info="postcode" placeholder="Enter something" />
+            </div>
+            <div class="form-row">
+                <label>Test</label>
+                <input type="text" id="mobile" data-field-info="mobile" placeholder="Enter something" />
             </div>
         </form>
     </body>

@@ -239,11 +239,13 @@
         },
         
         this.isPostCodeValid = function(field) {
-            var validPostcode = checkPostCode($(field).val());
+            var isValidPostCode, postCode = checkPostCode($(field).val());
             
-            this.options.postcode.showInvalidError = (validPostcode) ? false : true;
+            isValidPostCode = (!postCode) ? false : true;
             
-            return validPostcode;
+            this.options.postcode.showInvalidError = (isValidPostCode) ? false : true;
+            
+            return isValidPostCode;
         },
             
         this.isMobileValid = function(field) {

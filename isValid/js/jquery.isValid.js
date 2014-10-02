@@ -20,8 +20,8 @@
                 letters: true,
                 showLengthError: true, 
                 lengthErrorMessage: "Password must be at least 6 characters and no more than 20 characters.",
-                showMatchError: true,
-                matchErrorMessage: "Password must contain letters and numbers."
+                showInvalidError: true,
+                invalidErrorMessage: "Password must contain letters and numbers."
             },
             email: {
                 domain: '',
@@ -31,14 +31,14 @@
                 domainErrorMessage: "Email domain entered is invalid, only @xxxx.xxx is accepted."
             },
             letters: {
-                showMatchError: true,
-                matchErrorMessage: "Field is letters only."
+                showInvalidError: true,
+                invalidErrorMessage: "Field is letters only."
             },
             numbers: {
-                showMatchError: true,
-                matchErrorMessage: "Field is numbers only."
+                showInvalidError: true,
+                invalidErrorMessage: "Field is numbers only."
             },
-            dateofbirth: {
+            date: {
                 showInvalidError: true,
                 invalidErrorMessage: "Please enter a valid Date.",
                 showFormatError: true,
@@ -109,8 +109,8 @@
                         valMethodName = "isEmailValid";
                         break;
                     
-                    case 'dateofbirth':
-                        valMethodName = "isDateOfBirthValid";
+                    case 'date':
+                        valMethodName = "isDateValid";
                         break;
                     
                     case 'letters':
@@ -147,7 +147,7 @@
             var letterMatcher = /^[A-Za-z ]+$/;
             
             var matchResult = letterMatcher.test($(field).val());
-            this.options.letters.showMatchError = (matchResult) ? false : true;
+            this.options.letters.showInvalidError = (matchResult) ? false : true;
             
             return matchResult;
         },
@@ -156,7 +156,7 @@
             var numberMatcher = /^\d+$/;
             
             var matchResult = numberMatcher.test($(field).val());
-            this.options.numbers.showMatchError = (matchResult) ? false : true;
+            this.options.numbers.showInvalidError = (matchResult) ? false : true;
             
             return matchResult;
         },
@@ -180,7 +180,7 @@
             
             if (this.options.password.numbers && this.options.password.letters) { 
                 matchResult = (passwordMatcher.test($(field).val()));
-                this.options.password.showMatchError = (matchResult) ? false : true;
+                this.options.password.showInvalidError = (matchResult) ? false : true;
                 
                 return (lengthResult) ? matchResult : false;
             }
@@ -214,7 +214,7 @@
             return validResult;
         },
             
-        this.isDateOfBirthValid = function(field) {
+        this.isDateValid = function(field) {
             var date = $(field).val();
             var count = date.match(/\//g);
             
@@ -222,17 +222,17 @@
             
             if(count === null || count.length < 2) {
                 formatResult = false;
-                this.options.dateofbirth.showFormatError = (formatResult) ? false : true;
+                this.options.date.showFormatError = (formatResult) ? false : true;
                 
                 return formatResult;
             } else {
                 var data = date.split('/');
                 
                 formatResult = true;
-                this.options.dateofbirth.showFormatError = (formatResult) ? false : true;
+                this.options.date.showFormatError = (formatResult) ? false : true;
                 
                 validResult = isBetween(Date.parse(data[2] + "-" + data[1] + "-" + data[0]), 0, Date.now());
-                this.options.dateofbirth.showInvalidError = (validResult) ? false : true;
+                this.options.date.showInvalidError = (validResult) ? false : true;
                 
                 return validResult;
             }  
@@ -255,9 +255,9 @@
             this.options.mobile.showInvalidError = (isNumbers && lengthResult) ? false : true;
             return isNumbers && lengthResult ? true : false;
         },
-
+            
         // Need a more effective/faster/efficient way of writing the method below
-        self.createErrorMessage = function(obj, field) {
+        this.createErrorMessage = function(obj, field) {
             
             var data = changeToLowercase(field);
             
@@ -275,9 +275,9 @@
                     break;
 
                 case 'password':
-                    if(obj.options.password.showMatchError) {
+                    if(obj.options.password.showInvalidError) {
                         errorID = '-password-match-error';
-                        errorMessage = obj.options.password.matchErrorMessage;
+                        errorMessage = obj.options.password.invalidErrorMessage;
                         
                         buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
                     }
@@ -307,34 +307,34 @@
                     break;
 
                 case 'letters':
-                    if(obj.options.letters.showMatchError) {
+                    if(obj.options.letters.showInvalidError) {
                         errorID = '-letters-match-error';
-                        errorMessage = obj.options.letters.matchErrorMessage;
+                        errorMessage = obj.options.letters.invalidErrorMessage;
                         
                         buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
                     }
                     break;
 
                 case 'numbers':
-                    if(obj.options.numbers.showMatchError) {
+                    if(obj.options.numbers.showInvalidError) {
                         errorID = '-numbers-match-error';
-                        errorMessage = obj.options.numbers.matchErrorMessage;
+                        errorMessage = obj.options.numbers.invalidErrorMessage;
                         
                         buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
                     }
                     break;
 
-                case 'dateofbirth':
-                    if(obj.options.dateofbirth.showFormatError) {
-                        errorID = '-dateofbirth-format-error';
-                        errorMessage = obj.options.dateofbirth.formatErrorMessage;
+                case 'date':
+                    if(obj.options.date.showFormatError) {
+                        errorID = '-date-format-error';
+                        errorMessage = obj.options.date.formatErrorMessage;
                         
                         buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
                     }
                     
-                    if(obj.options.dateofbirth.showFormatError) {
-                        errorID = '-dateofbirth-invalid-error';
-                        errorMessage = obj.options.dateofbirth.invalidErrorMessage;
+                    if(obj.options.date.showFormatError) {
+                        errorID = '-date-invalid-error';
+                        errorMessage = obj.options.date.invalidErrorMessage;
                         
                         buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
                     }
@@ -363,7 +363,7 @@
         }
         
         // Need a more effective/faster/efficient way of writing the method below
-        self.controlErrorMessages = function(obj, field) {
+        this.controlErrorMessages = function(obj, field) {
 
             var data = changeToLowercase(field);
             
@@ -378,7 +378,7 @@
 
                 case "password":
                     errorMessageDisplay(obj.formID + '-password-length-error', obj.options.password.showLengthError);
-                    errorMessageDisplay(obj.formID + '-password-match-error', obj.options.password.showMatchError);
+                    errorMessageDisplay(obj.formID + '-password-match-error', obj.options.password.showInvalidError);
                     break;
 
                 case 'email':
@@ -388,17 +388,17 @@
 
                 case 'letters':
                     errorID = '-letters-match-error';
-                    showError = obj.options.letters.showMatchError;
+                    showError = obj.options.letters.showInvalidError;
                     break;
 
                 case 'numbers':
                     errorID = '-numbers-match-error';
-                    showError = obj.options.numbers.showMatchError;
+                    showError = obj.options.numbers.showInvalidError;
                     break;    
 
-                case 'dateofbirth': 
-                    errorMessageDisplay(obj.formID + '-dateofbirth-invalid-error', obj.options.dateofbirth.showInvalidError);
-                    errorMessageDisplay(obj.formID + '-dateofbirth-format-error', obj.options.dateofbirth.showFormatError);
+                case 'date': 
+                    errorMessageDisplay(obj.formID + '-date-invalid-error', obj.options.date.showInvalidError);
+                    errorMessageDisplay(obj.formID + '-date-format-error', obj.options.date.showFormatError);
                     break;
 
                 case 'postcode':
@@ -431,13 +431,13 @@
             if(show) {
                 this.options.username.showLengthError = false;
                 this.options.password.showLengthError = false;
-                this.options.password.showMatchError = false;
+                this.options.password.showInvalidError = false;
                 this.options.email.showInvalidError = false;
                 this.options.email.showDomainError = false;
-                this.options.letters.showMatchError = false;
-                this.options.numbers.showMatchError = false;
-                this.options.dateofbirth.showInvalidError = false;
-                this.options.dateofbirth.showFormatError = false;
+                this.options.letters.showInvalidError = false;
+                this.options.numbers.showInvalidError = false;
+                this.options.date.showInvalidError = false;
+                this.options.date.showFormatError = false;
                 this.options.postcode.showInvalidError = false;
                 this.options.mobile.showInvalidError = false;
             }

@@ -360,8 +360,8 @@
                     
                 case 'mobile':
                     errorDetails = new ErrorDetails(obj.formIDStr + '-mobile-invalid-error', 
-                                                    obj.options.date.showInvalidError, 
-                                                    obj.options.date.invalidErrorMessage);
+                                                    obj.options.mobile.showInvalidError, 
+                                                    obj.options.mobile.invalidErrorMessage);
 
                     obj.options.mobile.errorDetails.push(errorDetails);
                     buildErrorContainer(errorDetails, field);
@@ -379,15 +379,15 @@
             switch(data) {
 
                 case "username":
-                    for(var i = 0; i < obj.options.username.errorDetails.length; i++) {
-                        displayErrorMessage(obj.options.username.errorDetails[i]);
-                    }
+                    errorID = '-username-length-error';
+                    showError = obj.options.username.showLengthError;
+                    
                     break;
 
                 case "password":
-                    for(var i = 0; i < obj.options.password.errorDetails.length; i++) {
-                        displayErrorMessage(obj.options.password.errorDetails[i]);
-                    }
+                    errorMessageDisplay(obj.formID + '-password-length-error', obj.options.password.showLengthError);
+                    errorMessageDisplay(obj.formID + '-password-invalid-error', obj.options.password.showInvalidError);
+
                     break;
 
                 case 'email':
@@ -421,7 +421,7 @@
                     break;
             }
             
-            //errorMessageDisplay(obj.formID + errorID, showError);
+            errorMessageDisplay(obj.formID + errorID, showError);
 
         }
         

@@ -64,13 +64,13 @@
             turnOffErrors: false,
             onFormValidated: function () {},
             onFormInValidated: function () {}
-        }, self;
+        };
             
-        self = this, this.options;
+        self, this.options;
         
         this.init = function() {
             
-            var obj = this;
+            self = this;
             
             this.elem = element;
             this.$elem = $(element);
@@ -86,7 +86,7 @@
             this.formArray = $(this.formID + ' :input[type="text"],' + this.formID + ' :input[type="password"],' + this.formID + ' :input[type="tel"],' + this.formID + ' textarea,' + this.formID + ' select');
             
             this.formArray.each(function (index, field) {
-                self.createErrorMessage(obj, field);
+                self.createErrorMessage(self, field);
             });
             
             return this;

@@ -95,6 +95,12 @@
         this.isFormValidated = function() {
             return ($(this.formID + ' .invalid').length) ? false : true;
         },
+            
+        this.resetForm = function() {
+            $(this.formID + ' .invalid').removeClass('invalid');
+            $(this.formID + ' .form-error').hide();
+            this.isFormValid = this.isFormValidated();
+        },
   
         this.isValidField = function(field) {
             
@@ -438,17 +444,17 @@
         var showErrors = function(show) {
             
             if(show) {
-                this.options.username.showLengthError = false;
-                this.options.password.showLengthError = false;
-                this.options.password.showInvalidError = false;
-                this.options.email.showInvalidError = false;
-                this.options.email.showDomainError = false;
-                this.options.letters.showInvalidError = false;
-                this.options.numbers.showInvalidError = false;
-                this.options.date.showInvalidError = false;
-                this.options.date.showFormatError = false;
-                this.options.postcode.showInvalidError = false;
-                this.options.mobile.showInvalidError = false;
+                self.options.username.showLengthError = false;
+                self.options.password.showLengthError = false;
+                self.options.password.showInvalidError = false;
+                self.options.email.showInvalidError = false;
+                self.options.email.showDomainError = false;
+                self.options.letters.showInvalidError = false;
+                self.options.numbers.showInvalidError = false;
+                self.options.date.showInvalidError = false;
+                self.options.date.showFormatError = false;
+                self.options.postcode.showInvalidError = false;
+                self.options.mobile.showInvalidError = false;
             }
         }
         
@@ -523,9 +529,7 @@
             });
             
             newIsValid.$elem.find(':reset').click(function() {
-                $(newIsValid.formID + ' .invalid').removeClass('invalid');
-                $(newIsValid.formID + ' .form-error').hide();
-                newIsValid.isFormValid = newIsValid.isFormValidated();
+                newIsValid.resetForm();
             });
             
         });

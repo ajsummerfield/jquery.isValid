@@ -138,7 +138,7 @@
                         break;
                         
                     default:
-                        valMethodName = "isEmpty";
+                        valMethodName = "isNotEmpty";
                 }
                 
                 this.isValid = completeAction(this, (this[valMethodName](field)), field);
@@ -147,8 +147,8 @@
             return this.isValid;
         },
         
-        this.isEmpty = function(field) {
-            return (!($(field).val().length));
+        this.isNotEmpty = function(field) {
+            return (($(field).val().length));
         },
         
         this.isLetters = function(field) {

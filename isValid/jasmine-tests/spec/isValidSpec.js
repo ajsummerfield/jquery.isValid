@@ -2,6 +2,8 @@ describe("jQuery.isValid Tests", function() {
     
     var formOne;
     
+    document.write("<form id='test-form' action='' method='post' class='left-col-75' style='display: none;'><div class='form-row'><label>Test</label><input type='text' id='empty' placeholder='Enter something' /></div><div class='form-row'><label>Test</label><input type='text' id='letters' data-field-info='letters' placeholder='Enter something' /></div><div class='form-row'><label>Test</label><input type='text' id='numbers' data-field-info='numbers' placeholder='Enter something' /></div><div class='form-row'><label>Test</label><input type='text' id='email' data-field-info='email' placeholder='Enter something' /></div><div class='form-row'><label>Test</label><input type='text' id='username' data-field-info='username' placeholder='Enter something' /></div><div class='form-row'><label>Test</label><input type='text' id='password' data-field-info='password' placeholder='Enter something' /></div><div class='form-row'><label>Test</label><input type='text' id='dob' data-field-info='dateofbirth' placeholder='Enter something' /></div><div class='form-row'><label>Test</label><input type='text' id='postcode' data-field-info='postcode' placeholder='Enter something' /></div><div class='form-row'><label>Test</label><input type='text' id='mobile' data-field-info='mobile' placeholder='Enter something' /></div></form>");
+    
     beforeEach(function() {
         formOne = $('#test-form').isValid().data('isValid');
     });

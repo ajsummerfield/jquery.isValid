@@ -12,11 +12,6 @@ $(document).ready(function() {
             minLength: 7,
             maxLength: 144,
             lengthErrorMessage: "Username must be at least 7 characters and no more than 144 characters long."
-        },
-        email: {
-            domain: "@gmail.com",
-            showDomainError: true,
-            domainErrorMessage: "Email domain entered is invalid, only @gmail.com is accepted."
         }
     });
     

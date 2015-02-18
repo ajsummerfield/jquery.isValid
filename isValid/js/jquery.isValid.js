@@ -7,60 +7,61 @@
         // Look into similar changes to error message creation and display similar to the new way of calling the valid methods
 
         var defaults = {
-            username: {
-                minLength: 6,
-                maxLength: 12,
-                showLengthError: true,
-                lengthErrorMessage: "Username must be be at least 6 characters and no more than 12 characters.",
+                username: {
+                    minLength: 6,
+                    maxLength: 12,
+                    showLengthError: true,
+                    lengthErrorMessage: "Username must be be at least 6 characters and no more than 12 characters.",
+                },
+                password: {
+                    minLength: 6,
+                    maxLength: 20,
+                    numbers: true,
+                    letters: true,
+                    showLengthError: true,
+                    lengthErrorMessage: "Password must be at least 6 characters and no more than 20 characters.",
+                    showInvalidError: true,
+                    invalidErrorMessage: "Password must contain letters and numbers."
+                },
+                email: {
+                    domain: '',
+                    showInvalidError: true,
+                    invalidErrorMessage: "Email is an invalid email address.",
+                    showDomainError: false,
+                    domainErrorMessage: "Email domain entered is invalid, only @xxxx.xxx is accepted."
+                },
+                letters: {
+                    showInvalidError: true,
+                    invalidErrorMessage: "Field is letters only."
+                },
+                numbers: {
+                    showInvalidError: true,
+                    invalidErrorMessage: "Field is numbers only."
+                },
+                date: {
+                    showInvalidError: true,
+                    invalidErrorMessage: "Please enter a valid Date.",
+                    showFormatError: true,
+                    formatErrorMessage: "Please enter Date format as DD/MM/YYYY as specified in the placeholder."
+                },
+                postcode: {
+                    showInvalidError: true,
+                    invalidErrorMessage: "Not a valid Post Code."
+                },
+                mobile: {
+                    showInvalidError: true,
+                    numberLength: 11,
+                    invalidErrorMessage: "Invalid mobile number."
+                },
+                turnOffErrors: false,
+                onFormValidated: function () {},
+                onFormInValidated: function () {}
             },
-            password: {
-                minLength: 6,
-                maxLength: 20,
-                numbers: true,
-                letters: true,
-                showLengthError: true, 
-                lengthErrorMessage: "Password must be at least 6 characters and no more than 20 characters.",
-                showInvalidError: true,
-                invalidErrorMessage: "Password must contain letters and numbers."
-            },
-            email: {
-                domain: '',
-                showInvalidError: true,
-                invalidErrorMessage: "Email is an invalid email address.",
-                showDomainError: false,
-                domainErrorMessage: "Email domain entered is invalid, only @xxxx.xxx is accepted."
-            },
-            letters: {
-                showInvalidError: true,
-                invalidErrorMessage: "Field is letters only."
-            },
-            numbers: {
-                showInvalidError: true,
-                invalidErrorMessage: "Field is numbers only."
-            },
-            date: {
-                showInvalidError: true,
-                invalidErrorMessage: "Please enter a valid Date.",
-                showFormatError: true,
-                formatErrorMessage: "Please enter Date format as DD/MM/YYYY as specified in the placeholder."
-            },
-            postcode: {
-                showInvalidError: true,
-                invalidErrorMessage: "Not a valid Post Code."
-            },
-            mobile: {
-                showInvalidError: true,
-                numberLength: 11,
-                invalidErrorMessage: "Invalid mobile number."
-            },
-            turnOffErrors: false,
-            onFormValidated: function () {},
-            onFormInValidated: function () {}
-        }, self;
+            self;
 
         self = this, this.options;
 
-        this.init = function() {
+        this.init = function () {
 
             var obj = this;
 
@@ -84,11 +85,11 @@
             return this;
         },
 
-            this.isFormValidated = function() {
+        this.isFormValidated = function () {
             return ($(this.formID + ' .invalid').length) ? false : true;
         },
 
-            this.isValidField = function(field) {
+        this.isValidField = function (field) {
 
             if (field.disabled || $(field).attr('data-field-info') === "notrequired") {
                 this.isValid = true;
@@ -96,41 +97,41 @@
                 var data = changeToLowercase(field);
                 var valMethodName;
 
-                switch(data) {
-                    case 'username':
-                        valMethodName = "isUsernameValid";
-                        break;
+                switch (data) {
+                case 'username':
+                    valMethodName = "isUsernameValid";
+                    break;
 
-                    case 'password':
-                        valMethodName = "isPasswordValid";
-                        break; 
+                case 'password':
+                    valMethodName = "isPasswordValid";
+                    break;
 
-                    case 'email':
-                        valMethodName = "isEmailValid";
-                        break;
+                case 'email':
+                    valMethodName = "isEmailValid";
+                    break;
 
-                    case 'date':
-                        valMethodName = "isDateValid";
-                        break;
+                case 'date':
+                    valMethodName = "isDateValid";
+                    break;
 
-                    case 'letters':
-                        valMethodName = "isLetters";
-                        break;
+                case 'letters':
+                    valMethodName = "isLetters";
+                    break;
 
-                    case 'numbers':
-                        valMethodName = "isNumbers";
-                        break;
+                case 'numbers':
+                    valMethodName = "isNumbers";
+                    break;
 
-                    case 'postcode':
-                        valMethodName = "isPostCodeValid";
-                        break;
+                case 'postcode':
+                    valMethodName = "isPostCodeValid";
+                    break;
 
-                    case 'mobile':
-                        valMethodName = "isMobileValid";
-                        break;
+                case 'mobile':
+                    valMethodName = "isMobileValid";
+                    break;
 
-                    default:
-                        valMethodName = "isEmpty";
+                default:
+                    valMethodName = "isEmpty";
                 }
 
                 this.isValid = completeAction(this, (this[valMethodName](field)), field);
@@ -139,11 +140,11 @@
             return this.isValid;
         },
 
-            this.isEmpty = function(field) {
+        this.isEmpty = function (field) {
             return ($(field).val().length);
         },
 
-            this.isLetters = function(field) {
+        this.isLetters = function (field) {
             var letterMatcher = /^[A-Za-z ]+$/;
 
             var matchResult = letterMatcher.test($(field).val());
@@ -152,7 +153,7 @@
             return matchResult;
         },
 
-            this.isNumbers = function(field) {
+        this.isNumbers = function (field) {
             var numberMatcher = /^\d+$/;
 
             var matchResult = numberMatcher.test($(field).val());
@@ -161,7 +162,7 @@
             return matchResult;
         },
 
-            this.isUsernameValid = function(field) {
+        this.isUsernameValid = function (field) {
             var lengthResult = isBetween($(field).val().length, this.options.username.minLength, this.options.username.maxLength);
 
             this.options.username.showLengthError = (lengthResult) ? false : true;
@@ -169,7 +170,7 @@
             return lengthResult;
         },
 
-            this.isPasswordValid = function(field) {
+        this.isPasswordValid = function (field) {
             var passwordMatcher = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/;
 
             var lengthResult, matchResult;
@@ -178,7 +179,7 @@
 
             this.options.password.showLengthError = (lengthResult) ? false : true;
 
-            if (this.options.password.numbers && this.options.password.letters) { 
+            if (this.options.password.numbers && this.options.password.letters) {
                 matchResult = (passwordMatcher.test($(field).val()));
                 this.options.password.showInvalidError = (matchResult) ? false : true;
 
@@ -188,7 +189,7 @@
             return lengthResult;
         },
 
-            this.isEmailValid = function(field) {
+        this.isEmailValid = function (field) {
             var emailMatcher = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
 
             var validResult, domainResult;
@@ -196,7 +197,7 @@
             // Remove whitespace as some phones put a spacebar in if you use the autocomplete option on the phone
             var whiteSpace = /\s/;
             var isWhiteSpace = whiteSpace.test($(field).val());
-            if(isWhiteSpace) {
+            if (isWhiteSpace) {
                 $(field).val($(field).val().replace(/\s/g, ''));
             }
 
@@ -204,7 +205,7 @@
 
             this.options.email.showInvalidError = (validResult) ? false : true;
 
-            if(this.options.email.domain !== '') {
+            if (this.options.email.domain !== '') {
                 domainResult = ($(field).val().indexOf(this.options.email.domain, $(field).val().length - this.options.email.domain.length) !== -1);
                 this.options.email.showDomainError = (domainResult) ? false : true;
 
@@ -214,13 +215,13 @@
             return validResult;
         },
 
-            this.isDateValid = function(field) {
+        this.isDateValid = function (field) {
             var date = $(field).val();
             var count = date.match(/\//g);
 
             var validResult, formatResult;
 
-            if(count === null || count.length < 2) {
+            if (count === null || count.length < 2) {
                 formatResult = false;
                 this.options.date.showFormatError = (formatResult) ? false : true;
 
@@ -235,10 +236,10 @@
                 this.options.date.showInvalidError = (validResult) ? false : true;
 
                 return validResult;
-            }  
+            }
         },
 
-            this.isPostCodeValid = function(field) {
+        this.isPostCodeValid = function (field) {
             var isValidPostCode, postCode = checkPostCode($(field).val());
 
             isValidPostCode = (!postCode) ? false : true;
@@ -248,7 +249,7 @@
             return isValidPostCode;
         },
 
-            this.isMobileValid = function(field) {
+        this.isMobileValid = function (field) {
             var isNumbers = this.isNumbers(field);
 
             var lengthResult = $(field).val().length === this.options.mobile.numberLength;
@@ -256,160 +257,160 @@
             return isNumbers && lengthResult ? true : false;
         },
 
-            // Need a more effective/faster/efficient way of writing the method below
-            this.createErrorMessage = function(obj, field) {
+        // Need a more effective/faster/efficient way of writing the method below
+        this.createErrorMessage = function (obj, field) {
 
             var data = changeToLowercase(field);
 
             var errorID, errorMessage;
 
-            switch(data) {
+            switch (data) {
 
-                case 'username':
-                    if(obj.options.username.showLengthError) {
-                        errorID = '-username-length-error';
-                        errorMessage = obj.options.username.lengthErrorMessage;
+            case 'username':
+                if (obj.options.username.showLengthError) {
+                    errorID = '-username-length-error';
+                    errorMessage = obj.options.username.lengthErrorMessage;
 
-                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
-                    }
-                    break;
+                    buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                }
+                break;
 
-                case 'password':
-                    if(obj.options.password.showInvalidError) {
-                        errorID = '-password-match-error';
-                        errorMessage = obj.options.password.invalidErrorMessage;
+            case 'password':
+                if (obj.options.password.showInvalidError) {
+                    errorID = '-password-match-error';
+                    errorMessage = obj.options.password.invalidErrorMessage;
 
-                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
-                    }
+                    buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                }
 
-                    if(obj.options.password.showLengthError) {
-                        errorID = '-password-length-error';
-                        errorMessage = obj.options.password.lengthErrorMessage;
+                if (obj.options.password.showLengthError) {
+                    errorID = '-password-length-error';
+                    errorMessage = obj.options.password.lengthErrorMessage;
 
-                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
-                    }
-                    break;
+                    buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                }
+                break;
 
-                case 'email':
-                    if(obj.options.email.showInvalidError) {
-                        errorID = '-email-invalid-error';
-                        errorMessage = obj.options.email.invalidErrorMessage;
+            case 'email':
+                if (obj.options.email.showInvalidError) {
+                    errorID = '-email-invalid-error';
+                    errorMessage = obj.options.email.invalidErrorMessage;
 
-                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
-                    }
+                    buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                }
 
-                    if(obj.options.email.showDomainError) {
-                        errorID = '-email-domain-error';
-                        errorMessage = obj.options.email.domainErrorMessage;
+                if (obj.options.email.showDomainError) {
+                    errorID = '-email-domain-error';
+                    errorMessage = obj.options.email.domainErrorMessage;
 
-                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
-                    }
-                    break;
+                    buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                }
+                break;
 
-                case 'letters':
-                    if(obj.options.letters.showInvalidError) {
-                        errorID = '-letters-match-error';
-                        errorMessage = obj.options.letters.invalidErrorMessage;
+            case 'letters':
+                if (obj.options.letters.showInvalidError) {
+                    errorID = '-letters-match-error';
+                    errorMessage = obj.options.letters.invalidErrorMessage;
 
-                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
-                    }
-                    break;
+                    buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                }
+                break;
 
-                case 'numbers':
-                    if(obj.options.numbers.showInvalidError) {
-                        errorID = '-numbers-match-error';
-                        errorMessage = obj.options.numbers.invalidErrorMessage;
+            case 'numbers':
+                if (obj.options.numbers.showInvalidError) {
+                    errorID = '-numbers-match-error';
+                    errorMessage = obj.options.numbers.invalidErrorMessage;
 
-                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
-                    }
-                    break;
+                    buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                }
+                break;
 
-                case 'date':
-                    if(obj.options.date.showFormatError) {
-                        errorID = '-date-format-error';
-                        errorMessage = obj.options.date.formatErrorMessage;
+            case 'date':
+                if (obj.options.date.showFormatError) {
+                    errorID = '-date-format-error';
+                    errorMessage = obj.options.date.formatErrorMessage;
 
-                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
-                    }
+                    buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                }
 
-                    if(obj.options.date.showFormatError) {
-                        errorID = '-date-invalid-error';
-                        errorMessage = obj.options.date.invalidErrorMessage;
+                if (obj.options.date.showFormatError) {
+                    errorID = '-date-invalid-error';
+                    errorMessage = obj.options.date.invalidErrorMessage;
 
-                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
-                    }
-                    break;
+                    buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                }
+                break;
 
-                case 'postcode':
-                    if(obj.options.postcode.showInvalidError) {
-                        errorID = '-postcode-invalid-error';
-                        errorMessage = obj.options.postcode.invalidErrorMessage;
+            case 'postcode':
+                if (obj.options.postcode.showInvalidError) {
+                    errorID = '-postcode-invalid-error';
+                    errorMessage = obj.options.postcode.invalidErrorMessage;
 
-                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
-                    }
-                    break;
+                    buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                }
+                break;
 
-                case 'mobile':
-                    if(obj.options.mobile.showInvalidError) {
-                        errorID = '-mobile-invalid-error';
-                        errorMessage = obj.options.mobile.invalidErrorMessage;
+            case 'mobile':
+                if (obj.options.mobile.showInvalidError) {
+                    errorID = '-mobile-invalid-error';
+                    errorMessage = obj.options.mobile.invalidErrorMessage;
 
-                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
-                    }
-                    break;
+                    buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                }
+                break;
             }
 
             //buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
         }
 
         // Need a more effective/faster/efficient way of writing the method below
-        this.controlErrorMessages = function(obj, field) {
+        this.controlErrorMessages = function (obj, field) {
 
             var data = changeToLowercase(field);
 
             var errorID, showError;
 
-            switch(data) {
+            switch (data) {
 
-                case "username":
-                    errorID = '-username-length-error';
-                    showError = obj.options.username.showLengthError;
-                    break;
+            case "username":
+                errorID = '-username-length-error';
+                showError = obj.options.username.showLengthError;
+                break;
 
-                case "password":
-                    errorMessageDisplay(obj.formID + '-password-length-error', obj.options.password.showLengthError);
-                    errorMessageDisplay(obj.formID + '-password-match-error', obj.options.password.showInvalidError);
-                    break;
+            case "password":
+                errorMessageDisplay(obj.formID + '-password-length-error', obj.options.password.showLengthError);
+                errorMessageDisplay(obj.formID + '-password-match-error', obj.options.password.showInvalidError);
+                break;
 
-                case 'email':
-                    errorMessageDisplay(obj.formID + '-email-invalid-error', obj.options.email.showInvalidError);
-                    errorMessageDisplay(obj.formID + '-email-domain-error', obj.options.email.showDomainError);
-                    break;
+            case 'email':
+                errorMessageDisplay(obj.formID + '-email-invalid-error', obj.options.email.showInvalidError);
+                errorMessageDisplay(obj.formID + '-email-domain-error', obj.options.email.showDomainError);
+                break;
 
-                case 'letters':
-                    errorID = '-letters-match-error';
-                    showError = obj.options.letters.showInvalidError;
-                    break;
+            case 'letters':
+                errorID = '-letters-match-error';
+                showError = obj.options.letters.showInvalidError;
+                break;
 
-                case 'numbers':
-                    errorID = '-numbers-match-error';
-                    showError = obj.options.numbers.showInvalidError;
-                    break;    
+            case 'numbers':
+                errorID = '-numbers-match-error';
+                showError = obj.options.numbers.showInvalidError;
+                break;
 
-                case 'date': 
-                    errorMessageDisplay(obj.formID + '-date-invalid-error', obj.options.date.showInvalidError);
-                    errorMessageDisplay(obj.formID + '-date-format-error', obj.options.date.showFormatError);
-                    break;
+            case 'date':
+                errorMessageDisplay(obj.formID + '-date-invalid-error', obj.options.date.showInvalidError);
+                errorMessageDisplay(obj.formID + '-date-format-error', obj.options.date.showFormatError);
+                break;
 
-                case 'postcode':
-                    errorID = '-postcode-invalid-error';
-                    showError = obj.options.postcode.showInvalidError;
-                    break;
+            case 'postcode':
+                errorID = '-postcode-invalid-error';
+                showError = obj.options.postcode.showInvalidError;
+                break;
 
-                case 'mobile':
-                    errorID = '-mobile-invalid-error';
-                    showError = obj.options.mobile.showInvalidError;
-                    break;
+            case 'mobile':
+                errorID = '-mobile-invalid-error';
+                showError = obj.options.mobile.showInvalidError;
+                break;
             }
 
             errorMessageDisplay(obj.formID + errorID, showError);
@@ -418,7 +419,7 @@
 
         // Private Methods
 
-        var changeToLowercase = function(field) {
+        var changeToLowercase = function (field) {
             return ($(field).attr('data-field-info') !== undefined) ? $(field).attr('data-field-info').toLowerCase() : "";
         }
 
@@ -426,9 +427,9 @@
             return (val >= min && val <= max);
         }
 
-        var showErrors = function(show) {
+        var showErrors = function (show) {
 
-            if(show) {
+            if (show) {
                 this.options.username.showLengthError = false;
                 this.options.password.showLengthError = false;
                 this.options.password.showInvalidError = false;
@@ -443,11 +444,11 @@
             }
         }
 
-        var completeAction = function(obj, isValid, field) {
+        var completeAction = function (obj, isValid, field) {
             return (isValid) ? validAction(obj, field) : invalidAction(obj, field);
         }
 
-        var validAction = function(obj, field) {
+        var validAction = function (obj, field) {
 
             $(field).removeClass('invalid');
 
@@ -456,7 +457,7 @@
             return true;
         }
 
-        var invalidAction = function(obj, field) {
+        var invalidAction = function (obj, field) {
 
             $(field).addClass('invalid');
 
@@ -465,20 +466,20 @@
             return false;
         }
 
-        var buildErrorContainer = function(id, field, error) {
+        var buildErrorContainer = function (id, field, error) {
             $(field).after('<div id="' + id + '" class="form-error"></div>');
             $('#' + id).append(error);
         }
 
-        var errorMessageDisplay = function(id, errorType) {
+        var errorMessageDisplay = function (id, errorType) {
             (errorType) ? $(id).show() : $(id).hide();
         }
 
-        }
+    }
 
-    $.fn.isValid = function(options) {
+    $.fn.isValid = function (options) {
 
-        return this.each(function() {
+        return this.each(function () {
 
             var newIsValid = new $.isValid(this, options);
             $(this).data('isValid', newIsValid);
@@ -501,12 +502,12 @@
             });
 
             newIsValid.formArray.each(function (index, field) {
-                $(field).blur(function() {
+                $(field).blur(function () {
                     newIsValid.isValid = newIsValid.isValidField(field);
                 });
             });
 
-            newIsValid.$elem.find(':reset').click(function() {
+            newIsValid.$elem.find(':reset').click(function () {
                 $(newIsValid.formID + ' .invalid').removeClass('invalid');
                 $(newIsValid.formID + ' .form-error').hide();
                 newIsValid.isFormValid = newIsValid.isFormValidated();
@@ -572,46 +573,46 @@ Example call:
 
 --------------------------------------------------------------------------------------------------*/
 
-function checkPostCode (toCheck) {
+function checkPostCode(toCheck) {
 
     // Permitted letters depend upon their position in the postcode.
-    var alpha1 = "[abcdefghijklmnoprstuwyz]";                       // Character 1
-    var alpha2 = "[abcdefghklmnopqrstuvwxy]";                       // Character 2
-    var alpha3 = "[abcdefghjkpmnrstuvwxy]";                         // Character 3
-    var alpha4 = "[abehmnprvwxy]";                                  // Character 4
-    var alpha5 = "[abdefghjlnpqrstuwxyz]";                          // Character 5
-    var BFPOa5 = "[abdefghjlnpqrst]";                               // BFPO alpha5
-    var BFPOa6 = "[abdefghjlnpqrstuwzyz]";                          // BFPO alpha6
+    var alpha1 = "[abcdefghijklmnoprstuwyz]"; // Character 1
+    var alpha2 = "[abcdefghklmnopqrstuvwxy]"; // Character 2
+    var alpha3 = "[abcdefghjkpmnrstuvwxy]"; // Character 3
+    var alpha4 = "[abehmnprvwxy]"; // Character 4
+    var alpha5 = "[abdefghjlnpqrstuwxyz]"; // Character 5
+    var BFPOa5 = "[abdefghjlnpqrst]"; // BFPO alpha5
+    var BFPOa6 = "[abdefghjlnpqrstuwzyz]"; // BFPO alpha6
 
     // Array holds the regular expressions for the valid postcodes
-    var pcexp = new Array ();
+    var pcexp = new Array();
 
     // BFPO postcodes
-    pcexp.push (new RegExp ("^(bf1)(\\s*)([0-6]{1}" + BFPOa5 + "{1}" + BFPOa6 + "{1})$","i"));
+    pcexp.push(new RegExp("^(bf1)(\\s*)([0-6]{1}" + BFPOa5 + "{1}" + BFPOa6 + "{1})$", "i"));
 
     // Expression for postcodes: AN NAA, ANN NAA, AAN NAA, and AANN NAA
-    pcexp.push (new RegExp ("^(" + alpha1 + "{1}" + alpha2 + "?[0-9]{1,2})(\\s*)([0-9]{1}" + alpha5 + "{2})$","i"));
+    pcexp.push(new RegExp("^(" + alpha1 + "{1}" + alpha2 + "?[0-9]{1,2})(\\s*)([0-9]{1}" + alpha5 + "{2})$", "i"));
 
     // Expression for postcodes: ANA NAA
-    pcexp.push (new RegExp ("^(" + alpha1 + "{1}[0-9]{1}" + alpha3 + "{1})(\\s*)([0-9]{1}" + alpha5 + "{2})$","i"));
+    pcexp.push(new RegExp("^(" + alpha1 + "{1}[0-9]{1}" + alpha3 + "{1})(\\s*)([0-9]{1}" + alpha5 + "{2})$", "i"));
 
     // Expression for postcodes: AANA  NAA
-    pcexp.push (new RegExp ("^(" + alpha1 + "{1}" + alpha2 + "{1}" + "?[0-9]{1}" + alpha4 +"{1})(\\s*)([0-9]{1}" + alpha5 + "{2})$","i"));
+    pcexp.push(new RegExp("^(" + alpha1 + "{1}" + alpha2 + "{1}" + "?[0-9]{1}" + alpha4 + "{1})(\\s*)([0-9]{1}" + alpha5 + "{2})$", "i"));
 
     // Exception for the special postcode GIR 0AA
-    pcexp.push (/^(GIR)(\s*)(0AA)$/i);
+    pcexp.push(/^(GIR)(\s*)(0AA)$/i);
 
     // Standard BFPO numbers
-    pcexp.push (/^(bfpo)(\s*)([0-9]{1,4})$/i);
+    pcexp.push(/^(bfpo)(\s*)([0-9]{1,4})$/i);
 
     // c/o BFPO numbers
-    pcexp.push (/^(bfpo)(\s*)(c\/o\s*[0-9]{1,3})$/i);
+    pcexp.push(/^(bfpo)(\s*)(c\/o\s*[0-9]{1,3})$/i);
 
     // Overseas Territories
-    pcexp.push (/^([A-Z]{4})(\s*)(1ZZ)$/i);  
+    pcexp.push(/^([A-Z]{4})(\s*)(1ZZ)$/i);
 
     // Anguilla
-    pcexp.push (/^(ai-2640)$/i);
+    pcexp.push(/^(ai-2640)$/i);
 
     // Load up the string to check
     var postCode = toCheck;
@@ -620,7 +621,7 @@ function checkPostCode (toCheck) {
     var valid = false;
 
     // Check the string against the types of post codes
-    for ( var i=0; i<pcexp.length; i++) {
+    for (var i = 0; i < pcexp.length; i++) {
 
         if (pcexp[i].test(postCode)) {
 
@@ -632,10 +633,12 @@ function checkPostCode (toCheck) {
             postCode = RegExp.$1.toUpperCase() + " " + RegExp.$3.toUpperCase();
 
             // If it is a BFPO c/o type postcode, tidy up the "c/o" part
-            postCode = postCode.replace (/C\/O\s*/,"c/o ");
+            postCode = postCode.replace(/C\/O\s*/, "c/o ");
 
             // If it is the Anguilla overseas territory postcode, we need to treat it specially
-            if (toCheck.toUpperCase() == 'AI-2640') {postCode = 'AI-2640'};
+            if (toCheck.toUpperCase() == 'AI-2640') {
+                postCode = 'AI-2640'
+            };
 
             // Load new postcode back into the form element
             valid = true;
@@ -646,5 +649,7 @@ function checkPostCode (toCheck) {
     }
 
     // Return with either the reformatted valid postcode or the original invalid postcode
-    if (valid) {return postCode;} else return false;
+    if (valid) {
+        return postCode;
+    } else return false;
 }

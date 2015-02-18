@@ -53,6 +53,10 @@
                     numberLength: 11,
                     invalidErrorMessage: "Invalid mobile number."
                 },
+                checkbox: {
+                    showInvalidError: true,
+                    invalidErrorMessage: "Checkbox must be checked."
+                },
                 turnOffErrors: false,
                 onFormValidated: function () {},
                 onFormInValidated: function () {}
@@ -76,7 +80,7 @@
 
             showErrors(this.options.turnOffErrors);
 
-            this.formArray = $(this.formID + ' :input[type="text"],' + this.formID + ' :input[type="password"],' + this.formID + ' :input[type="tel"],' + this.formID + ' textarea,' + this.formID + ' select');
+            this.formArray = $(this.formID + ' :input[type="text"],' + this.formID + ' :input[type="email"],' + this.formID + ' :input[type="password"],' + this.formID + ' :input[type="tel"],'  + this.formID + ' :input[type="number"],' + this.formID + ' :input[type="date"],' + this.formID + ' :input[type="checkbox"],' + this.formID + ' textarea,' + this.formID + ' select');
 
             this.formArray.each(function (index, field) {
                 self.createErrorMessage(obj, field);
@@ -128,6 +132,10 @@
 
                 case 'mobile':
                     valMethodName = "isMobileValid";
+                    break;
+                
+                case 'checkbox':
+                    valMethodName = "isCheckboxTicked"
                     break;
 
                 default:
@@ -256,6 +264,15 @@
             this.options.mobile.showInvalidError = (isNumbers && lengthResult) ? false : true;
             return isNumbers && lengthResult ? true : false;
         },
+            
+        this.isCheckboxTicked = function (field) {
+            
+            var isChecked = $(field).is(":checked");
+            
+            this.options.checkbox.showInvalidError = isChecked ? false : true;
+            
+            return isChecked;
+        },
 
         // Need a more effective/faster/efficient way of writing the method below
         this.createErrorMessage = function (obj, field) {
@@ -358,6 +375,15 @@
                     buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
                 }
                 break;
+            
+            case 'checkbox':
+                if (obj.options.checkbox.showInvalidError) {
+                    errorID = '-checkbox-invalid-error';
+                    errorMessage = obj.options.checkbox.invalidErrorMessage;
+
+                    buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                }
+                break;
             }
 
             //buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
@@ -411,6 +437,11 @@
                 errorID = '-mobile-invalid-error';
                 showError = obj.options.mobile.showInvalidError;
                 break;
+                    
+            case 'checkbox':
+                errorID = '-checkbox-invalid-error';
+                showError = obj.options.checkbox.showInvalidError;
+                break;
             }
 
             errorMessageDisplay(obj.formID + errorID, showError);
@@ -441,6 +472,7 @@
                 this.options.date.showFormatError = false;
                 this.options.postcode.showInvalidError = false;
                 this.options.mobile.showInvalidError = false;
+                this.options.checkbox.showInvalidError = false;
             }
         }
 

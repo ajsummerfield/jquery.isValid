@@ -28,6 +28,14 @@ form .form-row input {
     margin-top: -5px;
 }
 
+form .form-row input[type="checkbox"] {
+    width: auto;
+    height: auto;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
 form .form-row input.small-input {
     width: 50px;
 }

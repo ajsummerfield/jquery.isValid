@@ -14,5 +14,4 @@ $(document).ready(function() {
             lengthErrorMessage: "Username must be at least 7 characters and no more than 144 characters long."
         }
     });
-    
 });

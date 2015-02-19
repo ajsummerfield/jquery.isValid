@@ -67,6 +67,10 @@
                     showInvalidError: true,
                     invalidErrorMessage: "Checkbox must be checked."
                 },
+                select: {
+                    showInvalidError: true,
+                    invalidErrorMessage: "Please choose an item from the dropdown."
+                },
                 turnOffErrors: false,
                 onFormValidated: function () {},
                 onFormInValidated: function () {}
@@ -90,7 +94,7 @@
 
             showErrors(this.options.turnOffErrors);
 
-            this.formArray = $(this.formID + ' :input[type="text"],' + this.formID + ' :input[type="email"],' + this.formID + ' :input[type="password"],' + this.formID + ' :input[type="tel"],'  + this.formID + ' :input[type="number"],' + this.formID + ' :input[type="date"],' + this.formID + ' :input[type="checkbox"],' + this.formID + ' textarea,' + this.formID + ' select');
+            this.formArray = $(this.formID + ' :input[type="text"],' + this.formID + ' :input[type="email"],' + this.formID + ' :input[type="password"],' + this.formID + ' :input[type="tel"],' + this.formID + ' :input[type="number"],' + this.formID + ' :input[type="date"],' + this.formID + ' :input[type="checkbox"],' + this.formID + ' textarea,' + this.formID + ' select');
 
             this.formArray.each(function (index, field) {
                 self.createErrorMessage(obj, field);
@@ -112,52 +116,56 @@
                 var valMethodName;
 
                 switch (data) {
-                case 'username':
-                    valMethodName = "isUsernameValid";
-                    break;
+                    case 'username':
+                        valMethodName = "isUsernameValid";
+                        break;
 
-                case 'password':
-                    valMethodName = "isPasswordValid";
-                    break;
-                        
-                case 'passwordconfirm':
-                    valMethodName = "isPasswordConfirmValid";
-                    break;
+                    case 'password':
+                        valMethodName = "isPasswordValid";
+                        break;
 
-                case 'email':
-                    valMethodName = "isEmailValid";
-                    break;
-                        
-                case 'emailconfirm':
-                    valMethodName = "isEmailConfirmValid";
-                    break;
+                    case 'passwordconfirm':
+                        valMethodName = "isPasswordConfirmValid";
+                        break;
 
-                case 'date':
-                    valMethodName = "isDateValid";
-                    break;
+                    case 'email':
+                        valMethodName = "isEmailValid";
+                        break;
 
-                case 'letters':
-                    valMethodName = "isLetters";
-                    break;
+                    case 'emailconfirm':
+                        valMethodName = "isEmailConfirmValid";
+                        break;
 
-                case 'numbers':
-                    valMethodName = "isNumbers";
-                    break;
+                    case 'date':
+                        valMethodName = "isDateValid";
+                        break;
 
-                case 'postcode':
-                    valMethodName = "isPostCodeValid";
-                    break;
+                    case 'letters':
+                        valMethodName = "isLetters";
+                        break;
 
-                case 'mobile':
-                    valMethodName = "isMobileValid";
-                    break;
-                
-                case 'checkbox':
-                    valMethodName = "isCheckboxTicked"
-                    break;
+                    case 'numbers':
+                        valMethodName = "isNumbers";
+                        break;
 
-                default:
-                    valMethodName = "isEmpty";
+                    case 'postcode':
+                        valMethodName = "isPostCodeValid";
+                        break;
+
+                    case 'mobile':
+                        valMethodName = "isMobileValid";
+                        break;
+
+                    case 'checkbox':
+                        valMethodName = "isCheckboxTicked"
+                        break;
+
+                    case 'select':
+                        valMethodName = "isSelectChosen"
+                        break;
+
+                    default:
+                        valMethodName = "isEmpty";
                 }
 
                 this.isValid = completeAction(this, (this[valMethodName](field)), field);
@@ -206,21 +214,21 @@
             this.options.password.showLengthError = (lengthResult) ? false : true;
 
             if (this.options.password.numbers && this.options.password.letters) {
-                
+
                 matchResult = (passwordMatcher.test($(field).val()));
                 this.options.password.showInvalidError = (matchResult) ? false : true;
                 this.isPasswordConfirmValid($("input[data-field-info='passwordconfirm']"));
-                
+
                 return (lengthResult) ? matchResult : false;
             }
 
             return lengthResult;
         };
-            
-        this.isPasswordConfirmValid = function(field) {
-            
-            if(this.options.password.passwordConfirm) {
-                if($(field).val() !== $("input[data-field-info='password']").val()) {
+
+        this.isPasswordConfirmValid = function (field) {
+
+            if (this.options.password.passwordConfirm) {
+                if ($(field).val() !== $("input[data-field-info='password']").val()) {
                     this.options.passwordConfirm.showInvalidError = true;
                     return false;
                 }
@@ -248,19 +256,19 @@
             if (this.options.email.domain !== '') {
                 domainResult = ($(field).val().indexOf(this.options.email.domain, $(field).val().length - this.options.email.domain.length) !== -1);
                 this.options.email.showDomainError = (domainResult) ? false : true;
-                
+
                 return (validResult) ? domainResult : false;
             }
-            
+
             this.isEmailConfirmValid($("input[data-field-info='emailconfirm']"));
 
             return validResult;
         };
-        
-        this.isEmailConfirmValid = function(field) {
 
-            if(this.options.email.emailConfirm) {
-                if($(field).val() !== $("input[data-field-info='email']").val()) {
+        this.isEmailConfirmValid = function (field) {
+
+            if (this.options.email.emailConfirm) {
+                if ($(field).val() !== $("input[data-field-info='email']").val()) {
                     this.options.emailConfirm.showInvalidError = true;
                     return false;
                 }
@@ -268,7 +276,7 @@
                 return true;
             }
         };
-        
+
         this.isDateValid = function (field) {
             var date = $(field).val();
             var count = date.match(/\//g);
@@ -310,14 +318,23 @@
             this.options.mobile.showInvalidError = (isNumbers && lengthResult) ? false : true;
             return isNumbers && lengthResult ? true : false;
         };
-            
+
         this.isCheckboxTicked = function (field) {
-            
+
             var isChecked = $(field).is(":checked");
-            
+
             this.options.checkbox.showInvalidError = isChecked ? false : true;
-            
+
             return isChecked;
+        };
+        
+        this.isSelectChosen = function (field) {
+        
+            var isChosen = ($(field).val() !== null);  
+            
+            this.options.select.showInvalidError = isChosen ? false : true;
+            
+            return isChosen;
         };
 
         // Need a more effective/faster/efficient way of writing the method below
@@ -355,7 +372,7 @@
                     break;
 
                 case 'passwordconfirm':
-                    if(obj.options.passwordConfirm.showInvalidError) {
+                    if (obj.options.passwordConfirm.showInvalidError) {
                         errorID = '-passwordconfirm-invalid-error';
                         errorMessage = obj.options.passwordConfirm.invalidErrorMessage;
 
@@ -378,9 +395,9 @@
                         buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
                     }
                     break;
-                
+
                 case 'emailconfirm':
-                    if(obj.options.emailConfirm.showInvalidError) {
+                    if (obj.options.emailConfirm.showInvalidError) {
                         errorID = '-emailconfirm-invalid-error';
                         errorMessage = obj.options.emailConfirm.invalidErrorMessage;
 
@@ -448,6 +465,15 @@
                         buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
                     }
                     break;
+                    
+                case 'select':
+                    if (obj.options.select.showInvalidError) {
+                        errorID = '-select-invalid-error';
+                        errorMessage = obj.options.select.invalidErrorMessage;
+
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                    }
+                    break;
             }
 
             //buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
@@ -470,18 +496,18 @@
                 case "password":
                     errorMessageDisplay(obj.formID + '-password-length-error', obj.options.password.showLengthError);
                     errorMessageDisplay(obj.formID + '-password-match-error', obj.options.password.showInvalidError);
-                    
-                    if(obj.options.password.passwordConfirm) {
+
+                    if (obj.options.password.passwordConfirm) {
                         errorMessageDisplay(obj.formID + '-passwordconfirm-invalid-error', obj.options.passwordConfirm.showInvalidError);
-                        if(obj.options.passwordConfirm.showInvalidError) {
+                        if (obj.options.passwordConfirm.showInvalidError) {
                             invalidAction(obj, $("input[data-field-info='passwordconfirm']"));
                         } else {
                             validAction(obj, $("input[data-field-info='passwordconfirm']"));
                         }
                     }
-                    
+
                     break;
-                    
+
                 case "passwordconfirm":
                     errorMessageDisplay(obj.formID + '-passwordconfirm-invalid-error', obj.options.passwordConfirm.showInvalidError);
                     break;
@@ -489,17 +515,17 @@
                 case 'email':
                     errorMessageDisplay(obj.formID + '-email-invalid-error', obj.options.email.showInvalidError);
                     errorMessageDisplay(obj.formID + '-email-domain-error', obj.options.email.showDomainError);
-                    
-                    if(obj.options.email.emailConfirm) {
+
+                    if (obj.options.email.emailConfirm) {
                         errorMessageDisplay(obj.formID + '-emailconfirm-invalid-error', obj.options.emailConfirm.showInvalidError);
-                        if(obj.options.emailConfirm.showInvalidError) {
+                        if (obj.options.emailConfirm.showInvalidError) {
                             invalidAction(obj, $("input[data-field-info='emailconfirm']"));
                         } else {
                             validAction(obj, $("input[data-field-info='emailconfirm']"));
                         }
                     }
                     break;
-                    
+
                 case "emailconfirm":
                     errorMessageDisplay(obj.formID + '-emailconfirm-invalid-error', obj.options.emailConfirm.showInvalidError);
                     break;
@@ -532,6 +558,11 @@
                 case 'checkbox':
                     errorID = '-checkbox-invalid-error';
                     showError = obj.options.checkbox.showInvalidError;
+                    break;
+                    
+                case 'select':
+                    errorID = '-select-invalid-error';
+                    showError = obj.options.select.showInvalidError;
                     break;
             }
 
@@ -566,6 +597,7 @@
                 this.options.postcode.showInvalidError = false;
                 this.options.mobile.showInvalidError = false;
                 this.options.checkbox.showInvalidError = false;
+                this.options.select.showInvalidError = false;
             }
         };
 

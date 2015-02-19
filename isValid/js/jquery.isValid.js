@@ -21,7 +21,12 @@
                     showLengthError: true,
                     lengthErrorMessage: "Password must be at least 6 characters and no more than 20 characters.",
                     showInvalidError: true,
-                    invalidErrorMessage: "Password must contain letters and numbers."
+                    invalidErrorMessage: "Password must contain letters and numbers.",
+                    passwordConfirm: true
+                },
+                passwordConfirm: {
+                    showInvalidError: true,
+                    invalidErrorMessage: "Passwords do not match."
                 },
                 email: {
                     domain: '',
@@ -87,11 +92,11 @@
             });
 
             return this;
-        },
+        };
 
         this.isFormValidated = function () {
             return ($(this.formID + ' .invalid').length) ? false : true;
-        },
+        };
 
         this.isValidField = function (field) {
 
@@ -108,6 +113,10 @@
 
                 case 'password':
                     valMethodName = "isPasswordValid";
+                    break;
+                        
+                case 'passwordconfirm':
+                    valMethodName = "isPasswordConfirmValid";
                     break;
 
                 case 'email':
@@ -146,11 +155,11 @@
             }
 
             return this.isValid;
-        },
+        };
 
         this.isEmpty = function (field) {
             return ($(field).val().length);
-        },
+        };
 
         this.isLetters = function (field) {
             var letterMatcher = /^[A-Za-z ]+$/;
@@ -159,7 +168,7 @@
             this.options.letters.showInvalidError = (matchResult) ? false : true;
 
             return matchResult;
-        },
+        };
 
         this.isNumbers = function (field) {
             var numberMatcher = /^\d+$/;
@@ -168,7 +177,7 @@
             this.options.numbers.showInvalidError = (matchResult) ? false : true;
 
             return matchResult;
-        },
+        };
 
         this.isUsernameValid = function (field) {
             var lengthResult = isBetween($(field).val().length, this.options.username.minLength, this.options.username.maxLength);
@@ -176,7 +185,7 @@
             this.options.username.showLengthError = (lengthResult) ? false : true;
 
             return lengthResult;
-        },
+        };
 
         this.isPasswordValid = function (field) {
             var passwordMatcher = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/;
@@ -188,14 +197,28 @@
             this.options.password.showLengthError = (lengthResult) ? false : true;
 
             if (this.options.password.numbers && this.options.password.letters) {
+                
                 matchResult = (passwordMatcher.test($(field).val()));
                 this.options.password.showInvalidError = (matchResult) ? false : true;
-
+                this.isPasswordConfirmValid($("input[data-field-info='passwordconfirm']"));
+                
                 return (lengthResult) ? matchResult : false;
             }
 
             return lengthResult;
-        },
+        };
+            
+        this.isPasswordConfirmValid = function(field) {
+            
+            if(this.options.password.passwordConfirm) {
+                if($(field).val() !== $("input[data-field-info='password']").val()) {
+                    this.options.passwordConfirm.showInvalidError = true;
+                    return false;
+                }
+                this.options.passwordConfirm.showInvalidError = false;
+                return true;
+            }
+        };
 
         this.isEmailValid = function (field) {
             var emailMatcher = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
@@ -221,7 +244,7 @@
             }
 
             return validResult;
-        },
+        };
 
         this.isDateValid = function (field) {
             var date = $(field).val();
@@ -245,7 +268,7 @@
 
                 return validResult;
             }
-        },
+        };
 
         this.isPostCodeValid = function (field) {
             var isValidPostCode, postCode = checkPostCode($(field).val());
@@ -263,7 +286,7 @@
             var lengthResult = $(field).val().length === this.options.mobile.numberLength;
             this.options.mobile.showInvalidError = (isNumbers && lengthResult) ? false : true;
             return isNumbers && lengthResult ? true : false;
-        },
+        };
             
         this.isCheckboxTicked = function (field) {
             
@@ -272,7 +295,7 @@
             this.options.checkbox.showInvalidError = isChecked ? false : true;
             
             return isChecked;
-        },
+        };
 
         // Need a more effective/faster/efficient way of writing the method below
         this.createErrorMessage = function (obj, field) {
@@ -283,111 +306,120 @@
 
             switch (data) {
 
-            case 'username':
-                if (obj.options.username.showLengthError) {
-                    errorID = '-username-length-error';
-                    errorMessage = obj.options.username.lengthErrorMessage;
+                case 'username':
+                    if (obj.options.username.showLengthError) {
+                        errorID = '-username-length-error';
+                        errorMessage = obj.options.username.lengthErrorMessage;
 
-                    buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
-                }
-                break;
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                    }
+                    break;
 
-            case 'password':
-                if (obj.options.password.showInvalidError) {
-                    errorID = '-password-match-error';
-                    errorMessage = obj.options.password.invalidErrorMessage;
+                case 'password':
+                    if (obj.options.password.showInvalidError) {
+                        errorID = '-password-match-error';
+                        errorMessage = obj.options.password.invalidErrorMessage;
 
-                    buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
-                }
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                    }
 
-                if (obj.options.password.showLengthError) {
-                    errorID = '-password-length-error';
-                    errorMessage = obj.options.password.lengthErrorMessage;
+                    if (obj.options.password.showLengthError) {
+                        errorID = '-password-length-error';
+                        errorMessage = obj.options.password.lengthErrorMessage;
 
-                    buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
-                }
-                break;
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                    }
+                    break;
 
-            case 'email':
-                if (obj.options.email.showInvalidError) {
-                    errorID = '-email-invalid-error';
-                    errorMessage = obj.options.email.invalidErrorMessage;
+                case 'passwordconfirm':
+                    if(obj.options.passwordConfirm.showInvalidError) {
+                        errorID = '-passwordconfirm-invalid-error';
+                        errorMessage = obj.options.passwordConfirm.invalidErrorMessage;
 
-                    buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
-                }
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                    }
+                    break;
 
-                if (obj.options.email.showDomainError) {
-                    errorID = '-email-domain-error';
-                    errorMessage = obj.options.email.domainErrorMessage;
+                case 'email':
+                    if (obj.options.email.showInvalidError) {
+                        errorID = '-email-invalid-error';
+                        errorMessage = obj.options.email.invalidErrorMessage;
 
-                    buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
-                }
-                break;
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                    }
 
-            case 'letters':
-                if (obj.options.letters.showInvalidError) {
-                    errorID = '-letters-match-error';
-                    errorMessage = obj.options.letters.invalidErrorMessage;
+                    if (obj.options.email.showDomainError) {
+                        errorID = '-email-domain-error';
+                        errorMessage = obj.options.email.domainErrorMessage;
 
-                    buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
-                }
-                break;
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                    }
+                    break;
 
-            case 'numbers':
-                if (obj.options.numbers.showInvalidError) {
-                    errorID = '-numbers-match-error';
-                    errorMessage = obj.options.numbers.invalidErrorMessage;
+                case 'letters':
+                    if (obj.options.letters.showInvalidError) {
+                        errorID = '-letters-match-error';
+                        errorMessage = obj.options.letters.invalidErrorMessage;
 
-                    buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
-                }
-                break;
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                    }
+                    break;
 
-            case 'date':
-                if (obj.options.date.showFormatError) {
-                    errorID = '-date-format-error';
-                    errorMessage = obj.options.date.formatErrorMessage;
+                case 'numbers':
+                    if (obj.options.numbers.showInvalidError) {
+                        errorID = '-numbers-match-error';
+                        errorMessage = obj.options.numbers.invalidErrorMessage;
 
-                    buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
-                }
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                    }
+                    break;
 
-                if (obj.options.date.showFormatError) {
-                    errorID = '-date-invalid-error';
-                    errorMessage = obj.options.date.invalidErrorMessage;
+                case 'date':
+                    if (obj.options.date.showFormatError) {
+                        errorID = '-date-format-error';
+                        errorMessage = obj.options.date.formatErrorMessage;
 
-                    buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
-                }
-                break;
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                    }
 
-            case 'postcode':
-                if (obj.options.postcode.showInvalidError) {
-                    errorID = '-postcode-invalid-error';
-                    errorMessage = obj.options.postcode.invalidErrorMessage;
+                    if (obj.options.date.showFormatError) {
+                        errorID = '-date-invalid-error';
+                        errorMessage = obj.options.date.invalidErrorMessage;
 
-                    buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
-                }
-                break;
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                    }
+                    break;
 
-            case 'mobile':
-                if (obj.options.mobile.showInvalidError) {
-                    errorID = '-mobile-invalid-error';
-                    errorMessage = obj.options.mobile.invalidErrorMessage;
+                case 'postcode':
+                    if (obj.options.postcode.showInvalidError) {
+                        errorID = '-postcode-invalid-error';
+                        errorMessage = obj.options.postcode.invalidErrorMessage;
 
-                    buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
-                }
-                break;
-            
-            case 'checkbox':
-                if (obj.options.checkbox.showInvalidError) {
-                    errorID = '-checkbox-invalid-error';
-                    errorMessage = obj.options.checkbox.invalidErrorMessage;
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                    }
+                    break;
 
-                    buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
-                }
-                break;
+                case 'mobile':
+                    if (obj.options.mobile.showInvalidError) {
+                        errorID = '-mobile-invalid-error';
+                        errorMessage = obj.options.mobile.invalidErrorMessage;
+
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                    }
+                    break;
+
+                case 'checkbox':
+                    if (obj.options.checkbox.showInvalidError) {
+                        errorID = '-checkbox-invalid-error';
+                        errorMessage = obj.options.checkbox.invalidErrorMessage;
+
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                    }
+                    break;
             }
 
             //buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
-        }
+        };
 
         // Need a more effective/faster/efficient way of writing the method below
         this.controlErrorMessages = function (obj, field) {
@@ -398,65 +430,79 @@
 
             switch (data) {
 
-            case "username":
-                errorID = '-username-length-error';
-                showError = obj.options.username.showLengthError;
-                break;
+                case "username":
+                    errorID = '-username-length-error';
+                    showError = obj.options.username.showLengthError;
+                    break;
 
-            case "password":
-                errorMessageDisplay(obj.formID + '-password-length-error', obj.options.password.showLengthError);
-                errorMessageDisplay(obj.formID + '-password-match-error', obj.options.password.showInvalidError);
-                break;
-
-            case 'email':
-                errorMessageDisplay(obj.formID + '-email-invalid-error', obj.options.email.showInvalidError);
-                errorMessageDisplay(obj.formID + '-email-domain-error', obj.options.email.showDomainError);
-                break;
-
-            case 'letters':
-                errorID = '-letters-match-error';
-                showError = obj.options.letters.showInvalidError;
-                break;
-
-            case 'numbers':
-                errorID = '-numbers-match-error';
-                showError = obj.options.numbers.showInvalidError;
-                break;
-
-            case 'date':
-                errorMessageDisplay(obj.formID + '-date-invalid-error', obj.options.date.showInvalidError);
-                errorMessageDisplay(obj.formID + '-date-format-error', obj.options.date.showFormatError);
-                break;
-
-            case 'postcode':
-                errorID = '-postcode-invalid-error';
-                showError = obj.options.postcode.showInvalidError;
-                break;
-
-            case 'mobile':
-                errorID = '-mobile-invalid-error';
-                showError = obj.options.mobile.showInvalidError;
-                break;
+                case "password":
+                    errorMessageDisplay(obj.formID + '-password-length-error', obj.options.password.showLengthError);
+                    errorMessageDisplay(obj.formID + '-password-match-error', obj.options.password.showInvalidError);
                     
-            case 'checkbox':
-                errorID = '-checkbox-invalid-error';
-                showError = obj.options.checkbox.showInvalidError;
-                break;
+                    if(obj.options.password.passwordConfirm) {
+                        errorMessageDisplay(obj.formID + '-passwordconfirm-invalid-error', obj.options.passwordConfirm.showInvalidError);
+                        if(obj.options.passwordConfirm.showInvalidError) {
+                            invalidAction(obj, $("input[data-field-info='passwordconfirm']"));
+                        } else {
+                            validAction(obj, $("input[data-field-info='passwordconfirm']"));
+                        }
+                    }
+                    
+                    break;
+                    
+                case "passwordconfirm":
+                    errorMessageDisplay(obj.formID + '-passwordconfirm-invalid-error', obj.options.passwordConfirm.showInvalidError);
+                    break;
+
+                case 'email':
+                    errorMessageDisplay(obj.formID + '-email-invalid-error', obj.options.email.showInvalidError);
+                    errorMessageDisplay(obj.formID + '-email-domain-error', obj.options.email.showDomainError);
+                    break;
+
+                case 'letters':
+                    errorID = '-letters-match-error';
+                    showError = obj.options.letters.showInvalidError;
+                    break;
+
+                case 'numbers':
+                    errorID = '-numbers-match-error';
+                    showError = obj.options.numbers.showInvalidError;
+                    break;
+
+                case 'date':
+                    errorMessageDisplay(obj.formID + '-date-invalid-error', obj.options.date.showInvalidError);
+                    errorMessageDisplay(obj.formID + '-date-format-error', obj.options.date.showFormatError);
+                    break;
+
+                case 'postcode':
+                    errorID = '-postcode-invalid-error';
+                    showError = obj.options.postcode.showInvalidError;
+                    break;
+
+                case 'mobile':
+                    errorID = '-mobile-invalid-error';
+                    showError = obj.options.mobile.showInvalidError;
+                    break;
+
+                case 'checkbox':
+                    errorID = '-checkbox-invalid-error';
+                    showError = obj.options.checkbox.showInvalidError;
+                    break;
             }
 
             errorMessageDisplay(obj.formID + errorID, showError);
 
-        }
+        };
 
         // Private Methods
 
         var changeToLowercase = function (field) {
             return ($(field).attr('data-field-info') !== undefined) ? $(field).attr('data-field-info').toLowerCase() : "";
-        }
+        };
 
         var isBetween = function (val, min, max) {
             return (val >= min && val <= max);
-        }
+        };
 
         var showErrors = function (show) {
 
@@ -464,6 +510,7 @@
                 this.options.username.showLengthError = false;
                 this.options.password.showLengthError = false;
                 this.options.password.showInvalidError = false;
+                this.options.passwordConfirm.showInvalidError = false;
                 this.options.email.showInvalidError = false;
                 this.options.email.showDomainError = false;
                 this.options.letters.showInvalidError = false;
@@ -474,11 +521,11 @@
                 this.options.mobile.showInvalidError = false;
                 this.options.checkbox.showInvalidError = false;
             }
-        }
+        };
 
         var completeAction = function (obj, isValid, field) {
             return (isValid) ? validAction(obj, field) : invalidAction(obj, field);
-        }
+        };
 
         var validAction = function (obj, field) {
 
@@ -487,7 +534,7 @@
             self.controlErrorMessages(obj, field);
 
             return true;
-        }
+        };
 
         var invalidAction = function (obj, field) {
 
@@ -496,16 +543,16 @@
             self.controlErrorMessages(obj, field);
 
             return false;
-        }
+        };
 
         var buildErrorContainer = function (id, field, error) {
             $(field).after('<div id="' + id + '" class="form-error"></div>');
             $('#' + id).append(error);
-        }
+        };
 
         var errorMessageDisplay = function (id, errorType) {
             (errorType) ? $(id).show() : $(id).hide();
-        }
+        };
 
     }
 
@@ -546,7 +593,7 @@
             });
 
         });
-    }
+    };
 
 })(jQuery);
 

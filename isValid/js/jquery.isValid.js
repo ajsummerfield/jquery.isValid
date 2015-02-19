@@ -33,7 +33,12 @@
                     showInvalidError: true,
                     invalidErrorMessage: "Email is an invalid email address.",
                     showDomainError: false,
-                    domainErrorMessage: "Email domain entered is invalid, only @xxxx.xxx is accepted."
+                    domainErrorMessage: "Email domain entered is invalid, only @xxxx.xxx is accepted.",
+                    emailConfirm: true
+                },
+                emailConfirm: {
+                    showInvalidError: true,
+                    invalidErrorMessage: "Emails do not match."
                 },
                 letters: {
                     showInvalidError: true,
@@ -121,6 +126,10 @@
 
                 case 'email':
                     valMethodName = "isEmailValid";
+                    break;
+                        
+                case 'emailconfirm':
+                    valMethodName = "isEmailConfirmValid";
                     break;
 
                 case 'date':
@@ -221,7 +230,7 @@
         };
 
         this.isEmailValid = function (field) {
-            var emailMatcher = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
+            var emailMatcher = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 
             var validResult, domainResult;
 
@@ -239,13 +248,27 @@
             if (this.options.email.domain !== '') {
                 domainResult = ($(field).val().indexOf(this.options.email.domain, $(field).val().length - this.options.email.domain.length) !== -1);
                 this.options.email.showDomainError = (domainResult) ? false : true;
-
+                
                 return (validResult) ? domainResult : false;
             }
+            
+            this.isEmailConfirmValid($("input[data-field-info='emailconfirm']"));
 
             return validResult;
         };
+        
+        this.isEmailConfirmValid = function(field) {
 
+            if(this.options.email.emailConfirm) {
+                if($(field).val() !== $("input[data-field-info='email']").val()) {
+                    this.options.emailConfirm.showInvalidError = true;
+                    return false;
+                }
+                this.options.emailConfirm.showInvalidError = false;
+                return true;
+            }
+        };
+        
         this.isDateValid = function (field) {
             var date = $(field).val();
             var count = date.match(/\//g);
@@ -355,6 +378,15 @@
                         buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
                     }
                     break;
+                
+                case 'emailconfirm':
+                    if(obj.options.emailConfirm.showInvalidError) {
+                        errorID = '-emailconfirm-invalid-error';
+                        errorMessage = obj.options.emailConfirm.invalidErrorMessage;
+
+                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                    }
+                    break;
 
                 case 'letters':
                     if (obj.options.letters.showInvalidError) {
@@ -457,6 +489,19 @@
                 case 'email':
                     errorMessageDisplay(obj.formID + '-email-invalid-error', obj.options.email.showInvalidError);
                     errorMessageDisplay(obj.formID + '-email-domain-error', obj.options.email.showDomainError);
+                    
+                    if(obj.options.email.emailConfirm) {
+                        errorMessageDisplay(obj.formID + '-emailconfirm-invalid-error', obj.options.emailConfirm.showInvalidError);
+                        if(obj.options.emailConfirm.showInvalidError) {
+                            invalidAction(obj, $("input[data-field-info='emailconfirm']"));
+                        } else {
+                            validAction(obj, $("input[data-field-info='emailconfirm']"));
+                        }
+                    }
+                    break;
+                    
+                case "emailconfirm":
+                    errorMessageDisplay(obj.formID + '-emailconfirm-invalid-error', obj.options.emailConfirm.showInvalidError);
                     break;
 
                 case 'letters':
@@ -513,6 +558,7 @@
                 this.options.passwordConfirm.showInvalidError = false;
                 this.options.email.showInvalidError = false;
                 this.options.email.showDomainError = false;
+                this.options.emailConfirm.showInvalidError = false;
                 this.options.letters.showInvalidError = false;
                 this.options.numbers.showInvalidError = false;
                 this.options.date.showInvalidError = false;

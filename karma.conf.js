@@ -1,23 +1,20 @@
 module.exports = function(config) {
     config.set({
 
-        basePath: 'Athena.Web',
+        basePath: 'Web',
 
-        frameworks: ['jasmine-jquery', 'jasmine-ajax', 'jasmine', 'requirejs'],
+        frameworks: ['jasmine-jquery', 'jasmine'],
 
         files: [
-            'test-main.js',
-            { pattern: 'app/**/*.js', included: false },
-            { pattern: 'app/**/*.html', included: false },
-            { pattern: 'content/lib/**/*.js', included: false },
-            { pattern: 'specs/**/*.js', included: false }
+            { pattern: 'js/**/*.js' },
+            { pattern: 'specs/MainSpec.js' }
         ],
 
         exclude: [
         ],
 
         preprocessors: {
-            'app/**/*.js': ['coverage']
+            'js/jquery.isValid.js': ['coverage']
         },
 
         coverageReporter: {
@@ -26,7 +23,6 @@ module.exports = function(config) {
         },
 
         reporters: ['progress', 'html'],
-        // reporters: ['progress', 'html', 'coverage'],
 
         hostname: '127.0.0.1',
         port: 9876,

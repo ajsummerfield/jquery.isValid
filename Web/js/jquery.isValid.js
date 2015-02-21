@@ -199,7 +199,7 @@
             $(this.formID + ' .invalid').removeClass('invalid');
             $(this.formID + ' .form-error').hide();
             this.isFormValid = this.isFormValidated();
-        },
+        };
 
         this.isValidField = function (field) {
 
@@ -251,15 +251,16 @@
                         break;
 
                     case "checkbox":
-                        valMethodName = "isCheckboxTicked"
+                        valMethodName = "isCheckboxTicked";
                         break;
 
                     case "select":
-                        valMethodName = "isSelectChosen"
+                        valMethodName = "isSelectChosen";
                         break;
 
                     default:
                         valMethodName = "isEmpty";
+                        break;
                 }
 
                 this.isValid = completeAction(this, (this[valMethodName](field)), field);
@@ -269,7 +270,7 @@
         };
 
         this.isEmpty = function (field) {
-            return ($(field).val().length);
+            return ($(field).val().length === 0);
         };
 
         this.isLetters = function (field) {
@@ -292,9 +293,11 @@
 
         this.isGeneralValid = function (field) {
             
+            var lengthResult = false;
+            
             if(this.options.general.maxLength > this.options.general.minLength) {
                 
-                var lengthResult = isBetween($(field).val().length, this.options.general.minLength, this.options.general.maxLength);
+                lengthResult = isBetween($(field).val().length, this.options.general.minLength, this.options.general.maxLength);
 
                 this.options.general.showLengthError = !lengthResult;
                 
@@ -375,7 +378,7 @@
 
             if (this.options.email.emailConfirm) {
                 
-                var matchResult = $(field).val() === $(this.formID + " input[data-field-info='email']").val()
+                var matchResult = $(field).val() === $(this.formID + " input[data-field-info='email']").val();
                 
                 this.options.emailConfirm.showInvalidError = !matchResult;
                 
@@ -415,7 +418,7 @@
             var validResult, 
                 postCode = checkPostCode($(field).val());
 
-            validResult = postCode;
+            validResult = !postCode ? false : true;
 
             this.options.postcode.showInvalidError = !validResult;
 
@@ -826,7 +829,7 @@ function checkPostCode(toCheck) {
     var BFPOa6 = "[abdefghjlnpqrstuwzyz]"; // BFPO alpha6
 
     // Array holds the regular expressions for the valid postcodes
-    var pcexp = new Array();
+    var pcexp = [];
 
     // BFPO postcodes
     pcexp.push(new RegExp("^(bf1)(\\s*)([0-6]{1}" + BFPOa5 + "{1}" + BFPOa6 + "{1})$", "i"));
@@ -878,8 +881,8 @@ function checkPostCode(toCheck) {
 
             // If it is the Anguilla overseas territory postcode, we need to treat it specially
             if (toCheck.toUpperCase() == 'AI-2640') {
-                postCode = 'AI-2640'
-            };
+                postCode = 'AI-2640';
+            }
 
             // Load new postcode back into the form element
             valid = true;

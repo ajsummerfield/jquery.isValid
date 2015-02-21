@@ -1,0 +1,2751 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for ./js/jquery.isValid.js</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="../prettify.css">
+
+    <link rel="stylesheet" href="../base.css">
+    <style type='text/css'>
+        div.coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class="header medium">
+    <h1>Code coverage report for <span class="entity">./js/jquery.isValid.js</span></h1>
+    <h2>
+        
+        Statements: <span class="metric">57.51% <small>(180 / 313)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Branches: <span class="metric">36.17% <small>(51 / 141)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Functions: <span class="metric">62.22% <small>(28 / 45)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Lines: <span class="metric">57.51% <small>(180 / 313)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
+    </h2>
+    <div class="path"><a href="../index.html">All files</a> &#187; <a href="index.html">./js\</a> &#187; jquery.isValid.js</div>
+</div>
+<div class="body">
+<pre><table class="coverage">
+<tr><td class="line-count">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476
+477
+478
+479
+480
+481
+482
+483
+484
+485
+486
+487
+488
+489
+490
+491
+492
+493
+494
+495
+496
+497
+498
+499
+500
+501
+502
+503
+504
+505
+506
+507
+508
+509
+510
+511
+512
+513
+514
+515
+516
+517
+518
+519
+520
+521
+522
+523
+524
+525
+526
+527
+528
+529
+530
+531
+532
+533
+534
+535
+536
+537
+538
+539
+540
+541
+542
+543
+544
+545
+546
+547
+548
+549
+550
+551
+552
+553
+554
+555
+556
+557
+558
+559
+560
+561
+562
+563
+564
+565
+566
+567
+568
+569
+570
+571
+572
+573
+574
+575
+576
+577
+578
+579
+580
+581
+582
+583
+584
+585
+586
+587
+588
+589
+590
+591
+592
+593
+594
+595
+596
+597
+598
+599
+600
+601
+602
+603
+604
+605
+606
+607
+608
+609
+610
+611
+612
+613
+614
+615
+616
+617
+618
+619
+620
+621
+622
+623
+624
+625
+626
+627
+628
+629
+630
+631
+632
+633
+634
+635
+636
+637
+638
+639
+640
+641
+642
+643
+644
+645
+646
+647
+648
+649
+650
+651
+652
+653
+654
+655
+656
+657
+658
+659
+660
+661
+662
+663
+664
+665
+666
+667
+668
+669
+670
+671
+672
+673
+674
+675
+676
+677
+678
+679
+680
+681
+682
+683
+684
+685
+686
+687
+688
+689
+690
+691
+692
+693
+694
+695
+696
+697
+698
+699
+700
+701
+702
+703
+704
+705
+706
+707
+708
+709
+710
+711
+712
+713
+714
+715
+716
+717
+718
+719
+720
+721
+722
+723
+724
+725
+726
+727
+728
+729
+730
+731
+732
+733
+734
+735
+736
+737
+738
+739
+740
+741
+742
+743
+744
+745
+746
+747
+748
+749
+750
+751
+752
+753
+754
+755
+756
+757
+758
+759
+760
+761
+762
+763
+764
+765
+766
+767
+768
+769
+770
+771
+772
+773
+774
+775
+776
+777
+778
+779
+780
+781
+782
+783
+784
+785
+786
+787
+788
+789
+790
+791
+792
+793
+794
+795
+796
+797
+798
+799
+800
+801
+802
+803
+804
+805
+806
+807
+808
+809
+810
+811
+812
+813
+814
+815
+816
+817
+818
+819
+820
+821
+822
+823
+824
+825
+826
+827
+828
+829
+830
+831
+832
+833
+834
+835
+836
+837
+838
+839
+840
+841
+842
+843
+844
+845
+846
+847
+848
+849
+850
+851
+852
+853
+854
+855
+856
+857
+858
+859
+860
+861
+862
+863
+864
+865
+866
+867
+868
+869
+870
+871
+872
+873
+874
+875
+876
+877
+878
+879
+880
+881
+882
+883
+884
+885
+886
+887
+888
+889
+890
+891
+892
+893
+894
+895
+896
+897
+898
+899</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-yes">207</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">207</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">207</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">207</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-yes">207</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">345</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">276</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">345</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1012</span>
+<span class="cline-any cline-yes">345</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">161</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">230</span>
+<span class="cline-any cline-yes">161</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-yes">161</span>
+<span class="cline-any cline-yes">161</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">25</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-yes">207</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">(function ($) {
+    "use strict";
+&nbsp;
+    $.isValid = function (element, options) {
+&nbsp;
+        var defaults = {
+                general: {
+                    minLength: 1,
+                    maxLength: 0,
+                    showLengthError: true,
+                    errorDetails: [
+                        {
+                            id: "-general-length-error",
+                            type: "length",
+                            message: "Must be be at least 1 character and no more than x characters."
+                        }
+                    ]
+                },
+                password: {
+                    minLength: 6,
+                    maxLength: 100,
+                    numbers: true,
+                    letters: true,
+                    showLengthError: true,
+                    showInvalidError: true,
+                    passwordConfirm: true,
+                    errorDetails: [
+                        {
+                            id: "-password-length-error",
+                            type: "length",
+                            message: "Password must be at least 6 characters"
+                        },
+                        {
+                            id: "-password-invalid-error",
+                            type: "invalid",
+                            message: "Password must contain letters and numbers."
+                        }
+                    ]
+                },
+                passwordConfirm: {
+                    showInvalidError: true,
+                    errorDetails: [
+                        {
+                            id: "-passwordconfirm-invalid-error",
+                            type: "invalid",
+                            message: "Passwords do not match."
+                        }
+                    ]
+                },
+                email: {
+                    domain: '',
+                    showInvalidError: true,
+                    showDomainError: false,
+                    emailConfirm: true,
+                    errorDetails: [
+                        {
+                            id: "-email-invalid-error",
+                            type: "invalid",
+                            message: "Email is an invalid email address."
+                        },
+                        {
+                            id: "-email-domain-error",
+                            type: "domain",
+                            message: "Email domain entered is invalid, only @xxxx.xxx is accepted."
+                        }
+                    ]
+                },
+                emailConfirm: {
+                    showInvalidError: true,
+                    invalidErrorMessage: "Emails do not match.",
+                    errorDetails: [
+                        {
+                            id: "-emailconfirm-invalid-error",
+                            type: "invalid"
+                        }
+                    ]
+                },
+                letters: {
+                    showInvalidError: true,
+                    errorDetails: [
+                        {
+                            id: "-letters-invalid-error",
+                            type: "invalid",
+                            message: "Field is letters characters only."
+                        }
+                    ]
+                },
+                numbers: {
+                    showInvalidError: true,
+                    errorDetails: [
+                        {
+                            id: "-numbers-invalid-error",
+                            type: "invalid",
+                            message: "Field is numbers only."
+                        }
+                    ]
+                },
+                date: {
+                    showInvalidError: true,
+                    showFormatError: true,
+                    errorDetails: [
+                        {
+                            id: "-date-invalid-error",
+                            type: "invalid",
+                            message: "Please enter a valid Date."
+                        },
+                        {
+                            id: "-date-format-error",
+                            type: "format",
+                            message: "Please enter Date format as DD/MM/YYYY as specified in the placeholder."
+                        }
+                    ]
+                },
+                postcode: {
+                    showInvalidError: true,
+                    errorDetails: [
+                        {
+                            id: "-postcode-invalid-error",
+                            type: "invalid",
+                            message: "Not a valid Post Code."
+                        }
+                    ]
+                },
+                mobile: {
+                    showInvalidError: true,
+                    numberLength: 11,
+                    errorDetails: [
+                        {
+                            id: "-mobile-invalid-error",
+                            type: "invalid",
+                            message: "Invalid mobile number."
+                        }
+                    ]
+                },
+                checkbox: {
+                    showInvalidError: true,
+                    errorDetails: [
+                        {
+                            id: "-checkbox-invalid-error",
+                            type: "invalid",
+                            message: "Checkbox must be checked."
+                        }
+                    ]
+                },
+                select: {
+                    showInvalidError: true,
+                    errorDetails: [
+                        {
+                            id: "-select-invalid-error",
+                            type: "invalid",
+                            message: "Please choose an item from the dropdown."
+                        }
+                    ]
+                },
+                turnOffErrors: false,
+                onFormValidated: <span class="fstat-no" title="function not covered" >function () {</span>},
+                onFormInValidated: <span class="fstat-no" title="function not covered" >function () {</span>}
+            },
+            self;
+&nbsp;
+        this.init = function () {
+&nbsp;
+            self = this;
+&nbsp;
+            this.elem = element;
+            this.$elem = $(element);
+            this.isFormValid = false;
+            this.isValid = false;
+            this.formID = "#" + this.$elem.attr('id');
+            this.formIDStr = this.$elem.attr('id');
+&nbsp;
+            this.options = $.extend(true, defaults, options);
+            
+            createErrorIds();
+            showErrors();
+&nbsp;
+            this.formArray = $(this.formID + ' :input[type="text"],' + 
+                               this.formID + ' :input[type="email"],' + 
+                               this.formID + ' :input[type="password"],' + 
+                               this.formID + ' :input[type="tel"],' + 
+                               this.formID + ' :input[type="number"],' + 
+                               this.formID + ' :input[type="date"],' + 
+                               this.formID + ' :input[type="checkbox"],' + 
+                               this.formID + ' textarea,' + 
+                               this.formID + ' select');
+&nbsp;
+            this.formArray.each(function (index, field) {
+                self.createErrorMessage(field);
+            });
+&nbsp;
+            return this;
+        };
+&nbsp;
+        this.isFormValidated = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >            return ($(this.formID + ' .invalid').length) ? false : true;</span>
+        };
+        
+        this.resetForm = <span class="fstat-no" title="function not covered" >function() {</span>
+<span class="cstat-no" title="statement not covered" >            $(this.formID + ' .invalid').removeClass('invalid');</span>
+<span class="cstat-no" title="statement not covered" >            $(this.formID + ' .form-error').hide();</span>
+<span class="cstat-no" title="statement not covered" >            this.isFormValid = this.isFormValidated();</span>
+        };
+&nbsp;
+        this.isValidField = <span class="fstat-no" title="function not covered" >function (field) {</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            if (field.disabled || $(field).attr('data-field-info') === "notrequired") {</span>
+<span class="cstat-no" title="statement not covered" >                this.isValid = true;</span>
+            } else {
+<span class="cstat-no" title="statement not covered" >                var data = changeToLowercase(field);</span>
+<span class="cstat-no" title="statement not covered" >                var valMethodName;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                switch (data) {</span>
+                    case "general":
+<span class="cstat-no" title="statement not covered" >                        valMethodName = "isGeneralValid";</span>
+<span class="cstat-no" title="statement not covered" >                        break;</span>
+&nbsp;
+                    case "password":
+<span class="cstat-no" title="statement not covered" >                        valMethodName = "isPasswordValid";</span>
+<span class="cstat-no" title="statement not covered" >                        break;</span>
+&nbsp;
+                    case "passwordconfirm":
+<span class="cstat-no" title="statement not covered" >                        valMethodName = "isPasswordConfirmValid";</span>
+<span class="cstat-no" title="statement not covered" >                        break;</span>
+&nbsp;
+                    case "email":
+<span class="cstat-no" title="statement not covered" >                        valMethodName = "isEmailValid";</span>
+<span class="cstat-no" title="statement not covered" >                        break;</span>
+&nbsp;
+                    case "emailconfirm":
+<span class="cstat-no" title="statement not covered" >                        valMethodName = "isEmailConfirmValid";</span>
+<span class="cstat-no" title="statement not covered" >                        break;</span>
+&nbsp;
+                    case "date":
+<span class="cstat-no" title="statement not covered" >                        valMethodName = "isDateValid";</span>
+<span class="cstat-no" title="statement not covered" >                        break;</span>
+&nbsp;
+                    case "letters":
+<span class="cstat-no" title="statement not covered" >                        valMethodName = "isLetters";</span>
+<span class="cstat-no" title="statement not covered" >                        break;</span>
+&nbsp;
+                    case "numbers":
+<span class="cstat-no" title="statement not covered" >                        valMethodName = "isNumbers";</span>
+<span class="cstat-no" title="statement not covered" >                        break;</span>
+&nbsp;
+                    case "postcode":
+<span class="cstat-no" title="statement not covered" >                        valMethodName = "isPostCodeValid";</span>
+<span class="cstat-no" title="statement not covered" >                        break;</span>
+&nbsp;
+                    case "mobile":
+<span class="cstat-no" title="statement not covered" >                        valMethodName = "isMobileValid";</span>
+<span class="cstat-no" title="statement not covered" >                        break;</span>
+&nbsp;
+                    case "checkbox":
+<span class="cstat-no" title="statement not covered" >                        valMethodName = "isCheckboxTicked";</span>
+<span class="cstat-no" title="statement not covered" >                        break;</span>
+&nbsp;
+                    case "select":
+<span class="cstat-no" title="statement not covered" >                        valMethodName = "isSelectChosen";</span>
+<span class="cstat-no" title="statement not covered" >                        break;</span>
+&nbsp;
+                    default:
+<span class="cstat-no" title="statement not covered" >                        valMethodName = "isNotEmpty";</span>
+<span class="cstat-no" title="statement not covered" >                        break;</span>
+                }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                this.isValid = completeAction(this, (this[valMethodName](field)), field);</span>
+            }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            return this.isValid;</span>
+        };
+&nbsp;
+        this.isEmpty = function (field) {
+            return ($(field).val().length === 0);
+        };
+&nbsp;
+        this.isLetters = function (field) {
+            
+            var letterMatcher = /^[A-Za-z ]+$/;
+            var matchResult = letterMatcher.test($(field).val());
+            this.options.letters.showInvalidError = !matchResult;
+&nbsp;
+            return matchResult;
+        };
+&nbsp;
+        this.isNumbers = function (field) {
+            
+            var numberMatcher = /^\d+$/;
+            var matchResult = numberMatcher.test($(field).val());
+            this.options.numbers.showInvalidError = !matchResult;
+&nbsp;
+            return matchResult;
+        };
+&nbsp;
+        this.isGeneralValid = function (field) {
+            
+            var lengthResult = false;
+            
+            <span class="missing-if-branch" title="if path not taken" >I</span>if(this.options.general.maxLength &gt; this.options.general.minLength) {
+                
+<span class="cstat-no" title="statement not covered" >                lengthResult = isBetween($(field).val().length, this.options.general.minLength, this.options.general.maxLength);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                this.options.general.showLengthError = !lengthResult;</span>
+                
+<span class="cstat-no" title="statement not covered" >                return lengthResult;</span>
+            }
+            
+            lengthResult = $(field).val().length &gt; this.options.general.minLength;
+            
+            this.options.general.showLengthError = !lengthResult;
+            
+            return lengthResult;
+        };
+&nbsp;
+        this.isPasswordValid = function (field) {
+            
+            var passwordMatcher = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/,
+                lengthResult, 
+                matchResult;
+            
+            lengthResult = isBetween($(field).val().length, this.options.password.minLength, this.options.password.maxLength);
+&nbsp;
+            this.options.password.showLengthError = !lengthResult;
+&nbsp;
+            <span class="missing-if-branch" title="else path not taken" >E</span>if (this.options.password.numbers &amp;&amp; this.options.password.letters) {
+&nbsp;
+                matchResult = (passwordMatcher.test($(field).val()));
+                this.options.password.showInvalidError = !matchResult;
+                this.isPasswordConfirmValid($(this.formID + " input[data-field-info='passwordconfirm']"));
+&nbsp;
+                return (lengthResult) ? matchResult : false;
+            }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            return lengthResult;</span>
+        };
+&nbsp;
+        this.isPasswordConfirmValid = function (field) {
+&nbsp;
+            <span class="missing-if-branch" title="else path not taken" >E</span>if (this.options.password.passwordConfirm) {
+                
+                var matchResult = $(field).val() === $(this.formID + " input[data-field-info='password']").val();
+                
+                this.options.passwordConfirm.showInvalidError = !matchResult;
+                
+                return matchResult;
+            }
+        };
+&nbsp;
+        this.isEmailValid = function (field) {
+            
+            var emailMatcher = /[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
+                validResult,
+                domainResult;
+&nbsp;
+            // Remove whitespace as some phones put a spacebar in if you use the autocomplete option on the phone
+            var whiteSpace = /\s/;
+            var isWhiteSpace = whiteSpace.test($(field).val());
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (isWhiteSpace) {
+<span class="cstat-no" title="statement not covered" >                $(field).val($(field).val().replace(/\s/g, ''));</span>
+            }
+&nbsp;
+            validResult = emailMatcher.test($(field).val());
+&nbsp;
+            this.options.email.showInvalidError = !validResult;
+&nbsp;
+            if (this.options.email.domain !== '') {
+                domainResult = ($(field).val().indexOf(this.options.email.domain, $(field).val().length - this.options.email.domain.length) !== -1);
+                this.options.email.showDomainError = !domainResult;
+&nbsp;
+                return (validResult) ? domainResult : <span class="branch-1 cbranch-no" title="branch not covered" >false;</span>
+            }
+&nbsp;
+            this.isEmailConfirmValid($(this.formID + " input[data-field-info='emailconfirm']"));
+&nbsp;
+            return validResult;
+        };
+&nbsp;
+        this.isEmailConfirmValid = function (field) {
+&nbsp;
+            <span class="missing-if-branch" title="else path not taken" >E</span>if (this.options.email.emailConfirm) {
+                
+                var matchResult = $(field).val() === $(this.formID + " input[data-field-info='email']").val();
+                
+                this.options.emailConfirm.showInvalidError = !matchResult;
+                
+                return matchResult;
+            }
+        };
+&nbsp;
+        this.isDateValid = function (field) {
+            
+            var date = $(field).val(),
+                count = date.match(/\//g),
+                validResult, 
+                formatResult;
+&nbsp;
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (count === null || count.length &lt; 2) {
+                
+<span class="cstat-no" title="statement not covered" >                formatResult = false;</span>
+<span class="cstat-no" title="statement not covered" >                this.options.date.showFormatError = !formatResult;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                return formatResult;</span>
+            } else {
+                
+                var data = date.split('/');
+&nbsp;
+                formatResult = true;
+                this.options.date.showFormatError = !formatResult;
+&nbsp;
+                validResult = isBetween(Date.parse(data[2] + "-" + data[1] + "-" + data[0]), 0, Date.now());
+                this.options.date.showInvalidError = !validResult;
+&nbsp;
+                return validResult;
+            }
+        };
+&nbsp;
+        this.isPostCodeValid = function (field) {
+            
+            var validResult, 
+                postCode = checkPostCode($(field).val());
+&nbsp;
+            validResult = !postCode ? false : true;
+&nbsp;
+            this.options.postcode.showInvalidError = !validResult;
+&nbsp;
+            return validResult;
+        },
+&nbsp;
+        this.isMobileValid = function (field) {
+            
+            var isNumbers = this.isNumbers(field),
+                lengthResult = $(field).val().length === this.options.mobile.numberLength;
+            
+            this.options.mobile.showInvalidError = !(isNumbers &amp;&amp; lengthResult);
+            return isNumbers &amp;&amp; lengthResult;
+        };
+&nbsp;
+        this.isCheckboxTicked = <span class="fstat-no" title="function not covered" >function (field) {</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            var isChecked = $(field).is(":checked");</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            this.options.checkbox.showInvalidError = !isChecked;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            return isChecked;</span>
+        };
+        
+        this.isSelectChosen = <span class="fstat-no" title="function not covered" >function (field) {</span>
+        
+<span class="cstat-no" title="statement not covered" >            var isChosen = ($(field).val() !== null);  </span>
+            
+<span class="cstat-no" title="statement not covered" >            this.options.select.showInvalidError = !isChosen;</span>
+            
+<span class="cstat-no" title="statement not covered" >            return isChosen;</span>
+        };
+        
+        this.createErrorMessage = function (field) {
+&nbsp;
+            var data = changeToLowercase(field);
+&nbsp;
+            var errorID, errorMessage;
+&nbsp;
+            switch (data) {
+&nbsp;
+<span class="branch-0 cbranch-no" title="branch not covered" >                case "general":</span>
+<span class="cstat-no" title="statement not covered" >                    if (self.options.general.showLengthError) {</span>
+<span class="cstat-no" title="statement not covered" >                        collectErrorInformation(field, self.options.general.errorDetails, "length");</span>
+                    }
+<span class="cstat-no" title="statement not covered" >                    break;</span>
+&nbsp;
+                case "password":
+                    <span class="missing-if-branch" title="else path not taken" >E</span>if (self.options.password.showInvalidError) {                        
+                        collectErrorInformation(field, self.options.password.errorDetails, "invalid");
+                    }
+&nbsp;
+                    <span class="missing-if-branch" title="else path not taken" >E</span>if (self.options.password.showLengthError) {
+                        collectErrorInformation(field, self.options.password.errorDetails, "length");
+                    }
+                    break;
+&nbsp;
+<span class="branch-2 cbranch-no" title="branch not covered" >                case "passwordconfirm":</span>
+<span class="cstat-no" title="statement not covered" >                    if (self.options.passwordConfirm.showInvalidError) {</span>
+<span class="cstat-no" title="statement not covered" >                        collectErrorInformation(field, self.options.passwordConfirm.errorDetails, "invalid");</span>
+                    }
+<span class="cstat-no" title="statement not covered" >                    break;</span>
+&nbsp;
+                case "email":
+                    <span class="missing-if-branch" title="else path not taken" >E</span>if (self.options.email.showInvalidError) {
+                        collectErrorInformation(field, self.options.email.errorDetails, "invalid");
+                    }
+&nbsp;
+                    <span class="missing-if-branch" title="if path not taken" >I</span>if (self.options.email.showDomainError) {
+<span class="cstat-no" title="statement not covered" >                        collectErrorInformation(field, self.options.email.errorDetails, "domain");</span>
+                    }
+                    break;
+&nbsp;
+<span class="branch-4 cbranch-no" title="branch not covered" >                case "emailconfirm":</span>
+<span class="cstat-no" title="statement not covered" >                    if (self.options.emailConfirm.showInvalidError) {</span>
+<span class="cstat-no" title="statement not covered" >                        collectErrorInformation(field, self.options.emailConfirm.errorDetails, "invalid");</span>
+                    }
+<span class="cstat-no" title="statement not covered" >                    break;</span>
+&nbsp;
+                case "letters":
+                    <span class="missing-if-branch" title="else path not taken" >E</span>if (self.options.letters.showInvalidError) {
+                        collectErrorInformation(field, self.options.letters.errorDetails, "invalid");
+                    }
+                    break;
+&nbsp;
+                case "numbers":
+                    <span class="missing-if-branch" title="else path not taken" >E</span>if (self.options.numbers.showInvalidError) {
+                        
+                        collectErrorInformation(field, self.options.numbers.errorDetails, "invalid");
+                    }
+                    break;
+&nbsp;
+<span class="branch-7 cbranch-no" title="branch not covered" >                case "date":</span>
+<span class="cstat-no" title="statement not covered" >                    if (self.options.date.showFormatError) {</span>
+<span class="cstat-no" title="statement not covered" >                        collectErrorInformation(field, self.options.date.errorDetails, "format");</span>
+                    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                    if (self.options.date.showInvalidError) {</span>
+<span class="cstat-no" title="statement not covered" >                        collectErrorInformation(field, self.options.date.errorDetails, "invalid");</span>
+                    }
+<span class="cstat-no" title="statement not covered" >                    break;</span>
+&nbsp;
+                case "postcode":
+                    <span class="missing-if-branch" title="else path not taken" >E</span>if (self.options.postcode.showInvalidError) {
+                        collectErrorInformation(field, self.options.postcode.errorDetails, "invalid");
+                    }
+                    break;
+&nbsp;
+                case "mobile":
+                    <span class="missing-if-branch" title="else path not taken" >E</span>if (self.options.mobile.showInvalidError) {
+                        collectErrorInformation(field, self.options.mobile.errorDetails, "invalid");
+                    }
+                    break;
+&nbsp;
+<span class="branch-10 cbranch-no" title="branch not covered" >                case "checkbox":</span>
+<span class="cstat-no" title="statement not covered" >                    if (self.options.checkbox.showInvalidError) {</span>
+<span class="cstat-no" title="statement not covered" >                        collectErrorInformation(field, self.options.checkbox.errorDetails, "invalid");</span>
+                    }
+<span class="cstat-no" title="statement not covered" >                    break;</span>
+                    
+<span class="branch-11 cbranch-no" title="branch not covered" >                case "select":</span>
+<span class="cstat-no" title="statement not covered" >                    if (self.options.select.showInvalidError) {</span>
+<span class="cstat-no" title="statement not covered" >                        collectErrorInformation(field, self.options.select.errorDetails, "invalid");</span>
+                    }
+<span class="cstat-no" title="statement not covered" >                    break;</span>
+            }
+        };
+&nbsp;
+        this.controlErrorMessages = <span class="fstat-no" title="function not covered" >function (field) {</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            var data = changeToLowercase(field);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            var errorID, showError;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            switch (data) {</span>
+&nbsp;
+                case "general":
+<span class="cstat-no" title="statement not covered" >                    errorMessageDisplay(self.options.general.errorDetails, "length", self.options.general.showLengthError);</span>
+<span class="cstat-no" title="statement not covered" >                    break;</span>
+&nbsp;
+                case "password":
+<span class="cstat-no" title="statement not covered" >                    errorMessageDisplay(self.options.password.errorDetails, "length", self.options.password.showLengthError);</span>
+<span class="cstat-no" title="statement not covered" >                    errorMessageDisplay(self.options.password.errorDetails, "invalid", self.options.password.showInvalidError);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                    if (self.options.password.passwordConfirm) {</span>
+                        
+<span class="cstat-no" title="statement not covered" >                        errorMessageDisplay(self.options.passwordConfirm.errorDetails, "invalid", self.options.passwordConfirm.showInvalidError);</span>
+                        
+<span class="cstat-no" title="statement not covered" >                        self.options.passwordConfirm.showInvalidError ? </span>
+                            invalidAction(self, $(self.formID + " input[data-field-info='passwordconfirm']")) :
+                            validAction(self, $(self.formID + " input[data-field-info='passwordconfirm']"));
+                    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                    break;</span>
+&nbsp;
+                case "passwordconfirm":
+<span class="cstat-no" title="statement not covered" >                    errorMessageDisplay(self.options.passwordConfirm.errorDetails, "invalid", self.options.passwordConfirm.showInvalidError);</span>
+<span class="cstat-no" title="statement not covered" >                    break;</span>
+&nbsp;
+                case 'email':
+<span class="cstat-no" title="statement not covered" >                    errorMessageDisplay(self.options.email.errorDetails, "invalid", self.options.email.showInvalidError);</span>
+<span class="cstat-no" title="statement not covered" >                    errorMessageDisplay(self.options.email.errorDetails, "domain", self.options.email.showDomainError);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                    if (self.options.email.emailConfirm) {</span>
+                        
+<span class="cstat-no" title="statement not covered" >                        errorMessageDisplay(self.options.emailConfirm.errorDetails, "invalid", self.options.emailConfirm.showInvalidError);</span>
+                        
+<span class="cstat-no" title="statement not covered" >                        self.options.emailConfirm.showInvalidError ?</span>
+                            invalidAction(self, $(self.formID + " input[data-field-info='emailconfirm']")) :
+                            validAction(self, $(self.formID + " input[data-field-info='emailconfirm']"));
+                    }
+<span class="cstat-no" title="statement not covered" >                    break;</span>
+&nbsp;
+                case "emailconfirm":
+<span class="cstat-no" title="statement not covered" >                    errorMessageDisplay(self.options.emailConfirm.errorDetails, "invalid", self.options.emailConfirm.showInvalidError);</span>
+<span class="cstat-no" title="statement not covered" >                    break;</span>
+&nbsp;
+                case 'letters':
+<span class="cstat-no" title="statement not covered" >                    errorMessageDisplay(self.options.letters.errorDetails, "invalid", self.options.letters.showInvalidError);</span>
+<span class="cstat-no" title="statement not covered" >                    break;</span>
+&nbsp;
+                case 'numbers':
+<span class="cstat-no" title="statement not covered" >                    errorMessageDisplay(self.options.numbers.errorDetails, "invalid", self.options.numbers.showInvalidError);</span>
+<span class="cstat-no" title="statement not covered" >                    break;</span>
+&nbsp;
+                case 'date':
+<span class="cstat-no" title="statement not covered" >                    errorMessageDisplay(self.options.date.errorDetails, "invalid", self.options.date.showInvalidError);</span>
+<span class="cstat-no" title="statement not covered" >                    errorMessageDisplay(self.options.date.errorDetails, "format", self.options.date.showFormatError);</span>
+<span class="cstat-no" title="statement not covered" >                    break;</span>
+&nbsp;
+                case 'postcode':
+<span class="cstat-no" title="statement not covered" >                    errorMessageDisplay(self.options.postcode.errorDetails, "invalid", self.options.postcode.showInvalidError);</span>
+<span class="cstat-no" title="statement not covered" >                    break;</span>
+&nbsp;
+                case 'mobile':
+<span class="cstat-no" title="statement not covered" >                    errorMessageDisplay(self.options.mobile.errorDetails, "invalid", self.options.mobile.showInvalidError);</span>
+<span class="cstat-no" title="statement not covered" >                    break;</span>
+&nbsp;
+                case 'checkbox':
+<span class="cstat-no" title="statement not covered" >                    errorMessageDisplay(self.options.checkbox.errorDetails, "invalid", self.options.checkbox.showInvalidError);</span>
+<span class="cstat-no" title="statement not covered" >                    break;</span>
+                    
+                case 'select':
+<span class="cstat-no" title="statement not covered" >                    errorMessageDisplay(self.options.select.errorDetails, "invalid", self.options.select.showInvalidError);</span>
+<span class="cstat-no" title="statement not covered" >                    break;</span>
+            }
+&nbsp;
+        };
+&nbsp;
+        // Private Methods
+&nbsp;
+        var changeToLowercase = function (field) {
+            return ($(field).attr('data-field-info') !== undefined) ? $(field).attr('data-field-info').toLowerCase() : "";
+        };
+&nbsp;
+        var isBetween = function (val, min, max) {
+            return (val &gt;= min &amp;&amp; val &lt;= max);
+        };
+&nbsp;
+        var showErrors = function () {
+&nbsp;
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (self.options.turnOffErrors) {
+                
+<span class="cstat-no" title="statement not covered" >                for(var option in self.options) {</span>
+                
+<span class="cstat-no" title="statement not covered" >                    for(var property in self.options[option]) {</span>
+                    
+<span class="cstat-no" title="statement not covered" >                        if(self.options[option].hasOwnProperty(property) &amp;&amp; /show/.test(property)) {</span>
+<span class="cstat-no" title="statement not covered" >                            self.options[option][property] = false;</span>
+                        }
+                    }
+                }
+            }
+        };
+        
+        var createErrorIds = function() {
+        
+            for(var option in self.options) {
+            
+                if (self.options[option].hasOwnProperty("errorDetails")) {
+                
+                    self.options[option].errorDetails.forEach(function(errorProperty, index) {
+                    
+                        for(var property in errorProperty) {
+                        
+                            if (property === "id") {
+                                errorProperty[property] = self.formIDStr + errorProperty[property];
+                            }
+                        }
+                    });
+                }
+            }
+        };
+&nbsp;
+        var completeAction = <span class="fstat-no" title="function not covered" >function (self, isValid, field) {</span>
+<span class="cstat-no" title="statement not covered" >            return (isValid) ? validAction(self, field) : invalidAction(self, field);</span>
+        };
+&nbsp;
+        var validAction = <span class="fstat-no" title="function not covered" >function (self, field) {</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            $(field).removeClass('invalid');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            self.controlErrorMessages(field);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            return true;</span>
+        };
+&nbsp;
+        var invalidAction = <span class="fstat-no" title="function not covered" >function (self, field) {</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            $(field).addClass('invalid');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            self.controlErrorMessages(field);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            return false;</span>
+        };
+&nbsp;
+        var collectErrorInformation = function(field, errorDetails, type) {
+        
+            errorDetails.forEach(function(errorProperty, index) {
+                
+                if (type === errorProperty.type) {
+                    buildErrorContainer(errorProperty.id, field, errorProperty.message);
+                }
+            });
+        };
+        
+        var buildErrorContainer = function (id, field, error) {
+            $(field).after('&lt;div id="' + id + '" class="form-error"&gt;&lt;/div&gt;');
+            $('#' + id).append(error);
+        };
+        
+        var errorMessageDisplay = <span class="fstat-no" title="function not covered" >function(errorDetails, type, showError) {</span>
+        
+<span class="cstat-no" title="statement not covered" >            errorDetails.forEach(<span class="fstat-no" title="function not covered" >function(errorProperty, index) {</span></span>
+                
+<span class="cstat-no" title="statement not covered" >                if (type === errorProperty.type) {</span>
+<span class="cstat-no" title="statement not covered" >                    (showError) ? $("#" + errorProperty.id).show() : $("#" + errorProperty.id).hide();</span>
+                }
+            });
+        };
+    }
+&nbsp;
+    $.fn.isValid = function (options) {
+&nbsp;
+        return this.each(function () {
+&nbsp;
+            var newIsValid = new $.isValid(this, options);
+            $(this).data('isValid', newIsValid);
+&nbsp;
+            newIsValid.init();
+&nbsp;
+            $(newIsValid.formID + ' :input[type="submit"]').click(<span class="fstat-no" title="function not covered" >function (e) {</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                newIsValid.formArray.each(<span class="fstat-no" title="function not covered" >function (index, field) {</span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                    newIsValid.isValid = newIsValid.isValidField(field);</span>
+<span class="cstat-no" title="statement not covered" >                    newIsValid.isFormValid = newIsValid.isFormValidated();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                    if (!newIsValid.isFormValid) {</span>
+<span class="cstat-no" title="statement not covered" >                        e.preventDefault();</span>
+                    }
+                });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                newIsValid.isFormValid ? newIsValid.options.onFormValidated() : newIsValid.options.onFormInValidated();</span>
+            });
+&nbsp;
+            newIsValid.formArray.each(function (index, field) {
+                $(field).blur(<span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                    newIsValid.isValid = newIsValid.isValidField(field);</span>
+                });
+            });
+&nbsp;
+            newIsValid.$elem.find(':reset').click(<span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                $(newIsValid.formID + ' .invalid').removeClass('invalid');</span>
+<span class="cstat-no" title="statement not covered" >                $(newIsValid.formID + ' .form-error').hide();</span>
+<span class="cstat-no" title="statement not covered" >                newIsValid.isFormValid = newIsValid.isFormValidated();</span>
+            });
+&nbsp;
+        });
+    };
+&nbsp;
+})(jQuery);
+&nbsp;
+/*==================================================================================================
+&nbsp;
+Application:   Utility Function
+Author:        John Gardner
+&nbsp;
+Version:       V1.0
+Date:          18th November 2003
+Description:   Used to check the validity of a UK postcode
+&nbsp;
+Version:       V2.0
+Date:          8th March 2005
+Description:   BFPO postcodes implemented.
+               The rules concerning which alphabetic characters are allowed in which part of the 
+               postcode were more stringently implementd.
+&nbsp;
+Version:       V3.0
+Date:          8th August 2005
+Description:   Support for Overseas Territories added                 
+&nbsp;
+Version:       V3.1
+Date:          23rd March 2008
+Description:   Problem corrected whereby valid postcode not returned, and 'BD23 DX' was invalidly 
+               treated as 'BD2 3DX' (thanks Peter Graves)        
+&nbsp;
+Version:       V4.0
+Date:          7th October 2009
+Description:   Character 3 extended to allow 'pmnrvxy' (thanks to Jaco de Groot)  
+&nbsp;
+Version:       V4.1
+               8th September 2011
+               Support for Anguilla overseas territory added    
+&nbsp;
+Version:       V5.0
+Date:          8th November 2012
+               Specific support added for new BFPO postcodes           
+&nbsp;
+Parameters:    toCheck - postcodeto be checked. 
+&nbsp;
+This function checks the value of the parameter for a valid postcode format. The space between the 
+inward part and the outward part is optional, although is inserted if not there as it is part of the 
+official postcode.
+&nbsp;
+If the postcode is found to be in a valid format, the function returns the postcode properly 
+formatted (in capitals with the outward code and the inward code separated by a space. If the 
+postcode is deemed to be incorrect a value of false is returned.
+&nbsp;
+Example call:
+&nbsp;
+  if (checkPostCode (myPostCode)) {
+    alert ("Postcode has a valid format")
+  } 
+  else {alert ("Postcode has invalid format")};
+&nbsp;
+--------------------------------------------------------------------------------------------------*/
+&nbsp;
+function checkPostCode(toCheck) {
+&nbsp;
+    // Permitted letters depend upon their position in the postcode.
+    var alpha1 = "[abcdefghijklmnoprstuwyz]"; // Character 1
+    var alpha2 = "[abcdefghklmnopqrstuvwxy]"; // Character 2
+    var alpha3 = "[abcdefghjkpmnrstuvwxy]"; // Character 3
+    var alpha4 = "[abehmnprvwxy]"; // Character 4
+    var alpha5 = "[abdefghjlnpqrstuwxyz]"; // Character 5
+    var BFPOa5 = "[abdefghjlnpqrst]"; // BFPO alpha5
+    var BFPOa6 = "[abdefghjlnpqrstuwzyz]"; // BFPO alpha6
+&nbsp;
+    // Array holds the regular expressions for the valid postcodes
+    var pcexp = [];
+&nbsp;
+    // BFPO postcodes
+    pcexp.push(new RegExp("^(bf1)(\\s*)([0-6]{1}" + BFPOa5 + "{1}" + BFPOa6 + "{1})$", "i"));
+&nbsp;
+    // Expression for postcodes: AN NAA, ANN NAA, AAN NAA, and AANN NAA
+    pcexp.push(new RegExp("^(" + alpha1 + "{1}" + alpha2 + "?[0-9]{1,2})(\\s*)([0-9]{1}" + alpha5 + "{2})$", "i"));
+&nbsp;
+    // Expression for postcodes: ANA NAA
+    pcexp.push(new RegExp("^(" + alpha1 + "{1}[0-9]{1}" + alpha3 + "{1})(\\s*)([0-9]{1}" + alpha5 + "{2})$", "i"));
+&nbsp;
+    // Expression for postcodes: AANA  NAA
+    pcexp.push(new RegExp("^(" + alpha1 + "{1}" + alpha2 + "{1}" + "?[0-9]{1}" + alpha4 + "{1})(\\s*)([0-9]{1}" + alpha5 + "{2})$", "i"));
+&nbsp;
+    // Exception for the special postcode GIR 0AA
+    pcexp.push(/^(GIR)(\s*)(0AA)$/i);
+&nbsp;
+    // Standard BFPO numbers
+    pcexp.push(/^(bfpo)(\s*)([0-9]{1,4})$/i);
+&nbsp;
+    // c/o BFPO numbers
+    pcexp.push(/^(bfpo)(\s*)(c\/o\s*[0-9]{1,3})$/i);
+&nbsp;
+    // Overseas Territories
+    pcexp.push(/^([A-Z]{4})(\s*)(1ZZ)$/i);
+&nbsp;
+    // Anguilla
+    pcexp.push(/^(ai-2640)$/i);
+&nbsp;
+    // Load up the string to check
+    var postCode = toCheck;
+&nbsp;
+    // Assume we're not going to find a valid postcode
+    var valid = false;
+&nbsp;
+    // Check the string against the types of post codes
+    for (var i = 0; i &lt; pcexp.length; i++) {
+&nbsp;
+        if (pcexp[i].test(postCode)) {
+&nbsp;
+            // The post code is valid - split the post code into component parts
+            pcexp[i].exec(postCode);
+&nbsp;
+            // Copy it back into the original string, converting it to uppercase and inserting a space 
+            // between the inward and outward codes
+            postCode = RegExp.$1.toUpperCase() + " " + RegExp.$3.toUpperCase();
+&nbsp;
+            // If it is a BFPO c/o type postcode, tidy up the "c/o" part
+            postCode = postCode.replace(/C\/O\s*/, "c/o ");
+&nbsp;
+            // If it is the Anguilla overseas territory postcode, we need to treat it specially
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (toCheck.toUpperCase() == 'AI-2640') {
+<span class="cstat-no" title="statement not covered" >                postCode = 'AI-2640';</span>
+            }
+&nbsp;
+            // Load new postcode back into the form element
+            valid = true;
+&nbsp;
+            // Remember that we have found that the code is valid and break from loop
+            break;
+        }
+    }
+&nbsp;
+    // Return with either the reformatted valid postcode or the original invalid postcode
+    if (valid) {
+        return postCode;
+    } else return false;
+}</pre></td></tr>
+</table></pre>
+
+</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Feb 21 2015 21:42:31 GMT+0000 (GMT Standard Time)</div>
+</div>
+
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+
+<script src="../sorter.js"></script>
+</body>
+</html>

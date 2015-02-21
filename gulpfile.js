@@ -9,22 +9,10 @@ var debug = require('gulp-debug');
 var livereload = require('gulp-livereload');
 
 var paths = {
-    scripts: pkg.instance + '/js/**/*.js',
-    html: pkg.instance + '/index.html',
-    css: pkg.instance + '/css/**/*.css'
+    scripts: __dirname + '/Web/js/**/*.js',
+    html: __dirname + '/Web/index.html',
+    css: __dirname + '/Web/css/**/*.css'
 };
-
-// Run test once and exit
-gulp.task('test', function (done) {
-    karma.start({
-        configFile: __dirname + '/karma.conf.js',
-        singleRun: true
-    })
-    .on('done', done())
-    .on('error',  function (err) {
-        throw err;
-    });
-});
 
 gulp.task('reload', function () {
     console.log("reload");
@@ -33,7 +21,8 @@ gulp.task('reload', function () {
 
 // Watch for file changes and re-run tests on each change
 gulp.task('tdd', function (done) {
-    gulp.watch('specs/MainSpec.js', ["reload"]);
+    livereload.listen();
+    gulp.watch([__dirname + '/Web/specs/MainSpec.js', __dirname + '/Web/js/jquery.isValid.js'], ["reload"]);
     karma.start({
         configFile: __dirname + '/karma.conf.js'
     }, function() {

@@ -9,6 +9,11 @@
                     maxLength: 0,
                     showLengthError: true,
                     lengthErrorMessage: "Must be be at least 1 character and no more than x characters.",
+                    errorDetails: [
+                        {
+                            errorID: "-general-length-error"
+                        }
+                    ]
                 },
                 password: {
                     minLength: 6,
@@ -19,11 +24,24 @@
                     lengthErrorMessage: "Password must be at least 6 characters",
                     showInvalidError: true,
                     invalidErrorMessage: "Password must contain letters and numbers.",
-                    passwordConfirm: true
+                    passwordConfirm: true,
+                    errorDetails: [
+                        {
+                            errorID: "-password-length-error"    
+                        },
+                        {
+                            errorID: "-password-match-error"    
+                        }
+                    ]
                 },
                 passwordConfirm: {
                     showInvalidError: true,
-                    invalidErrorMessage: "Passwords do not match."
+                    invalidErrorMessage: "Passwords do not match.",
+                    errorDetails: [
+                        {
+                            errorID: "-passwordconfirm-invalid-error"
+                        }
+                    ]
                 },
                 email: {
                     domain: '',
@@ -31,42 +49,93 @@
                     invalidErrorMessage: "Email is an invalid email address.",
                     showDomainError: false,
                     domainErrorMessage: "Email domain entered is invalid, only @xxxx.xxx is accepted.",
-                    emailConfirm: true
+                    emailConfirm: true,
+                    errorDetails: [
+                        {
+                            errorID: "-email-invalid-error"
+                        },
+                        {
+                            errorID: "-email-domain-error"
+                        }
+                    ]
                 },
                 emailConfirm: {
                     showInvalidError: true,
-                    invalidErrorMessage: "Emails do not match."
+                    invalidErrorMessage: "Emails do not match.",
+                    errorDetails: [
+                        {
+                            errorID: "-emailconfirm-invalid-error"
+                        }
+                    ]
                 },
                 letters: {
                     showInvalidError: true,
-                    invalidErrorMessage: "Field is alphabet characters o only."
+                    invalidErrorMessage: "Field is letters characters only.",
+                    errorDetails: [
+                        {
+                            errorID: "-letters-match-error"
+                        }
+                    ]
                 },
                 numbers: {
                     showInvalidError: true,
-                    invalidErrorMessage: "Field is numbers only."
+                    invalidErrorMessage: "Field is numbers only.",
+                    errorDetails: [
+                        {
+                            errorID: "-numbers-match-error"
+                        }
+                    ]
                 },
                 date: {
                     showInvalidError: true,
                     invalidErrorMessage: "Please enter a valid Date.",
                     showFormatError: true,
-                    formatErrorMessage: "Please enter Date format as DD/MM/YYYY as specified in the placeholder."
+                    formatErrorMessage: "Please enter Date format as DD/MM/YYYY as specified in the placeholder.",
+                    errorDetails: [
+                        {
+                            errorID: "-date-invalid-error"
+                        },
+                        {
+                            errorID: "-date-format-error"
+                        }
+                    ]
                 },
                 postcode: {
                     showInvalidError: true,
-                    invalidErrorMessage: "Not a valid Post Code."
+                    invalidErrorMessage: "Not a valid Post Code.",
+                    errorDetails: [
+                        {
+                            errorID: "-postcode-invalid-error"
+                        }
+                    ]
                 },
                 mobile: {
                     showInvalidError: true,
                     numberLength: 11,
-                    invalidErrorMessage: "Invalid mobile number."
+                    invalidErrorMessage: "Invalid mobile number.",
+                    errorDetails: [
+                        {
+                            errorID: "-mobile-invalid-error"
+                        }
+                    ]
                 },
                 checkbox: {
                     showInvalidError: true,
-                    invalidErrorMessage: "Checkbox must be checked."
+                    invalidErrorMessage: "Checkbox must be checked.",
+                    errorDetails: [
+                        {
+                            errorID: "-checkbox-invalid-error"
+                        }
+                    ]
                 },
                 select: {
                     showInvalidError: true,
-                    invalidErrorMessage: "Please choose an item from the dropdown."
+                    invalidErrorMessage: "Please choose an item from the dropdown.",
+                    errorDetails: [
+                        {
+                            errorID: "-select-invalid-error"
+                        }
+                    ]
                 },
                 turnOffErrors: false,
                 onFormValidated: function () {},
@@ -88,6 +157,22 @@
             this.formIDStr = this.$elem.attr('id');
 
             this.options = $.extend(true, defaults, options);
+            
+            for(var option in this.options) {
+            
+                if (this.options[option].hasOwnProperty("errorDetails")) {
+                
+                    this.options[option].errorDetails.forEach(function(errorProperty, index) {
+                    
+                        for(var property in errorProperty) {
+                        
+                            if (property === "errorID") {
+                                errorProperty[property] = self.formIDStr + errorProperty[property];
+                            }
+                        }
+                    });
+                }
+            }
 
             showErrors(this.options.turnOffErrors);
 
@@ -362,10 +447,7 @@
 
                 case 'general':
                     if (obj.options.general.showLengthError) {
-                        errorID = '-general-length-error';
-                        errorMessage = obj.options.general.lengthErrorMessage;
-
-                        buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
+                        buildErrorContainer(obj.options.general.errorDetails.errorID, field, obj.options.general.lengthErrorMessage);
                     }
                     break;
 

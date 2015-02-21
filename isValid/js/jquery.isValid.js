@@ -171,25 +171,18 @@
 
             this.options = $.extend(true, defaults, options);
             
-            for(var option in this.options) {
-            
-                if (this.options[option].hasOwnProperty("errorDetails")) {
-                
-                    this.options[option].errorDetails.forEach(function(errorProperty, index) {
-                    
-                        for(var property in errorProperty) {
-                        
-                            if (property === "id") {
-                                errorProperty[property] = self.formIDStr + errorProperty[property];
-                            }
-                        }
-                    });
-                }
-            }
+            createErrorIds();
+            showErrors();
 
-            showErrors(this.options.turnOffErrors, self);
-
-            this.formArray = $(this.formID + ' :input[type="text"],' + this.formID + ' :input[type="email"],' + this.formID + ' :input[type="password"],' + this.formID + ' :input[type="tel"],' + this.formID + ' :input[type="number"],' + this.formID + ' :input[type="date"],' + this.formID + ' :input[type="checkbox"],' + this.formID + ' textarea,' + this.formID + ' select');
+            this.formArray = $(this.formID + ' :input[type="text"],' + 
+                               this.formID + ' :input[type="email"],' + 
+                               this.formID + ' :input[type="password"],' + 
+                               this.formID + ' :input[type="tel"],' + 
+                               this.formID + ' :input[type="number"],' + 
+                               this.formID + ' :input[type="date"],' + 
+                               this.formID + ' :input[type="checkbox"],' + 
+                               this.formID + ' textarea,' + 
+                               this.formID + ' select');
 
             this.formArray.each(function (index, field) {
                 self.createErrorMessage(field);
@@ -201,6 +194,12 @@
         this.isFormValidated = function () {
             return ($(this.formID + ' .invalid').length) ? false : true;
         };
+        
+        this.resetForm = function() {
+            $(this.formID + ' .invalid').removeClass('invalid');
+            $(this.formID + ' .form-error').hide();
+            this.isFormValid = this.isFormValidated();
+        },
 
         this.isValidField = function (field) {
 
@@ -636,9 +635,9 @@
             return (val >= min && val <= max);
         };
 
-        var showErrors = function (show, self) {
+        var showErrors = function () {
 
-            if (show) {
+            if (self.options.turnOffErrors) {
                 
                 for(var option in self.options) {
                 
@@ -648,6 +647,25 @@
                             self.options[option][property] = false;
                         }
                     }
+                }
+            }
+        };
+        
+        var createErrorIds = function() {
+        
+            for(var option in self.options) {
+            
+                if (self.options[option].hasOwnProperty("errorDetails")) {
+                
+                    self.options[option].errorDetails.forEach(function(errorProperty, index) {
+                    
+                        for(var property in errorProperty) {
+                        
+                            if (property === "id") {
+                                errorProperty[property] = self.formIDStr + errorProperty[property];
+                            }
+                        }
+                    });
                 }
             }
         };

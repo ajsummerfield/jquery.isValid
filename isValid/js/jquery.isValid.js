@@ -3,23 +3,20 @@
 
     $.isValid = function (element, options) {
 
-        // To do
-        // Look into similar changes to error message creation and display similar to the new way of calling the valid methods
-
         var defaults = {
-                username: {
-                    minLength: 6,
-                    maxLength: 12,
+                general: {
+                    minLength: 1,
+                    maxLength: 0,
                     showLengthError: true,
-                    lengthErrorMessage: "Username must be be at least 6 characters and no more than 12 characters.",
+                    lengthErrorMessage: "Must be be at least 1 character and no more than x characters.",
                 },
                 password: {
                     minLength: 6,
-                    maxLength: 20,
+                    maxLength: 100,
                     numbers: true,
                     letters: true,
                     showLengthError: true,
-                    lengthErrorMessage: "Password must be at least 6 characters and no more than 20 characters.",
+                    lengthErrorMessage: "Password must be at least 6 characters",
                     showInvalidError: true,
                     invalidErrorMessage: "Password must contain letters and numbers.",
                     passwordConfirm: true
@@ -42,7 +39,7 @@
                 },
                 letters: {
                     showInvalidError: true,
-                    invalidErrorMessage: "Field is letters only."
+                    invalidErrorMessage: "Field is alphabet characters o only."
                 },
                 numbers: {
                     showInvalidError: true,
@@ -116,8 +113,8 @@
                 var valMethodName;
 
                 switch (data) {
-                    case 'username':
-                        valMethodName = "isUsernameValid";
+                    case 'general':
+                        valMethodName = "isGeneralValid";
                         break;
 
                     case 'password':
@@ -179,45 +176,56 @@
         };
 
         this.isLetters = function (field) {
+            
             var letterMatcher = /^[A-Za-z ]+$/;
-
             var matchResult = letterMatcher.test($(field).val());
-            this.options.letters.showInvalidError = (matchResult) ? false : true;
+            this.options.letters.showInvalidError = !matchResult;
 
             return matchResult;
         };
 
         this.isNumbers = function (field) {
+            
             var numberMatcher = /^\d+$/;
-
             var matchResult = numberMatcher.test($(field).val());
-            this.options.numbers.showInvalidError = (matchResult) ? false : true;
+            this.options.numbers.showInvalidError = !matchResult;
 
             return matchResult;
         };
 
-        this.isUsernameValid = function (field) {
-            var lengthResult = isBetween($(field).val().length, this.options.username.minLength, this.options.username.maxLength);
+        this.isGeneralValid = function (field) {
+            
+            if(this.options.general.maxLength > this.options.general.minLength) {
+                
+                var lengthResult = isBetween($(field).val().length, this.options.general.minLength, this.options.general.maxLength);
 
-            this.options.username.showLengthError = (lengthResult) ? false : true;
-
+                this.options.general.showLengthError = !lengthResult;
+                
+                return lengthResult;
+            }
+            
+            lengthResult = $(field).val().length > this.options.general.minLength;
+            
+            this.options.general.showLengthError = !lengthResult;
+            
             return lengthResult;
         };
 
         this.isPasswordValid = function (field) {
-            var passwordMatcher = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/;
-
-            var lengthResult, matchResult;
-
+            
+            var passwordMatcher = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/,
+                lengthResult, 
+                matchResult;
+            
             lengthResult = isBetween($(field).val().length, this.options.password.minLength, this.options.password.maxLength);
 
-            this.options.password.showLengthError = (lengthResult) ? false : true;
+            this.options.password.showLengthError = !lengthResult;
 
             if (this.options.password.numbers && this.options.password.letters) {
 
                 matchResult = (passwordMatcher.test($(field).val()));
-                this.options.password.showInvalidError = (matchResult) ? false : true;
-                this.isPasswordConfirmValid($("input[data-field-info='passwordconfirm']"));
+                this.options.password.showInvalidError = !matchResult;
+                this.isPasswordConfirmValid($(this.formID + " input[data-field-info='passwordconfirm']"));
 
                 return (lengthResult) ? matchResult : false;
             }
@@ -228,19 +236,20 @@
         this.isPasswordConfirmValid = function (field) {
 
             if (this.options.password.passwordConfirm) {
-                if ($(field).val() !== $("input[data-field-info='password']").val()) {
-                    this.options.passwordConfirm.showInvalidError = true;
-                    return false;
-                }
-                this.options.passwordConfirm.showInvalidError = false;
-                return true;
+                
+                var matchResult = $(field).val() === $(this.formID + " input[data-field-info='password']").val();
+                
+                this.options.passwordConfirm.showInvalidError = !matchResult;
+                
+                return matchResult;
             }
         };
 
         this.isEmailValid = function (field) {
-            var emailMatcher = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-
-            var validResult, domainResult;
+            
+            var emailMatcher = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
+                validResult,
+                domainResult;
 
             // Remove whitespace as some phones put a spacebar in if you use the autocomplete option on the phone
             var whiteSpace = /\s/;
@@ -251,16 +260,16 @@
 
             validResult = emailMatcher.test($(field).val());
 
-            this.options.email.showInvalidError = (validResult) ? false : true;
+            this.options.email.showInvalidError = !validResult;
 
             if (this.options.email.domain !== '') {
                 domainResult = ($(field).val().indexOf(this.options.email.domain, $(field).val().length - this.options.email.domain.length) !== -1);
-                this.options.email.showDomainError = (domainResult) ? false : true;
+                this.options.email.showDomainError = !domainResult;
 
                 return (validResult) ? domainResult : false;
             }
 
-            this.isEmailConfirmValid($("input[data-field-info='emailconfirm']"));
+            this.isEmailConfirmValid($(this.formID + " input[data-field-info='emailconfirm']"));
 
             return validResult;
         };
@@ -268,62 +277,68 @@
         this.isEmailConfirmValid = function (field) {
 
             if (this.options.email.emailConfirm) {
-                if ($(field).val() !== $("input[data-field-info='email']").val()) {
-                    this.options.emailConfirm.showInvalidError = true;
-                    return false;
-                }
-                this.options.emailConfirm.showInvalidError = false;
-                return true;
+                
+                var matchResult = $(field).val() === $(this.formID + " input[data-field-info='email']").val()
+                
+                this.options.emailConfirm.showInvalidError = !matchResult;
+                
+                return matchResult;
             }
         };
 
         this.isDateValid = function (field) {
-            var date = $(field).val();
-            var count = date.match(/\//g);
-
-            var validResult, formatResult;
+            
+            var date = $(field).val(),
+                count = date.match(/\//g),
+                validResult, 
+                formatResult;
 
             if (count === null || count.length < 2) {
+                
                 formatResult = false;
-                this.options.date.showFormatError = (formatResult) ? false : true;
+                this.options.date.showFormatError = !formatResult;
 
                 return formatResult;
             } else {
+                
                 var data = date.split('/');
 
                 formatResult = true;
-                this.options.date.showFormatError = (formatResult) ? false : true;
+                this.options.date.showFormatError = !formatResult;
 
                 validResult = isBetween(Date.parse(data[2] + "-" + data[1] + "-" + data[0]), 0, Date.now());
-                this.options.date.showInvalidError = (validResult) ? false : true;
+                this.options.date.showInvalidError = !validResult;
 
                 return validResult;
             }
         };
 
         this.isPostCodeValid = function (field) {
-            var isValidPostCode, postCode = checkPostCode($(field).val());
+            
+            var validResult, 
+                postCode = checkPostCode($(field).val());
 
-            isValidPostCode = (!postCode) ? false : true;
+            validResult = postCode;
 
-            this.options.postcode.showInvalidError = (isValidPostCode) ? false : true;
+            this.options.postcode.showInvalidError = !validResult;
 
-            return isValidPostCode;
+            return validResult;
         },
 
         this.isMobileValid = function (field) {
-            var isNumbers = this.isNumbers(field);
-
-            var lengthResult = $(field).val().length === this.options.mobile.numberLength;
-            this.options.mobile.showInvalidError = (isNumbers && lengthResult) ? false : true;
-            return isNumbers && lengthResult ? true : false;
+            
+            var isNumbers = this.isNumbers(field),
+                lengthResult = $(field).val().length === this.options.mobile.numberLength;
+            
+            this.options.mobile.showInvalidError = !(isNumbers && lengthResult);
+            return isNumbers && lengthResult;
         };
 
         this.isCheckboxTicked = function (field) {
 
             var isChecked = $(field).is(":checked");
 
-            this.options.checkbox.showInvalidError = isChecked ? false : true;
+            this.options.checkbox.showInvalidError = !isChecked;
 
             return isChecked;
         };
@@ -332,12 +347,11 @@
         
             var isChosen = ($(field).val() !== null);  
             
-            this.options.select.showInvalidError = isChosen ? false : true;
+            this.options.select.showInvalidError = !isChosen;
             
             return isChosen;
         };
 
-        // Need a more effective/faster/efficient way of writing the method below
         this.createErrorMessage = function (obj, field) {
 
             var data = changeToLowercase(field);
@@ -346,10 +360,10 @@
 
             switch (data) {
 
-                case 'username':
-                    if (obj.options.username.showLengthError) {
-                        errorID = '-username-length-error';
-                        errorMessage = obj.options.username.lengthErrorMessage;
+                case 'general':
+                    if (obj.options.general.showLengthError) {
+                        errorID = '-general-length-error';
+                        errorMessage = obj.options.general.lengthErrorMessage;
 
                         buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
                     }
@@ -475,11 +489,8 @@
                     }
                     break;
             }
-
-            //buildErrorContainer(obj.formIDStr + errorID, field, errorMessage);
         };
 
-        // Need a more effective/faster/efficient way of writing the method below
         this.controlErrorMessages = function (obj, field) {
 
             var data = changeToLowercase(field);
@@ -488,9 +499,9 @@
 
             switch (data) {
 
-                case "username":
-                    errorID = '-username-length-error';
-                    showError = obj.options.username.showLengthError;
+                case "general":
+                    errorID = '-general-length-error';
+                    showError = obj.options.general.showLengthError;
                     break;
 
                 case "password":
@@ -583,7 +594,7 @@
         var showErrors = function (show) {
 
             if (show) {
-                this.options.username.showLengthError = false;
+                this.options.general.showLengthError = false;
                 this.options.password.showLengthError = false;
                 this.options.password.showInvalidError = false;
                 this.options.passwordConfirm.showInvalidError = false;

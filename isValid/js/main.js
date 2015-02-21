@@ -1,8 +1,9 @@
 $(document).ready(function() {
 
     var formOne = $('#form-one').isValid({
-        username: {
+        general: {
             minLength: 8,
+            maxLength: 12,
             lengthErrorMessage: "Username must be at least 8 characters and no more than 12 characters long."
         }
     }).data('isValid');

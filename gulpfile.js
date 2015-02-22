@@ -14,6 +14,7 @@ var paths = {
     css: __dirname + '/Web/css/**/*.css'
 };
 
+// Reload the debug page
 gulp.task('reload', function () {
     console.log("reload");
     livereload.changed("debug.html");

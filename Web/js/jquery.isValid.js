@@ -268,7 +268,7 @@
 
             return this.isValid;
         };
-
+        
         this.isEmpty = function (field) {
             return ($(field).val().length === 0);
         };

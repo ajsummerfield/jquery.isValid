@@ -96,13 +96,15 @@
                     ]
                 },
                 date: {
-                    showInvalidError: true,
+                    format: "DD/MM/YYYY",
+                    allowFutureDates: true,
+                    showInvalidError: false,
                     showFormatError: true,
                     errorDetails: [
                         {
                             id: "-date-invalid-error",
                             type: "invalid",
-                            message: "Please enter a valid Date."
+                            message: "Please enter a valid Date. The date specified is in the future."
                         },
                         {
                             id: "-date-format-error",
@@ -389,28 +391,24 @@
         this.isDateValid = function (field) {
             
             var date = $(field).val(),
-                count = date.match(/\//g),
                 validResult, 
                 formatResult;
+            
+            var momentObject = new moment(date, this.options.date.format, true);
 
-            if (count === null || count.length < 2) {
+            formatResult = momentObject.isValid();
+            
+            this.options.date.showFormatError = !formatResult;
+            
+            if(!this.options.date.allowFutureDates) {
                 
-                formatResult = false;
-                this.options.date.showFormatError = !formatResult;
-
-                return formatResult;
-            } else {
-                
-                var data = date.split('/');
-
-                formatResult = true;
-                this.options.date.showFormatError = !formatResult;
-
-                validResult = isBetween(Date.parse(data[2] + "-" + data[1] + "-" + data[0]), 0, Date.now());
+                validResult = isBetween(Date.parse(momentObject._d), 0, Date.now());
                 this.options.date.showInvalidError = !validResult;
-
-                return validResult;
+                
+                return formatResult ? validResult : false;
             }
+            
+            return formatResult;
         };
 
         this.isPostCodeValid = function (field) {

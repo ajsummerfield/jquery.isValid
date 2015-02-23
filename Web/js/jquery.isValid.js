@@ -67,11 +67,11 @@
                 },
                 emailConfirm: {
                     showInvalidError: true,
-                    invalidErrorMessage: "Emails do not match.",
                     errorDetails: [
                         {
                             id: "-emailconfirm-invalid-error",
-                            type: "invalid"
+                            type: "invalid",
+                            message: "Emails do not match."
                         }
                     ]
                 },
@@ -261,7 +261,7 @@
                         break;
 
                     default:
-                        valMethodName = "isEmpty";
+                        valMethodName = "isNotEmpty";
                         break;
                 }
 
@@ -271,8 +271,8 @@
             return this.isValid;
         };
         
-        this.isEmpty = function (field) {
-            return ($(field).val().length === 0);
+        this.isNotEmpty = function (field) {
+            return ($(field).val().length !== 0);
         };
 
         this.isLetters = function (field) {

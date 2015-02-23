@@ -24,7 +24,15 @@
                         <form id="form-one" action="" method="post" class="left-col-50">
                             <div class="form-row">
                                 <label for="username">Username</label>
-                                <input type="text" data-field-info="general" placeholder="Enter Username" name="username" />
+                                <input type="text" data-field-info="general" data-error-container="form-one-username-error" placeholder="Enter Username" name="username" />
+                            </div>
+                            <div class="form-row">
+                                <label for="other">Other</label>
+                                <input type="text" data-field-info="general" data-error-container="form-one-other-error" placeholder="Enter other" name="other" />
+                            </div>
+                            <div class="form-row">
+                                <label for="something">Something</label>
+                                <input type="text" data-field-info="general" data-error-container="form-one-something-error" placeholder="Enter something" name="something" />
                             </div>
                             <div class="form-row">
                                 <label for="password">Password</label>
@@ -82,6 +90,10 @@
                             <div class="form-row">
                                 <label for="mobile">Mobile</label>
                                 <input type="text" data-field-info="mobile" placeholder="Enter Mobile No." name="mobile" />
+                            </div>
+                            <div class="form-row">
+                                <label for="numbers">Number</label>
+                                <input type="text" data-field-info="numbers" placeholder="Enter number" name="numbers" />
                             </div>
                             <div class="form-row">
                                 <label for="terms">Terms</label>

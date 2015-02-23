@@ -286,7 +286,7 @@
 
         this.isNumbers = function (field) {
             
-            var numberMatcher = /^\d+$/;
+            var numberMatcher = /^[0-9 ]+$/;
             var matchResult = numberMatcher.test($(field).val());
             this.options.numbers.showInvalidError = !matchResult;
 
@@ -295,7 +295,8 @@
 
         this.isGeneralValid = function (field) {
             
-            var lengthResult = false;
+            var lengthResult = false,
+                showError;
             
             if(this.options.general.maxLength > this.options.general.minLength) {
                 
@@ -303,12 +304,20 @@
 
                 this.options.general.showLengthError = !lengthResult;
                 
+                $(field).attr("data-show-error", !lengthResult);
+                
+                showError = $(field).attr("data-show-error");
+                
                 return lengthResult;
             }
             
             lengthResult = $(field).val().length > this.options.general.minLength;
             
             this.options.general.showLengthError = !lengthResult;
+            
+            $(field).attr("data-show-error", !lengthResult);
+                
+            showError = $(field).attr("data-show-error");
             
             return lengthResult;
         };
@@ -453,176 +462,180 @@
         this.createErrorMessage = function (field) {
 
             var data = changeToLowercase(field);
+            
+            collectErrorInformation(field, self.options.general.errorDetails);
 
             var errorID, errorMessage;
 
-            switch (data) {
-
-                case "general":
-                    if (self.options.general.showLengthError) {
-                        collectErrorInformation(field, self.options.general.errorDetails, "length");
-                    }
-                    break;
-
-                case "password":
-                    if (self.options.password.showInvalidError) {                        
-                        collectErrorInformation(field, self.options.password.errorDetails, "invalid");
-                    }
-
-                    if (self.options.password.showLengthError) {
-                        collectErrorInformation(field, self.options.password.errorDetails, "length");
-                    }
-                    break;
-
-                case "passwordconfirm":
-                    if (self.options.passwordConfirm.showInvalidError) {
-                        collectErrorInformation(field, self.options.passwordConfirm.errorDetails, "invalid");
-                    }
-                    break;
-
-                case "email":
-                    if (self.options.email.showInvalidError) {
-                        collectErrorInformation(field, self.options.email.errorDetails, "invalid");
-                    }
-
-                    if (self.options.email.showDomainError) {
-                        collectErrorInformation(field, self.options.email.errorDetails, "domain");
-                    }
-                    break;
-
-                case "emailconfirm":
-                    if (self.options.emailConfirm.showInvalidError) {
-                        collectErrorInformation(field, self.options.emailConfirm.errorDetails, "invalid");
-                    }
-                    break;
-
-                case "letters":
-                    if (self.options.letters.showInvalidError) {
-                        collectErrorInformation(field, self.options.letters.errorDetails, "invalid");
-                    }
-                    break;
-
-                case "numbers":
-                    if (self.options.numbers.showInvalidError) {
-                        
-                        collectErrorInformation(field, self.options.numbers.errorDetails, "invalid");
-                    }
-                    break;
-
-                case "date":
-                    if (self.options.date.showFormatError) {
-                        collectErrorInformation(field, self.options.date.errorDetails, "format");
-                    }
-
-                    if (self.options.date.showInvalidError) {
-                        collectErrorInformation(field, self.options.date.errorDetails, "invalid");
-                    }
-                    break;
-
-                case "postcode":
-                    if (self.options.postcode.showInvalidError) {
-                        collectErrorInformation(field, self.options.postcode.errorDetails, "invalid");
-                    }
-                    break;
-
-                case "mobile":
-                    if (self.options.mobile.showInvalidError) {
-                        collectErrorInformation(field, self.options.mobile.errorDetails, "invalid");
-                    }
-                    break;
-
-                case "checkbox":
-                    if (self.options.checkbox.showInvalidError) {
-                        collectErrorInformation(field, self.options.checkbox.errorDetails, "invalid");
-                    }
-                    break;
-                    
-                case "select":
-                    if (self.options.select.showInvalidError) {
-                        collectErrorInformation(field, self.options.select.errorDetails, "invalid");
-                    }
-                    break;
-            }
+//            switch (data) {
+//
+//                case "general":
+//                    if (self.options.general.showLengthError) {
+//                        collectErrorInformation(field, self.options.general.errorDetails, "length");
+//                    }
+//                    break;
+//
+//                case "password":
+//                    if (self.options.password.showInvalidError) {                        
+//                        collectErrorInformation(field, self.options.password.errorDetails, "invalid");
+//                    }
+//
+//                    if (self.options.password.showLengthError) {
+//                        collectErrorInformation(field, self.options.password.errorDetails, "length");
+//                    }
+//                    break;
+//
+//                case "passwordconfirm":
+//                    if (self.options.passwordConfirm.showInvalidError) {
+//                        collectErrorInformation(field, self.options.passwordConfirm.errorDetails, "invalid");
+//                    }
+//                    break;
+//
+//                case "email":
+//                    if (self.options.email.showInvalidError) {
+//                        collectErrorInformation(field, self.options.email.errorDetails, "invalid");
+//                    }
+//
+//                    if (self.options.email.showDomainError) {
+//                        collectErrorInformation(field, self.options.email.errorDetails, "domain");
+//                    }
+//                    break;
+//
+//                case "emailconfirm":
+//                    if (self.options.emailConfirm.showInvalidError) {
+//                        collectErrorInformation(field, self.options.emailConfirm.errorDetails, "invalid");
+//                    }
+//                    break;
+//
+//                case "letters":
+//                    if (self.options.letters.showInvalidError) {
+//                        collectErrorInformation(field, self.options.letters.errorDetails, "invalid");
+//                    }
+//                    break;
+//
+//                case "numbers":
+//                    if (self.options.numbers.showInvalidError) {
+//                        
+//                        collectErrorInformation(field, self.options.numbers.errorDetails, "invalid");
+//                    }
+//                    break;
+//
+//                case "date":
+//                    if (self.options.date.showFormatError) {
+//                        collectErrorInformation(field, self.options.date.errorDetails, "format");
+//                    }
+//
+//                    if (self.options.date.showInvalidError) {
+//                        collectErrorInformation(field, self.options.date.errorDetails, "invalid");
+//                    }
+//                    break;
+//
+//                case "postcode":
+//                    if (self.options.postcode.showInvalidError) {
+//                        collectErrorInformation(field, self.options.postcode.errorDetails, "invalid");
+//                    }
+//                    break;
+//
+//                case "mobile":
+//                    if (self.options.mobile.showInvalidError) {
+//                        collectErrorInformation(field, self.options.mobile.errorDetails, "invalid");
+//                    }
+//                    break;
+//
+//                case "checkbox":
+//                    if (self.options.checkbox.showInvalidError) {
+//                        collectErrorInformation(field, self.options.checkbox.errorDetails, "invalid");
+//                    }
+//                    break;
+//                    
+//                case "select":
+//                    if (self.options.select.showInvalidError) {
+//                        collectErrorInformation(field, self.options.select.errorDetails, "invalid");
+//                    }
+//                    break;
+//            }
         };
 
         this.controlErrorMessages = function (field) {
 
             var data = changeToLowercase(field);
+            
+            errorMessageDisplay(field, self.options.general.errorDetails);
 
             var errorID, showError;
 
-            switch (data) {
-
-                case "general":
-                    errorMessageDisplay(self.options.general.errorDetails, "length", self.options.general.showLengthError);
-                    break;
-
-                case "password":
-                    errorMessageDisplay(self.options.password.errorDetails, "length", self.options.password.showLengthError);
-                    errorMessageDisplay(self.options.password.errorDetails, "invalid", self.options.password.showInvalidError);
-
-                    if (self.options.password.passwordConfirm) {
-                        
-                        errorMessageDisplay(self.options.passwordConfirm.errorDetails, "invalid", self.options.passwordConfirm.showInvalidError);
-                        
-                        self.options.passwordConfirm.showInvalidError ? 
-                            invalidAction(self, $(self.formID + " input[data-field-info='passwordconfirm']")) :
-                            validAction(self, $(self.formID + " input[data-field-info='passwordconfirm']"));
-                    }
-
-                    break;
-
-                case "passwordconfirm":
-                    errorMessageDisplay(self.options.passwordConfirm.errorDetails, "invalid", self.options.passwordConfirm.showInvalidError);
-                    break;
-
-                case 'email':
-                    errorMessageDisplay(self.options.email.errorDetails, "invalid", self.options.email.showInvalidError);
-                    errorMessageDisplay(self.options.email.errorDetails, "domain", self.options.email.showDomainError);
-
-                    if (self.options.email.emailConfirm) {
-                        
-                        errorMessageDisplay(self.options.emailConfirm.errorDetails, "invalid", self.options.emailConfirm.showInvalidError);
-                        
-                        self.options.emailConfirm.showInvalidError ?
-                            invalidAction(self, $(self.formID + " input[data-field-info='emailconfirm']")) :
-                            validAction(self, $(self.formID + " input[data-field-info='emailconfirm']"));
-                    }
-                    break;
-
-                case "emailconfirm":
-                    errorMessageDisplay(self.options.emailConfirm.errorDetails, "invalid", self.options.emailConfirm.showInvalidError);
-                    break;
-
-                case 'letters':
-                    errorMessageDisplay(self.options.letters.errorDetails, "invalid", self.options.letters.showInvalidError);
-                    break;
-
-                case 'numbers':
-                    errorMessageDisplay(self.options.numbers.errorDetails, "invalid", self.options.numbers.showInvalidError);
-                    break;
-
-                case 'date':
-                    errorMessageDisplay(self.options.date.errorDetails, "invalid", self.options.date.showInvalidError);
-                    errorMessageDisplay(self.options.date.errorDetails, "format", self.options.date.showFormatError);
-                    break;
-
-                case 'postcode':
-                    errorMessageDisplay(self.options.postcode.errorDetails, "invalid", self.options.postcode.showInvalidError);
-                    break;
-
-                case 'mobile':
-                    errorMessageDisplay(self.options.mobile.errorDetails, "invalid", self.options.mobile.showInvalidError);
-                    break;
-
-                case 'checkbox':
-                    errorMessageDisplay(self.options.checkbox.errorDetails, "invalid", self.options.checkbox.showInvalidError);
-                    break;
-                    
-                case 'select':
-                    errorMessageDisplay(self.options.select.errorDetails, "invalid", self.options.select.showInvalidError);
-                    break;
-            }
+//            switch (data) {
+//
+//                case "general":
+//                    //errorMessageDisplay(self.options.general.errorDetails, "length", self.options.general.showLengthError);
+//                    break;
+//
+//                case "password":
+//                    errorMessageDisplay(self.options.password.errorDetails, "length", self.options.password.showLengthError);
+//                    errorMessageDisplay(self.options.password.errorDetails, "invalid", self.options.password.showInvalidError);
+//
+//                    if (self.options.password.passwordConfirm) {
+//                        
+//                        errorMessageDisplay(self.options.passwordConfirm.errorDetails, "invalid", self.options.passwordConfirm.showInvalidError);
+//                        
+//                        self.options.passwordConfirm.showInvalidError ? 
+//                            invalidAction(self, $(self.formID + " input[data-field-info='passwordconfirm']")) :
+//                            validAction(self, $(self.formID + " input[data-field-info='passwordconfirm']"));
+//                    }
+//
+//                    break;
+//
+//                case "passwordconfirm":
+//                    errorMessageDisplay(self.options.passwordConfirm.errorDetails, "invalid", self.options.passwordConfirm.showInvalidError);
+//                    break;
+//
+//                case 'email':
+//                    errorMessageDisplay(self.options.email.errorDetails, "invalid", self.options.email.showInvalidError);
+//                    errorMessageDisplay(self.options.email.errorDetails, "domain", self.options.email.showDomainError);
+//
+//                    if (self.options.email.emailConfirm) {
+//                        
+//                        errorMessageDisplay(self.options.emailConfirm.errorDetails, "invalid", self.options.emailConfirm.showInvalidError);
+//                        
+//                        self.options.emailConfirm.showInvalidError ?
+//                            invalidAction(self, $(self.formID + " input[data-field-info='emailconfirm']")) :
+//                            validAction(self, $(self.formID + " input[data-field-info='emailconfirm']"));
+//                    }
+//                    break;
+//
+//                case "emailconfirm":
+//                    errorMessageDisplay(self.options.emailConfirm.errorDetails, "invalid", self.options.emailConfirm.showInvalidError);
+//                    break;
+//
+//                case 'letters':
+//                    errorMessageDisplay(self.options.letters.errorDetails, "invalid", self.options.letters.showInvalidError);
+//                    break;
+//
+//                case 'numbers':
+//                    errorMessageDisplay(self.options.numbers.errorDetails, "invalid", self.options.numbers.showInvalidError);
+//                    break;
+//
+//                case 'date':
+//                    errorMessageDisplay(self.options.date.errorDetails, "invalid", self.options.date.showInvalidError);
+//                    errorMessageDisplay(self.options.date.errorDetails, "format", self.options.date.showFormatError);
+//                    break;
+//
+//                case 'postcode':
+//                    errorMessageDisplay(self.options.postcode.errorDetails, "invalid", self.options.postcode.showInvalidError);
+//                    break;
+//
+//                case 'mobile':
+//                    errorMessageDisplay(self.options.mobile.errorDetails, "invalid", self.options.mobile.showInvalidError);
+//                    break;
+//
+//                case 'checkbox':
+//                    errorMessageDisplay(self.options.checkbox.errorDetails, "invalid", self.options.checkbox.showInvalidError);
+//                    break;
+//                    
+//                case 'select':
+//                    errorMessageDisplay(self.options.select.errorDetails, "invalid", self.options.select.showInvalidError);
+//                    break;
+//            }
 
         };
 
@@ -693,11 +706,13 @@
             return false;
         };
 
-        var collectErrorInformation = function(field, errorDetails, type) {
+        var collectErrorInformation = function(field, errorDetails) {
         
+            var errorID = $(field).attr("data-error-container");
+            
             errorDetails.forEach(function(errorProperty, index) {
                 
-                if (type === errorProperty.type) {
+                if (errorID === errorProperty.id) {
                     buildErrorContainer(errorProperty.id, field, errorProperty.message);
                 }
             });
@@ -708,12 +723,15 @@
             $('#' + id).append(error);
         };
         
-        var errorMessageDisplay = function(errorDetails, type, showError) {
+        var errorMessageDisplay = function(field, errorDetails, type, showErrorR) {
         
+            var errorID = $(field).attr("data-error-container"),
+                showError = $(field).attr("data-show-error");
+            
             errorDetails.forEach(function(errorProperty, index) {
                 
-                if (type === errorProperty.type) {
-                    (showError) ? $("#" + errorProperty.id).show() : $("#" + errorProperty.id).hide();
+                if (errorID === errorProperty.id) {
+                    (showError === "true") ? $("#" + errorProperty.id).show() : $("#" + errorProperty.id).hide();
                 }
             });
         };
@@ -750,9 +768,7 @@
             });
 
             newIsValid.$elem.find(':reset').click(function () {
-                $(newIsValid.formID + ' .invalid').removeClass('invalid');
-                $(newIsValid.formID + ' .form-error').hide();
-                newIsValid.isFormValid = newIsValid.isFormValidated();
+                newIsValid.resetForm();
             });
 
         });

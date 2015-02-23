@@ -12,12 +12,12 @@ describe("jQuery.isValid Tests", function() {
     describe("isEmpty", function() {
         
         it("Returns false if input is empty", function() {
-            expect(formOne.isEmpty('#empty')).toBe(true);
+            expect(formOne.isNotEmpty('#empty')).toBe(false);
         });
         
         it("Returns true if input is empty", function() {
             $('#empty').val("not empty");
-            expect(formOne.isEmpty('#empty')).toBe(false);
+            expect(formOne.isNotEmpty('#empty')).toBe(true);
         });
     });
     

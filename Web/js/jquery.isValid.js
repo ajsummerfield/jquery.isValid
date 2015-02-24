@@ -313,7 +313,7 @@
                 showError;
 
             lengthResult = this.isNotEmpty(field);
-            
+
             $(field).attr("data-show-error", !lengthResult);
 
             showError = $(field).attr("data-show-error");
@@ -462,11 +462,8 @@
 
             var data = changeToLowercase(field);
 
-            if (data !== "") {
-
-                if (data !== "notrequired") {
-                    collectErrorInformation(field, self.options[data].errorDetails);
-                }
+            if (data !== "" && data !== "notrequired") {
+                collectErrorInformation(field, self.options[data].errorDetails);
             }
         };
 
@@ -474,7 +471,9 @@
 
             var data = changeToLowercase(field);
 
-            errorMessageDisplay(field, self.options[data].errorDetails);
+            if (data !== "" && data !== "notrequired") {
+                errorMessageDisplay(field, self.options[data].errorDetails);
+            }
         };
 
         // Private Methods

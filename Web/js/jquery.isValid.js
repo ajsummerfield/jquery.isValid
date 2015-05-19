@@ -198,6 +198,7 @@
             this.formIDStr = this.$elem.attr('id');
 
             this.options = $.extend(true, defaults, options);
+            this.options.submitButton = $(this.formID + ' :input[type="submit"]');
 
             createErrorIds();
             showErrors();

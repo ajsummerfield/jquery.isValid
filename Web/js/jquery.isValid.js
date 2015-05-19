@@ -103,6 +103,17 @@
                     }
                 ]
             },
+            decimals: {
+                showInvalidError: true,
+                errorDetails: [
+                    {
+                        id: "-decimals-invalid-error",
+                        type: "invalid",
+                        message: "Field is decimals only",
+                        show: true
+                    }
+                ]
+            },
             date: {
                 format: "DD/MM/YYYY",
                 allowFutureDates: true,
@@ -168,6 +179,7 @@
                     }
                 ]
             },
+            submitButton: null,
             turnOffErrors: false,
             onFormValidated: function () { },
             onFormInValidated: function () { }
@@ -186,6 +198,7 @@
             this.formIDStr = this.$elem.attr('id');
 
             this.options = $.extend(true, defaults, options);
+            this.options.submitButton = $(this.formID + ' :input[type="submit"]');
 
             createErrorIds();
             showErrors();
@@ -257,6 +270,10 @@
                     case "numbers":
                         valMethodName = "isNumbers";
                         break;
+                    
+                    case "decimals":
+                        valMethodName = "isDecimals";
+                        break;
 
                     case "postcode":
                         valMethodName = "isPostCodeValid";
@@ -303,6 +320,15 @@
             var numberMatcher = /^[0-9 ]+$/;
             var matchResult = numberMatcher.test($(field).val());
             this.options.numbers.showInvalidError = !matchResult;
+
+            return matchResult;
+        };
+        
+        this.isDecimals = function (field) {
+
+            var decimalMatcher = /^(\d+\.?\d*|\.\d+)$/;
+            var matchResult = decimalMatcher.test($(field).val());
+            this.options.decimals.showInvalidError = !matchResult;
 
             return matchResult;
         };
@@ -433,12 +459,12 @@
 
             this.isMobileValid = function (field) {
 
-            var isNumbers = this.isNumbers(field),
-                lengthResult = $(field).val().length === this.options.mobile.numberLength;
+                var isNumbers = this.isNumbers(field),
+                    lengthResult = $(field).val().length === this.options.mobile.numberLength;
 
-            this.options.mobile.showInvalidError = !(isNumbers && lengthResult);
-            return isNumbers && lengthResult;
-        };
+                this.options.mobile.showInvalidError = !(isNumbers && lengthResult);
+                return isNumbers && lengthResult;
+            };
 
         this.isCheckboxTicked = function (field) {
 
@@ -591,20 +617,37 @@
 
             newIsValid.init();
 
-            $(newIsValid.formID + ' :input[type="submit"]').click(function (e) {
+            if (newIsValid.options.submitButton === null) {
+                $(newIsValid.formID + ' :input[type="submit"]').click(function(e) {
 
-                newIsValid.formArray.each(function (index, field) {
+                    newIsValid.formArray.each(function(index, field) {
 
-                    newIsValid.isValid = newIsValid.isValidField(field);
-                    newIsValid.isFormValid = newIsValid.isFormValidated();
+                        newIsValid.isValid = newIsValid.isValidField(field);
+                        newIsValid.isFormValid = newIsValid.isFormValidated();
 
-                    if (!newIsValid.isFormValid) {
-                        e.preventDefault();
-                    }
+                        if (!newIsValid.isFormValid) {
+                            e.preventDefault();
+                        }
+                    });
+
+                    newIsValid.isFormValid ? newIsValid.options.onFormValidated() : newIsValid.options.onFormInValidated();
                 });
+            } else {
+                newIsValid.options.submitButton.click(function (e) {
 
-                newIsValid.isFormValid ? newIsValid.options.onFormValidated() : newIsValid.options.onFormInValidated();
-            });
+                    newIsValid.formArray.each(function (index, field) {
+
+                        newIsValid.isValid = newIsValid.isValidField(field);
+                        newIsValid.isFormValid = newIsValid.isFormValidated();
+
+                        if (!newIsValid.isFormValid) {
+                            e.preventDefault();
+                        }
+                    });
+
+                    newIsValid.isFormValid ? newIsValid.options.onFormValidated() : newIsValid.options.onFormInValidated();
+                });
+            }
 
             newIsValid.formArray.each(function (index, field) {
                 $(field).blur(function () {

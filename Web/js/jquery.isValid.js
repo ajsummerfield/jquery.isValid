@@ -235,7 +235,7 @@
                         break;
 
                     case "passwordconfirm":
-                        valMethodName = "ispasswordconfirmValid";
+                        valMethodName = "isPasswordConfirmValid";
                         break;
 
                     case "email":
@@ -243,7 +243,7 @@
                         break;
 
                     case "emailconfirm":
-                        valMethodName = "isemailconfirmValid";
+                        valMethodName = "isEmailConfirmValid";
                         break;
 
                     case "date":
@@ -335,7 +335,7 @@
 
                 matchResult = (passwordMatcher.test($(field).val()));
                 this.options.password.showInvalidError = !matchResult;
-                this.ispasswordconfirmValid($(this.formID + " input[data-field-info='passwordconfirm']"));
+                this.isPasswordConfirmValid($(this.formID + " input[data-field-info='passwordconfirm']"));
 
                 return (lengthResult) ? matchResult : false;
             }
@@ -343,7 +343,7 @@
             return lengthResult;
         };
 
-        this.ispasswordconfirmValid = function (field) {
+        this.isPasswordConfirmValid = function (field) {
 
             if (this.options.password.passwordconfirm) {
 
@@ -379,12 +379,12 @@
                 return (validResult) ? domainResult : false;
             }
 
-            this.isemailconfirmValid($(this.formID + " input[data-field-info='emailconfirm']"));
+            this.isEmailConfirmValid($(this.formID + " input[data-field-info='emailconfirm']"));
 
             return validResult;
         };
 
-        this.isemailconfirmValid = function (field) {
+        this.isEmailConfirmValid = function (field) {
 
             if (this.options.email.emailconfirm) {
 

@@ -7,7 +7,9 @@ $(document).ready(function() {
             errorDetails: [
                 {
                     id: "-username-error",
-                    message: "Username must be at least 8 characters and no more than 12 characters long."
+                    type: "length",
+                    message: "Username must be at least 8 characters and no more than 12 characters long.",
+                    show: false
                 },
                 {
                     id: "-other-error",
@@ -20,6 +22,22 @@ $(document).ready(function() {
                     message: "Something error"
                 }
             ],
+        },
+        password: {
+            errorDetails: [
+                {
+                    type: "invalid",
+                    show: false
+                }
+            ]
+        },
+        passwordconfirm: {
+            errorDetails: [
+                {
+                    type: "invalid",
+                    show: false
+                }
+            ]
         }
     }).data('isValid');
     

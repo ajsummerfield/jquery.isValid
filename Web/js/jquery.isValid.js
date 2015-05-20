@@ -7,12 +7,12 @@
             general: {
                 minLength: 1,
                 maxLength: 0,
-                showLengthError: true,
                 errorDetails: [
                     {
                         id: "-general-length-error",
                         type: "length",
-                        message: "Must be be at least 1 character and no more than x characters."
+                        message: "Must be be at least 1 character and no more than x characters.",
+                        show: true
                     }
                 ]
             },
@@ -21,8 +21,6 @@
                 maxLength: 100,
                 numbers: false,
                 letters: true,
-                showLengthError: true,
-                showInvalidError: false,
                 passwordconfirm: true,
                 errorDetails: [
                     {
@@ -40,7 +38,6 @@
                 ]
             },
             passwordconfirm: {
-                showInvalidError: true,
                 errorDetails: [
                     {
                         id: "-passwordconfirm-invalid-error",
@@ -52,8 +49,6 @@
             },
             email: {
                 domain: '',
-                showInvalidError: true,
-                showDomainError: false,
                 emailconfirm: true,
                 errorDetails: [
                     {
@@ -71,7 +66,6 @@
                 ]
             },
             emailconfirm: {
-                showInvalidError: true,
                 errorDetails: [
                     {
                         id: "-emailconfirm-invalid-error",
@@ -82,7 +76,6 @@
                 ]
             },
             letters: {
-                showInvalidError: true,
                 errorDetails: [
                     {
                         id: "-letters-invalid-error",
@@ -93,7 +86,6 @@
                 ]
             },
             numbers: {
-                showInvalidError: true,
                 errorDetails: [
                     {
                         id: "-numbers-invalid-error",
@@ -104,7 +96,6 @@
                 ]
             },
             decimals: {
-                showInvalidError: true,
                 errorDetails: [
                     {
                         id: "-decimals-invalid-error",
@@ -117,8 +108,6 @@
             date: {
                 format: "DD/MM/YYYY",
                 allowFutureDates: true,
-                showInvalidError: false,
-                showFormatError: true,
                 errorDetails: [
                     {
                         id: "-date-invalid-error",
@@ -135,7 +124,6 @@
                 ]
             },
             postcode: {
-                showInvalidError: true,
                 errorDetails: [
                     {
                         id: "-postcode-invalid-error",
@@ -146,7 +134,6 @@
                 ]
             },
             mobile: {
-                showInvalidError: true,
                 numberLength: 11,
                 errorDetails: [
                     {
@@ -158,7 +145,6 @@
                 ]
             },
             checkbox: {
-                showInvalidError: true,
                 errorDetails: [
                     {
                         id: "-checkbox-invalid-error",
@@ -169,7 +155,6 @@
                 ]
             },
             select: {
-                showInvalidError: true,
                 errorDetails: [
                     {
                         id: "-select-invalid-error",
@@ -221,6 +206,9 @@
         };
 
         this.isFormValidated = function () {
+            
+            $(this.formID).submit();
+            
             return ($(this.formID + ' .invalid').length) ? false : true;
         };
 
@@ -310,7 +298,6 @@
 
             var letterMatcher = /^[A-Za-z ]+$/;
             var matchResult = letterMatcher.test($(field).val());
-            this.options.letters.showInvalidError = !matchResult;
 
             return matchResult;
         };
@@ -319,7 +306,6 @@
 
             var numberMatcher = /^[0-9 ]+$/;
             var matchResult = numberMatcher.test($(field).val());
-            this.options.numbers.showInvalidError = !matchResult;
 
             return matchResult;
         };
@@ -355,12 +341,9 @@
 
             lengthResult = isBetween($(field).val().length, this.options.password.minLength, this.options.password.maxLength);
 
-            this.options.password.showLengthError = !lengthResult;
-
             if (this.options.password.numbers && this.options.password.letters) {
 
                 matchResult = (passwordMatcher.test($(field).val()));
-                this.options.password.showInvalidError = !matchResult;
                 this.isPasswordConfirmValid($(this.formID + " input[data-field-info='passwordconfirm']"));
 
                 return (lengthResult) ? matchResult : false;
@@ -374,8 +357,6 @@
             if (this.options.password.passwordconfirm) {
 
                 var matchResult = $(field).val() === $(this.formID + " input[data-field-info='password']").val();
-
-                this.options.passwordconfirm.showInvalidError = !matchResult;
 
                 return matchResult;
             }
@@ -396,12 +377,8 @@
 
             validResult = emailMatcher.test($(field).val());
 
-            this.options.email.showInvalidError = !validResult;
-
             if (this.options.email.domain !== '') {
                 domainResult = ($(field).val().indexOf(this.options.email.domain, $(field).val().length - this.options.email.domain.length) !== -1);
-                this.options.email.showDomainError = !domainResult;
-
                 return (validResult) ? domainResult : false;
             }
 
@@ -415,9 +392,6 @@
             if (this.options.email.emailconfirm) {
 
                 var matchResult = $(field).val() === $(this.formID + " input[data-field-info='email']").val();
-
-                this.options.emailconfirm.showInvalidError = !matchResult;
-
                 return matchResult;
             }
         };
@@ -452,8 +426,6 @@
 
             validResult = !postCode ? false : true;
 
-            this.options.postcode.showInvalidError = !validResult;
-
             return validResult;
         },
 
@@ -462,15 +434,12 @@
                 var isNumbers = this.isNumbers(field),
                     lengthResult = $(field).val().length === this.options.mobile.numberLength;
 
-                this.options.mobile.showInvalidError = !(isNumbers && lengthResult);
                 return isNumbers && lengthResult;
             };
 
         this.isCheckboxTicked = function (field) {
 
             var isChecked = $(field).is(":checked");
-
-            this.options.checkbox.showInvalidError = !isChecked;
 
             return isChecked;
         };
@@ -586,7 +555,7 @@
         };
 
         var buildErrorContainer = function (id, field, error) {
-            $(field).after('<div id="' + id + '" class="form-error"></div>');
+            $(field).after('<div id="' + id + '" class="form-error" />');
             $('#' + id).append(error);
         };
 
@@ -617,38 +586,33 @@
 
             newIsValid.init();
 
-            if (newIsValid.options.submitButton === null) {
-                $(newIsValid.formID + ' :input[type="submit"]').click(function(e) {
+            var submitButton = newIsValid.options.submitButton === null ? $(newIsValid.formID + ' :input[type="submit"]') : newIsValid.options.submitButton;
+            
+            submitButton.click(function (e) {
 
-                    newIsValid.formArray.each(function(index, field) {
+                newIsValid.formArray.each(function (index, field) {
 
-                        newIsValid.isValid = newIsValid.isValidField(field);
-                        newIsValid.isFormValid = newIsValid.isFormValidated();
+                    newIsValid.isValid = newIsValid.isValidField(field);
+                    newIsValid.isFormValid = newIsValid.isFormValidated();
 
-                        if (!newIsValid.isFormValid) {
-                            e.preventDefault();
-                        }
-                    });
-
-                    newIsValid.isFormValid ? newIsValid.options.onFormValidated() : newIsValid.options.onFormInValidated();
+                    if (!newIsValid.isFormValid) {
+                        e.preventDefault();
+                    }
                 });
-            } else {
-                newIsValid.options.submitButton.click(function (e) {
 
-                    newIsValid.formArray.each(function (index, field) {
+                newIsValid.isFormValid ? newIsValid.options.onFormValidated() : newIsValid.options.onFormInValidated();
+            });
 
-                        newIsValid.isValid = newIsValid.isValidField(field);
-                        newIsValid.isFormValid = newIsValid.isFormValidated();
-
-                        if (!newIsValid.isFormValid) {
-                            e.preventDefault();
-                        }
-                    });
-
-                    newIsValid.isFormValid ? newIsValid.options.onFormValidated() : newIsValid.options.onFormInValidated();
-                });
-            }
-
+            $(newIsValid.formID).on('submit', function(event) {
+                
+                if(!newIsValid.isFormValid) {
+                    event.preventDefault();
+                    newIsValid.options.onFormInValidated();
+                } else {
+                    newIsValid.options.onFormValidated();
+                }
+            });
+            
             newIsValid.formArray.each(function (index, field) {
                 $(field).blur(function () {
                     newIsValid.isValid = newIsValid.isValidField(field);

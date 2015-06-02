@@ -10,16 +10,27 @@
                     maxLength: 100,
                     numbers: false,
                     letters: true,
-                    passwordConfirm: false
+                    passwordConfirm: false,
+                    activeErrorMessage: ''
+                },
+                passwordConfirm: {
+                    activeErrorMessage: ''
                 },
                 email: {
                     domain: '',
-                    emailConfirm: false
+                    emailConfirm: false,
+                    activeErrorMessage: '',
+                    domainErrorMessage: 'Email domain should be @xxxx.com',
+                    invalidErrorMessage: 'Please enter a valid email address'
+                },
+                emailConfirm: {
+                    activeErrorMessage: ''
                 },
                 date: {
                     format: 'DD/MM/YYYY',
                     allowPastDates: true,
-                    allowFutureDates: true
+                    allowFutureDates: true,
+                    activeErrorMessage: ''
                 },
                 onFormValidated: function () { },
                 onFormInValidated: function () { }
@@ -189,6 +200,8 @@
             if (this.options.email.domain !== '') {
                 domainResult = ($(field).val().indexOf(this.options.email.domain, $(field).val().length - this.options.email.domain.length) !== -1);
                 
+                this.options.email.activeErrorMessage = validResult && !domainResult ? this.options.email.domainErrorMessage : this.options.email.invalidErrorMessage;
+                
                 return (validResult) ? domainResult : false;
             }
 
@@ -251,15 +264,9 @@
          
         this.showErrorFor = function(field) {
 
-            if($(field).siblings('.form-error').length) {
+            if($(field).siblings('.form-error').length === 0) {
 
-                $(field).siblings('.form-error').show();
-            } else {
-
-                var errorContainer = '<div class="form-error">' + 
-                                        $(field).data().errorMessage + 
-                                     '</div>';
-
+                var errorContainer = createErrorContainer(field);
                 var errorContainerWidth = getErrorContainerWidth(field);
                 
                 $(field).parent().append(errorContainer);
@@ -275,9 +282,22 @@
             $(field).removeClass('invalid');
             $(field).siblings('.form-error').remove();
         };
-        
+         
         var isBetween = function (val, min, max) {
             return (val >= min && val <= max);
+        };
+         
+        var createErrorContainer = function(field) {
+            
+            var errorMessage;
+            
+            if(!($(field).data().errorMessage === undefined)) {
+                errorMessage = $(field).data().errorMessage;
+            } else {
+                errorMessage = self.options[$(field).data().fieldType].activeErrorMessage;
+            }
+            
+            return '<div class="form-error">' + errorMessage + '</div>';
         };
          
         var getErrorContainerWidth = function(field) {

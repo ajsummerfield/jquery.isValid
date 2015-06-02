@@ -6,16 +6,23 @@
          var self,
              defaults = {
                 general: {
-                    activeErrorMessage: 'Field is required'
+                    activeErrorMessage: '',
+                    requiredMessage: 'Field is required'
                 },
                 letters: {
-                    activeErrorMessage: 'Field is required'
+                    activeErrorMessage: '',
+                    requiredMessage: 'Field is required',
+                    invalidErrorMessage: 'Field is letters only'
                 },
                 numbers: {
-                    activeErrorMessage: 'Field is required'
+                    activeErrorMessage: '',
+                    requiredMessage: 'Field is required',
+                    invalidErrorMessage: 'Field is numbers only',
                 },
                 decimals: {
-                    activeErrorMessage: 'Field is required'
+                    activeErrorMessage: '',
+                    requiredMessage: 'Field is required',
+                    invalidErrorMessage: 'Field is decimals only',
                 },
                 password: {
                     minLength: 6,
@@ -23,39 +30,48 @@
                     numbers: false,
                     letters: true,
                     passwordConfirm: false,
-                    activeErrorMessage: 'Password is required',
+                    activeErrorMessage: '',
+                    requiredMessage: 'Password is required',
                     formatErrorMessage: 'Password should contain numbers and letters',
                     invalidErrorMessage: 'Password should be more than 6 characters'
                 },
                 passwordConfirm: {
-                    activeErrorMessage: 'Confirming your Password is required',
+                    activeErrorMessage: '',
+                    requiredMessage: 'Confirming your Password is required',
                     invalidErrorMessage: 'Passwords do not match'
                 },
                 email: {
                     domain: '',
                     emailConfirm: false,
-                    activeErrorMessage: 'Email is required',
+                    activeErrorMessage: '',
+                    requiredMessage: 'Email is required',
                     domainErrorMessage: 'Email domain should be @xxxx.com',
                     invalidErrorMessage: 'Please enter a valid email address'
                 },
                 emailConfirm: {
-                    activeErrorMessage: 'Confirming your Email is required',
+                    activeErrorMessage: '',
+                    requiredMessage: 'Confirming your Email is required',
                     invalidErrorMessage: 'Email addresses do not match'
                 },
                 date: {
                     format: 'DD/MM/YYYY',
                     allowPastDates: true,
                     allowFutureDates: true,
-                    activeErrorMessage: 'Date is required'
+                    activeErrorMessage: '',
+                    requiredMessage: 'Date is required',
                 },
                 postCode: {
-                    activeErrorMessage: 'Post Code is required'
+                    activeErrorMessage: '',
+                    requiredMessage: 'Post Code is required',
+                    invalidErrorMessage: 'Please enter a valid Post Code'
                 },
                 select: {
-                    activeErrorMessage: 'Choosing an item is required'
+                    activeErrorMessage: '',
+                    requiredMessage: 'Choosing an option is required',
                 },
                 checkbox: {
-                    activeErrorMessage: 'Checkbox is required'
+                    activeErrorMessage: '',
+                    requiredMessage: 'Checkbox is required',
                 },
                 onFormValidated: function () { },
                 onFormInValidated: function () { }
@@ -158,19 +174,56 @@
         };
          
         this.isEmpty = function (field) {
-            return ($(field).val().length === 0);
+            
+            var isEmpty = ($(field).val().length === 0);
+            
+            if(isEmpty) {
+                this.options.general.activeErrorMessage = this.options.general.requiredMessage;
+            }
+            
+            return isEmpty;
         };
          
         this.isLetters = function (field) {
-            return /^[A-Za-z ]+$/.test($(field).val());
+            
+            var isEmpty = this.isEmpty(field),
+                validResult = /^[A-Za-z ]+$/.test($(field).val());
+            
+            if(!isEmpty) {
+                this.options.letters.activeErrorMessage = validResult ? '' : this.options.letters.invalidErrorMessage;
+                return validResult;
+            } else {
+                this.options.letters.activeErrorMessage = this.options.letters.requiredMessage;
+                return !isEmpty;
+            }
         };
 
         this.isNumbers = function (field) {
-            return /^[0-9 ]+$/.test($(field).val());
+            
+            var isEmpty = this.isEmpty(field),
+                validResult = /^[0-9 ]+$/.test($(field).val());
+            
+            if(!isEmpty) {
+                this.options.numbers.activeErrorMessage = validResult ? '' : this.options.numbers.invalidErrorMessage;
+                return validResult;
+            }  else {
+                this.options.numbers.activeErrorMessage = this.options.numbers.requiredMessage;
+                return !isEmpty;
+            }
         };
         
         this.isDecimals = function (field) {
-            return /^(\d+\.?\d*|\.\d+)$/.test($(field).val());
+            
+            var isEmpty = this.isEmpty(field),
+                validResult = /^(\d+\.?\d*|\.\d+)$/.test($(field).val());
+            
+            if(!isEmpty) {
+                this.options.decimals.activeErrorMessage = validResult ? '' : this.options.decimals.invalidErrorMessage;
+                return validResult;
+            } else {
+                this.options.decimals.activeErrorMessage = this.options.decimals.requiredMessage;
+                return !isEmpty;
+            }
         };
          
         this.isGeneralValid = function (field) {
@@ -196,6 +249,7 @@
                     this.options.password.activeErrorMessage = lengthResult && !formatResult ? this.options.password.formatErrorMessage : this.options.password.invalidErrorMessage;
                     return (lengthResult) ? formatResult : false;
                 } else {
+                    this.options.password.activeErrorMessage = this.options.password.requiredMessage;
                     return !isEmpty;
                 }
             }
@@ -206,6 +260,7 @@
                 this.options.password.activeErrorMessage = lengthResult ? '' : this.options.password.invalidErrorMessage;
                 return lengthResult;
             } else {
+                this.options.password.activeErrorMessage = this.options.password.requiredMessage;
                 return !isEmpty;
             }
         };
@@ -221,6 +276,7 @@
                     this.options.passwordConfirm.activeErrorMessage = validResult ? ''  : this.options.passwordConfirm.invalidErrorMessage;
                     return validResult;
                 } else {
+                    this.options.passwordConfirm.activeErrorMessage = this.options.passwordConfirm.requiredMessage;
                     return !isEmpty;
                 }
             }
@@ -251,6 +307,7 @@
                     this.options.email.activeErrorMessage = validResult && !domainResult ? this.options.email.domainErrorMessage : this.options.email.invalidErrorMessage;
                     return (validResult) ? domainResult : false;
                 } else {
+                    this.options.email.activeErrorMessage = this.options.email.requiredMessage;
                     return !isEmpty;
                 }
             }
@@ -261,6 +318,7 @@
                 this.options.email.activeErrorMessage = validResult ? '' : this.options.email.invalidErrorMessage;
                 return validResult;
             } else {
+                this.options.email.activeErrorMessage = this.options.email.requiredMessage;
                 return !isEmpty;
             }
         };
@@ -276,6 +334,7 @@
                     this.options.emailConfirm.activeErrorMessage = validResult ? '' : this.options.emailConfirm.invalidErrorMessage;
                     return validResult;
                 } else {
+                    this.options.emailConfirm.activeErrorMessage = this.options.emailConfirm.requiredMessage;
                     return !isEmpty;
                 }
             }
@@ -305,7 +364,17 @@
         };
          
         this.isPostCodeValid = function (field) {
-            return !checkPostCode($(field).val()) ? false : true;
+            
+            var isEmpty = this.isEmpty(field),
+                validResult = checkPostCode($(field).val());
+            
+            if(!isEmpty) {
+                this.options.postCode.activeErrorMessage = validResult ? '' : this.options.postCode.invalidErrorMessage;
+                return validResult;
+            } else {
+                this.options.postCode.activeErrorMessage = this.options.postCode.requiredMessage;
+                return !isEmpty;
+            }
         };
          
         this.isSelectChosen = function (field) {
@@ -382,7 +451,11 @@
             
             if($(field).data().errorMessage !== undefined) {
                 
-                if($(field).data().errorMessage !== self.options[$(field).data().fieldType].activeErrorMessage) {
+                if(self.options[$(field).data().fieldType].activeErrorMessage === defaults[$(field).data().fieldType].activeErrorMessage) {
+                    return $(field).data().errorMessage;
+                } else if(self.options[$(field).data().fieldType].activeErrorMessage.length === 0) {
+                    return $(field).data().errorMessage;
+                } else if($(field).data().errorMessage !== self.options[$(field).data().fieldType].activeErrorMessage) {
                     return self.options[$(field).data().fieldType].activeErrorMessage;
                 } else {
                     return $(field).data().errorMessage;

@@ -618,6 +618,12 @@
                     newIsValid.isValid = newIsValid.isValidField(field);
                 });
             });
+            
+            newIsValid.formArray.each(function (index, field) {
+                $(field).change(function () {
+                    newIsValid.isValid = newIsValid.isValidField(field);
+                });
+            });
 
             newIsValid.$elem.find(':reset').click(function () {
                 newIsValid.resetForm();
@@ -762,4 +768,4 @@ function checkPostCode(toCheck) {
     if (valid) {
         return postCode;
     } else return false;
-}
+};

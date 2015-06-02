@@ -7,6 +7,8 @@
         <meta name="description" content="" />
         <title>isValid Form Plugin</title>
         <link href='http://fonts.googleapis.com/css?family=Raleway:400,200,300,500,600,700' rel='stylesheet' type='text/css'>
+        <link href="css/libs/select2.min.css" rel="stylesheet" media="screen" type="text/css" />
+        <link href="css/libs/selectize.default.css" rel="stylesheet" media="screen" type="text/css" />
         <link href="css/jquery.isValid.css" rel="stylesheet" media="screen" type="text/css" />
         <link href="css/main.css" rel="stylesheet" media="screen" type="text/css" />
     </head>
@@ -24,55 +26,11 @@
                         <form id="form-one" action="" method="post" class="left-col-50">
                             <div class="form-row">
                                 <label for="username">Username</label>
-                                <input type="text" data-field-info="general" data-error-container="form-one-username-error" placeholder="Enter Username" name="username" />
-                            </div>
-                            <div class="form-row">
-                                <label for="other">Other</label>
-                                <input type="text" data-field-info="general" data-error-container="form-one-other-error" placeholder="Enter other" name="other" />
-                            </div>
-                            <div class="form-row">
-                                <label for="something">Something</label>
-                                <input type="text" data-field-info="general" data-error-container="form-one-something-error" placeholder="Enter something" name="something" />
-                            </div>
-                            <div class="form-row">
-                                <label for="password">Password</label>
-                                <input type="password" data-field-info="password" placeholder="Enter Password" name="password" />
-                            </div>
-                            <div class="form-row">
-                                <label for="passwordconfirm">Confirm</label>
-                                <input type="password" data-field-info="passwordconfirm" placeholder="Confirm Password" name="passwordconfirm" />
-                            </div>
-                            <div class="form-row">
-                                <label>&nbsp;</label>
-                                <input type="submit" value="Log in" class="form-btn" />
-                                <input type="reset" value="Reset" class="form-btn" />
-                            </div>
-                        </form>
-                        <div class="intro right-col-50">
-                            <h2>Welcome to jQuery.isValid</h2>
-                            <p>jQuery.isValid is a simple form validation plugin that has various options dependent on what type of form you are using. Some of the options range from usernames, date of births, emails etc etc.</p>
-                            <p>The 2 example forms on the left give an example or idea of the possibilities of jQuery.isValid.</p>
-                        </div>
-                        
-                        <div class="clear"></div>
-                        <div class="divider"></div>
-                        
-                        <form id="form-two" action="" method="post" class="left-col-75">
-                            <div class="form-row">
-                                <label for="name">Name</label>
-                                <input type="text" data-field-info="letters"  placeholder="Enter Name" name="name" />
-                            </div>
-                            <div class="form-row">
-                                <label for="email">Email</label>
-                                <input type="text" data-field-info="email" placeholder="Enter Email" name="email" />
-                            </div>
-                            <div class="form-row">
-                                <label for="emailconfirm">Email</label>
-                                <input type="text" data-field-info="emailconfirm" placeholder="Enter Email" name="emailconfirm" />
+                                <input type="text" data-field-type="general" data-error-message="Please enter a Username" placeholder="Enter Username" name="username" />
                             </div>
                             <div class="form-row">
                                 <label for="subject">Subject</label>
-                                <select name="subject" data-field-info="select">
+                                <select id="subject" name="subject" data-field-type="select" data-error-message="Please choose a Subject">
                                     <option disabled selected>Choose Subject</option>
                                     <option value="Question">Question</option>
                                     <option value="Feedback">Feedback</option>
@@ -80,33 +38,52 @@
                                 </select>
                             </div>
                             <div class="form-row">
+                                <label for="role">Role</label>
+                                <select id="role" name="role" data-field-type="select" data-error-message="Please choose a Role">
+                                    <option disabled selected>Choose Role</option>
+                                    <option value="Junior">Junior</option>
+                                    <option value="Mid">Mid</option>
+                                    <option value="Senior">Senior</option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <label for="email">Email</label>
+                                <input type="text" data-field-type="email" data-error-message="Please enter a valid email address" placeholder="Enter Email" name="email" />
+                            </div>
+                            <div class="form-row">
+                                <label for="emailConfirm">Email</label>
+                                <input type="text" data-field-type="emailConfirm" data-error-message="Email addresses do not match" placeholder="Enter Email" name="emailConfirm" />
+                            </div>
+                            <div class="form-row">
+                                <label for="password">Password</label>
+                                <input type="password" data-field-type="password" data-error-message="Please enter a password" placeholder="Enter Password" name="password" />
+                            </div>
+                            <div class="form-row">
+                                <label for="passwordConfirm">Confirm</label>
+                                <input type="password" data-field-type="passwordConfirm" data-error-message="Passwords do not match" placeholder="Confirm Password" name="passwordConfirm" />
+                            </div>
+                            <div class="form-row">
                                 <label for="date">Date</label>
-                                <input type="text" data-field-info="date" placeholder="DD/MM/YYYY" name="date" />
+                                <input type="text" data-field-type="date" data-error-message="Date is not valid" placeholder="DD/MM/YYYY" name="date" />
                             </div>
                             <div class="form-row">
                                 <label for="postcode">Post Code</label>
-                                <input type="text" data-field-info="postcode" placeholder="Enter PostCode" name="postcode" />
-                            </div>
-                            <div class="form-row">
-                                <label for="mobile">Mobile</label>
-                                <input type="text" data-field-info="mobile" placeholder="Enter Mobile No." name="mobile" />
+                                <input type="text" data-field-type="postcode" data-error-message="Post code is not valid" placeholder="Enter PostCode" name="postcode" />
                             </div>
                             <div class="form-row">
                                 <label for="numbers">Number</label>
-                                <input type="text" data-field-info="numbers" placeholder="Enter number" name="numbers" />
+                                <input type="text" data-field-type="numbers" data-error-message="Field is numbers only" placeholder="Enter number" name="numbers" />
                             </div>
                             <div class="form-row">
                                 <label for="terms">Terms</label>
                                 <input type="checkbox"
-                                       name="terms" data-field-info="checkbox" />
+                                       name="terms" data-field-type="checkbox" data-error-message="Please check before proceeding" />
                             </div>
                             <div class="form-row">
                                 <label>&nbsp;</label>
-                                <input type="submit" value="Register" class="form-btn" />
-                                <input type="reset" value="Reset" class="form-btn" />
+                                <input type="submit" value="Submit" class="form-btn" />
                             </div>
                         </form>
-                        
                         <div class="clear"></div>
                     </div>
                 </div>
@@ -118,7 +95,11 @@
         </div>
         
         <script type="text/javascript" src="js/jquery-1.10.1.js"></script>
-        <script type="text/javascript" src="js/jquery.isValid.js"></script>
+<!--        <script type="text/javascript" src="js/jquery.isValid.js"></script>-->
+        <script type="text/javascript" src="js/isValid.js"></script>
+        <script type="text/javascript" src="js/checkPostCode.js"></script>
+        <script type="text/javascript" src="js/libs/select2.full.min.js"></script>
+        <script type="text/javascript" src="js/libs/selectize.js"></script>
         <script type="text/javascript" src="js/moment.js"></script>
         <script type="text/javascript" src="js/main.js"></script>
     </body>

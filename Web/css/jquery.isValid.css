@@ -1,23 +1,32 @@
 /* isValid Default CSS Styles */
-/* Version 1.0 */
+/* Version 2.0 */
 /* Andy Summerfield */
 
-form input.invalid:focus, 
-form textarea.invalid:focus,
-form input[type="checkbox"].invalid {
+form.isValid input {
+    box-sizing: border-box;
+}
+
+form.isValid input.invalid:focus, 
+form.isValid textarea.invalid:focus,
+form.isValid input[type="checkbox"].invalid {
     border-color: #c4c4c4;
     box-shadow: 0 0 10px #c4c4c4;
 }
 
-form .invalid {
-    background: #FFBABA !important;
-/*    border-color: #EC5555 !important;*/
+form.isValid .invalid {
+    background-color: #E5BFBF;
+    border: 1px solid #C0848E;
 }
 
-form .form-error {
-    display: none;
+form.isValid .form-error {
     font-weight: bold;
     margin: 10px 0;
     font-size: 14px;
-    line-height: 20px;
+    line-height: 40px;
+    background-color: #E5BFBF;
+    border: 1px solid #ebccd1;
+    border-radius: 5px;
+    padding: 0 10px;
+    box-sizing: border-box;
+    min-width: 265px;
 }

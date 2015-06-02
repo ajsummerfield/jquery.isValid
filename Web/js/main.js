@@ -11,6 +11,9 @@ $(document).ready(function() {
         },
         emailConfirm: {
             invalidErrorMessage: 'Do not match'
+        },
+        date: {
+            invalidErrorMessage: 'Invalid Date entered'
         }
     });
     

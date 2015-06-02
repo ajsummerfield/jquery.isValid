@@ -59,6 +59,8 @@
                     allowFutureDates: true,
                     activeErrorMessage: '',
                     requiredMessage: 'Date is required',
+                    formatErrorMessage: 'Date format doesn\'t match DD/MM/YYYY',
+                    invalidErrorMessage: 'Please enter a valid Date'
                 },
                 postCode: {
                     activeErrorMessage: '',
@@ -75,7 +77,7 @@
                 },
                 onFormValidated: function () { },
                 onFormInValidated: function () { }
-             };
+         };
          
          this.init = function() {
              
@@ -83,7 +85,7 @@
              
             this.$elem = $(element);
             this.isFieldValid = false;
-            this.options = $.extend(true, defaults, options);
+            this.options = $.extend(true, {}, defaults, options);
             this.formID = '#' + this.$elem.attr('id');
             this.$elem.addClass('isValid');
              
@@ -343,14 +345,16 @@
         this.isDateValid = function (field) {
 
             var date = $(field).val(),
+                isEmpty,
                 validResult,
                 formatResult;
 
+            isEmpty = this.isEmpty(field);
+            
             var momentObject = new moment(date, this.options.date.format, true); // jshint ignore:line
 
-            formatResult = momentObject.isValid();
-
-            this.options.date.showFormatError = !formatResult;
+            validResult = momentObject.isValid();
+            formatResult = (momentObject._pf.charsLeftOver === 0);
 
             if (!this.options.date.allowFutureDates) {
 
@@ -360,7 +364,27 @@
                 return formatResult ? validResult : false;
             }
 
-            return formatResult;
+            if(!isEmpty) {
+                
+                if(validResult) {
+                    if(!formatResult) {
+                        this.options.date.activeErrorMessage = this.options.date.formatErrorMessage;
+                    } else {
+                        this.options.date.activeErrorMessage = '';
+                    }   
+                } else {
+                    if(!formatResult) {
+                        this.options.date.activeErrorMessage = this.options.date.formatErrorMessage;
+                    } else {
+                        this.options.date.activeErrorMessage = this.options.date.invalidErrorMessage;
+                    }
+                }
+                
+                return validResult && formatResult;
+            } else {
+                this.options.date.activeErrorMessage = this.options.date.requiredMessage;
+                return !isEmpty;
+            }
         };
          
         this.isPostCodeValid = function (field) {

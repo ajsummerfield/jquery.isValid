@@ -2,11 +2,15 @@ $(document).ready(function() {
 
     var formOne = $('#form-one').isValid({
         password: {
+            numbers: true,
             passwordConfirm: true
         },
         email: {
             emailConfirm: true,
             domain: '@gmail.com'
+        },
+        emailConfirm: {
+            invalidErrorMessage: 'Do not match'
         }
     });
     

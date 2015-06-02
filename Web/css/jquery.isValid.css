@@ -22,11 +22,11 @@ form.isValid .form-error {
     font-weight: bold;
     margin: 10px 0;
     font-size: 14px;
-    line-height: 40px;
+    line-height: 22px;
     background-color: #E5BFBF;
     border: 1px solid #ebccd1;
     border-radius: 5px;
-    padding: 0 10px;
+    padding: 12px 10px 10px 10px;
     box-sizing: border-box;
     min-width: 265px;
 }

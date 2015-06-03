@@ -13,6 +13,7 @@ $(document).ready(function() {
             invalidErrorMessage: 'Do not match'
         },
         date: {
+            allowFutureDates: false,
             invalidErrorMessage: 'Invalid Date entered'
         }
     });

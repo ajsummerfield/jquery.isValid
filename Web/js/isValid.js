@@ -55,12 +55,12 @@
                 },
                 date: {
                     format: 'DD/MM/YYYY',
-                    allowPastDates: true,
                     allowFutureDates: true,
                     activeErrorMessage: '',
                     requiredMessage: 'Date is required',
                     formatErrorMessage: 'Date format doesn\'t match DD/MM/YYYY',
-                    invalidErrorMessage: 'Please enter a valid Date'
+                    invalidErrorMessage: 'Please enter a valid Date',
+                    allowedDateErrorMessage: 'Date not allowed'
                 },
                 postCode: {
                     activeErrorMessage: '',
@@ -347,6 +347,7 @@
             var date = $(field).val(),
                 isEmpty,
                 validResult,
+                allowedResult,
                 formatResult;
 
             isEmpty = this.isEmpty(field);
@@ -358,29 +359,37 @@
 
             if (!this.options.date.allowFutureDates) {
 
-                validResult = isBetween(Date.parse(momentObject._d), 0, Date.now());
-                this.options.date.showInvalidError = !validResult;
-
-                return formatResult ? validResult : false;
-            }
-
-            if(!isEmpty) {
-                
                 if(validResult) {
+                    allowedResult = isBetween(Date.parse(momentObject._d), 0, Date.now());
+                }
+            }
+            
+            if(!isEmpty) {
+                 
+                if(!validResult) {
+                    
                     if(!formatResult) {
-                        this.options.date.activeErrorMessage = this.options.date.formatErrorMessage;
+                        
+                        if(momentObject._pf.unusedTokens.length === 1 || momentObject._pf.unusedTokens.length === 2 && momentObject._pf.charsLeftOver === 2) {
+                            this.options.date.activeErrorMessage = this.options.date.formatErrorMessage;
+                        } else {
+                            this.options.date.activeErrorMessage = this.options.date.invalidErrorMessage;
+                        }
+                        
                     } else {
-                        this.options.date.activeErrorMessage = '';
-                    }   
+                        this.options.date.activeErrorMessage = this.options.date.invalidErrorMessage;
+                    }
                 } else {
                     if(!formatResult) {
                         this.options.date.activeErrorMessage = this.options.date.formatErrorMessage;
                     } else {
-                        this.options.date.activeErrorMessage = this.options.date.invalidErrorMessage;
+                        if(!allowedResult) {
+                            this.options.date.activeErrorMessage = this.options.date.allowedDateErrorMessage;
+                        }
                     }
                 }
                 
-                return validResult && formatResult;
+                return validResult && formatResult && allowedResult;
             } else {
                 this.options.date.activeErrorMessage = this.options.date.requiredMessage;
                 return !isEmpty;

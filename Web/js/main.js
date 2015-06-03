@@ -24,4 +24,12 @@ $(document).ready(function() {
     
     $('#role').selectize();
     
+//    $('#datepicker').datepicker({
+//        dateFormat: 'dd/mm/yy'
+//    });
+    
+    $('#bootstrap-datepicker').datepicker({
+        format: 'dd/mm/yyyy'
+    });
+    
 });

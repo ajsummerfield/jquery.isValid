@@ -9,6 +9,7 @@
         <link href='http://fonts.googleapis.com/css?family=Raleway:400,200,300,500,600,700' rel='stylesheet' type='text/css'>
         <link href="css/libs/select2.min.css" rel="stylesheet" media="screen" type="text/css" />
         <link href="css/libs/selectize.default.css" rel="stylesheet" media="screen" type="text/css" />
+        <link href="css/libs/jquery-ui.css" rel="stylesheet" media="screen" type="text/css" />
         <link href="css/jquery.isValid.css" rel="stylesheet" media="screen" type="text/css" />
         <link href="css/main.css" rel="stylesheet" media="screen" type="text/css" />
     </head>
@@ -64,7 +65,11 @@
                             </div>
                             <div class="form-row">
                                 <label for="date">Date</label>
-                                <input type="text" data-field-type="date" placeholder="DD/MM/YYYY" name="date" />
+                                <input type="text" id="datepicker" data-field-type="date" placeholder="DD/MM/YYYY" name="date" />
+                            </div>
+                            <div class="form-row">
+                                <label for="date">Date</label>
+                                <input type="text" id="bootstrap-datepicker" data-field-type="date" placeholder="DD/MM/YYYY" name="date" />
                             </div>
                             <div class="form-row">
                                 <label for="postcode">Post Code</label>
@@ -94,12 +99,12 @@
         
         </div>
         
-        <script type="text/javascript" src="js/jquery-1.10.1.js"></script>
-<!--        <script type="text/javascript" src="js/jquery.isValid.js"></script>-->
-        <script type="text/javascript" src="js/isValid.js"></script>
-        <script type="text/javascript" src="js/checkPostCode.js"></script>
+        <script type="text/javascript" src="js/libs/jquery-1.10.1.js"></script>
+        <script type="text/javascript" src="js/libs/jquery-ui.js"></script>
         <script type="text/javascript" src="js/libs/select2.full.min.js"></script>
         <script type="text/javascript" src="js/libs/selectize.js"></script>
+        <script type="text/javascript" src="js/isValid.js"></script>
+        <script type="text/javascript" src="js/checkPostCode.js"></script>
         <script type="text/javascript" src="js/moment.js"></script>
         <script type="text/javascript" src="js/main.js"></script>
     </body>

@@ -7,7 +7,11 @@
              defaults = {
                 general: {
                     activeErrorMessage: '',
-                    requiredErrorMessage: 'Field is required'
+                    requiredErrorMessage: 'Field is required',
+                    callbacks: {
+                        onValidated: function() {},
+                        onInvalidated: function() {}
+                    }
                 },
                 letters: {
                     activeErrorMessage: '',
@@ -76,13 +80,14 @@
                     requiredErrorMessage: 'Checkbox is required',
                 },
                 onFormValidated: function () { },
-                onFormInValidated: function () { }
+                onFormInvalidated: function () { }
          };
          
          this.init = function() {
              
             self = this;
              
+            this.elem = element;
             this.$elem = $(element);
             this.isFieldValid = false;
             this.options = $.extend(true, {}, defaults, options);
@@ -176,14 +181,21 @@
         };
          
         this.isEmpty = function (field) {
+            return ($(field).val().length === 0);
+        };
+         
+        this.isGeneralValid = function (field) {
             
-            var isEmpty = ($(field).val().length === 0);
+            var isEmpty = this.isEmpty(field);
             
             if(isEmpty) {
                 this.options.general.activeErrorMessage = this.options.general.requiredErrorMessage;
+                $(field).trigger('fieldValidated', [!isEmpty, this.options.general.activeErrorMessage]);
+            } else {
+                this.options.general.callbacks.onInvalidated();
             }
             
-            return isEmpty;
+            return !isEmpty;
         };
          
         this.isLetters = function (field) {
@@ -226,10 +238,6 @@
                 this.options.decimals.activeErrorMessage = this.options.decimals.requiredErrorMessage;
                 return !isEmpty;
             }
-        };
-         
-        this.isGeneralValid = function (field) {
-            return !this.isEmpty(field);
         };
          
         this.isPasswordValid = function (field) {
@@ -550,6 +558,9 @@
                     if(!isValid.isValidField(field)) {
 
                         isValid.showErrorFor(field);
+                        $(field).on('fieldValidated', function(event, isFieldValid, activeErrorMessage) {
+                            console.log(event);
+                        });
                     } else {
 
                         isValid.hideErrorFor(field);

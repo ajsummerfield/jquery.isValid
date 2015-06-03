@@ -1,6 +1,16 @@
 $(document).ready(function() {
 
     var formOne = $('#form-one').isValid({
+        general: {
+            callbacks: {
+                onValidated: function(event) {
+                    console.log(event);
+                },
+                onInvalidated: function(event) {
+                    console.log(event);
+                }
+            }
+        },
         password: {
             numbers: true,
             passwordConfirm: true
@@ -24,12 +34,8 @@ $(document).ready(function() {
     
     $('#role').selectize();
     
-//    $('#datepicker').datepicker({
-//        dateFormat: 'dd/mm/yy'
-//    });
-    
-    $('#bootstrap-datepicker').datepicker({
-        format: 'dd/mm/yyyy'
+    $('#datepicker').datepicker({
+        dateFormat: 'dd/mm/yy'
     });
     
 });

@@ -24,47 +24,4 @@ $(document).ready(function() {
     
     $('#role').selectize();
     
-//    $('#form-two').isValid();
-//  
-//        general: {
-//            minLength: 8,
-//            maxLength: 12,
-//            errorDetails: [
-//                {
-//                    id: "-username-error",
-//                    type: "length",
-//                    message: "Username must be at least 8 characters and no more than 12 characters long.",
-//                    show: false
-//                },
-//                {
-//                    id: "-other-error",
-//                    type: "length",
-//                    message: "other error"
-//                },
-//                {
-//                    id: "-something-error",
-//                    type: "length",
-//                    message: "Something error"
-//                }
-//            ],
-//        },
-//        password: {
-//            errorDetails: [
-//                {
-//                    type: "invalid",
-//                    show: false
-//                }
-//            ]
-//        },
-//        passwordconfirm: {
-//            errorDetails: [
-//                {
-//                    type: "invalid",
-//                    show: false
-//                }
-//            ]
-//        }
-//    }).data('isValid');
-//    
-//    $('#form-two').isValid();
 });

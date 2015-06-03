@@ -7,21 +7,21 @@
              defaults = {
                 general: {
                     activeErrorMessage: '',
-                    requiredMessage: 'Field is required'
+                    requiredErrorMessage: 'Field is required'
                 },
                 letters: {
                     activeErrorMessage: '',
-                    requiredMessage: 'Field is required',
+                    requiredErrorMessage: 'Field is required',
                     invalidErrorMessage: 'Field is letters only'
                 },
                 numbers: {
                     activeErrorMessage: '',
-                    requiredMessage: 'Field is required',
+                    requiredErrorMessage: 'Field is required',
                     invalidErrorMessage: 'Field is numbers only',
                 },
                 decimals: {
                     activeErrorMessage: '',
-                    requiredMessage: 'Field is required',
+                    requiredErrorMessage: 'Field is required',
                     invalidErrorMessage: 'Field is decimals only',
                 },
                 password: {
@@ -31,49 +31,49 @@
                     letters: true,
                     passwordConfirm: false,
                     activeErrorMessage: '',
-                    requiredMessage: 'Password is required',
+                    requiredErrorMessage: 'Password is required',
                     formatErrorMessage: 'Password should contain numbers and letters',
                     invalidErrorMessage: 'Password should be more than 6 characters'
                 },
                 passwordConfirm: {
                     activeErrorMessage: '',
-                    requiredMessage: 'Confirming your Password is required',
+                    requiredErrorMessage: 'Confirming your Password is required',
                     invalidErrorMessage: 'Passwords do not match'
                 },
                 email: {
                     domain: '',
                     emailConfirm: false,
                     activeErrorMessage: '',
-                    requiredMessage: 'Email is required',
+                    requiredErrorMessage: 'Email is required',
                     domainErrorMessage: 'Email domain should be @xxxx.com',
                     invalidErrorMessage: 'Please enter a valid email address'
                 },
                 emailConfirm: {
                     activeErrorMessage: '',
-                    requiredMessage: 'Confirming your Email is required',
+                    requiredErrorMessage: 'Confirming your Email is required',
                     invalidErrorMessage: 'Email addresses do not match'
                 },
                 date: {
                     format: 'DD/MM/YYYY',
                     allowFutureDates: true,
                     activeErrorMessage: '',
-                    requiredMessage: 'Date is required',
+                    requiredErrorMessage: 'Date is required',
                     formatErrorMessage: 'Date format doesn\'t match DD/MM/YYYY',
                     invalidErrorMessage: 'Please enter a valid Date',
                     allowedDateErrorMessage: 'Date not allowed'
                 },
                 postCode: {
                     activeErrorMessage: '',
-                    requiredMessage: 'Post Code is required',
+                    requiredErrorMessage: 'Post Code is required',
                     invalidErrorMessage: 'Please enter a valid Post Code'
                 },
                 select: {
                     activeErrorMessage: '',
-                    requiredMessage: 'Choosing an option is required',
+                    requiredErrorMessage: 'Choosing an option is required',
                 },
                 checkbox: {
                     activeErrorMessage: '',
-                    requiredMessage: 'Checkbox is required',
+                    requiredErrorMessage: 'Checkbox is required',
                 },
                 onFormValidated: function () { },
                 onFormInValidated: function () { }
@@ -180,7 +180,7 @@
             var isEmpty = ($(field).val().length === 0);
             
             if(isEmpty) {
-                this.options.general.activeErrorMessage = this.options.general.requiredMessage;
+                this.options.general.activeErrorMessage = this.options.general.requiredErrorMessage;
             }
             
             return isEmpty;
@@ -195,7 +195,7 @@
                 this.options.letters.activeErrorMessage = validResult ? '' : this.options.letters.invalidErrorMessage;
                 return validResult;
             } else {
-                this.options.letters.activeErrorMessage = this.options.letters.requiredMessage;
+                this.options.letters.activeErrorMessage = this.options.letters.requiredErrorMessage;
                 return !isEmpty;
             }
         };
@@ -209,7 +209,7 @@
                 this.options.numbers.activeErrorMessage = validResult ? '' : this.options.numbers.invalidErrorMessage;
                 return validResult;
             }  else {
-                this.options.numbers.activeErrorMessage = this.options.numbers.requiredMessage;
+                this.options.numbers.activeErrorMessage = this.options.numbers.requiredErrorMessage;
                 return !isEmpty;
             }
         };
@@ -223,7 +223,7 @@
                 this.options.decimals.activeErrorMessage = validResult ? '' : this.options.decimals.invalidErrorMessage;
                 return validResult;
             } else {
-                this.options.decimals.activeErrorMessage = this.options.decimals.requiredMessage;
+                this.options.decimals.activeErrorMessage = this.options.decimals.requiredErrorMessage;
                 return !isEmpty;
             }
         };
@@ -251,7 +251,7 @@
                     this.options.password.activeErrorMessage = lengthResult && !formatResult ? this.options.password.formatErrorMessage : this.options.password.invalidErrorMessage;
                     return (lengthResult) ? formatResult : false;
                 } else {
-                    this.options.password.activeErrorMessage = this.options.password.requiredMessage;
+                    this.options.password.activeErrorMessage = this.options.password.requiredErrorMessage;
                     return !isEmpty;
                 }
             }
@@ -262,7 +262,7 @@
                 this.options.password.activeErrorMessage = lengthResult ? '' : this.options.password.invalidErrorMessage;
                 return lengthResult;
             } else {
-                this.options.password.activeErrorMessage = this.options.password.requiredMessage;
+                this.options.password.activeErrorMessage = this.options.password.requiredErrorMessage;
                 return !isEmpty;
             }
         };
@@ -278,7 +278,7 @@
                     this.options.passwordConfirm.activeErrorMessage = validResult ? ''  : this.options.passwordConfirm.invalidErrorMessage;
                     return validResult;
                 } else {
-                    this.options.passwordConfirm.activeErrorMessage = this.options.passwordConfirm.requiredMessage;
+                    this.options.passwordConfirm.activeErrorMessage = this.options.passwordConfirm.requiredErrorMessage;
                     return !isEmpty;
                 }
             }
@@ -309,7 +309,7 @@
                     this.options.email.activeErrorMessage = validResult && !domainResult ? this.options.email.domainErrorMessage : this.options.email.invalidErrorMessage;
                     return (validResult) ? domainResult : false;
                 } else {
-                    this.options.email.activeErrorMessage = this.options.email.requiredMessage;
+                    this.options.email.activeErrorMessage = this.options.email.requiredErrorMessage;
                     return !isEmpty;
                 }
             }
@@ -320,7 +320,7 @@
                 this.options.email.activeErrorMessage = validResult ? '' : this.options.email.invalidErrorMessage;
                 return validResult;
             } else {
-                this.options.email.activeErrorMessage = this.options.email.requiredMessage;
+                this.options.email.activeErrorMessage = this.options.email.requiredErrorMessage;
                 return !isEmpty;
             }
         };
@@ -336,7 +336,7 @@
                     this.options.emailConfirm.activeErrorMessage = validResult ? '' : this.options.emailConfirm.invalidErrorMessage;
                     return validResult;
                 } else {
-                    this.options.emailConfirm.activeErrorMessage = this.options.emailConfirm.requiredMessage;
+                    this.options.emailConfirm.activeErrorMessage = this.options.emailConfirm.requiredErrorMessage;
                     return !isEmpty;
                 }
             }
@@ -391,7 +391,7 @@
                 
                 return validResult && formatResult && allowedResult;
             } else {
-                this.options.date.activeErrorMessage = this.options.date.requiredMessage;
+                this.options.date.activeErrorMessage = this.options.date.requiredErrorMessage;
                 return !isEmpty;
             }
         };
@@ -405,26 +405,33 @@
                 this.options.postCode.activeErrorMessage = validResult ? '' : this.options.postCode.invalidErrorMessage;
                 return validResult;
             } else {
-                this.options.postCode.activeErrorMessage = this.options.postCode.requiredMessage;
+                this.options.postCode.activeErrorMessage = this.options.postCode.requiredErrorMessage;
                 return !isEmpty;
             }
         };
          
         this.isSelectChosen = function (field) {
             
-            var isValid = true;
+            var validResult = true;
             
             if($(field).val() === null) {
-                isValid = false;
+                validResult = false;
             } else if($(field).val().length === 0) {
-                isValid = false;
+                validResult = false;
             }
             
-            return isValid;
+            this.options.select.activeErrorMessage = validResult ? '' : this.options.select.requiredErrorMessage;
+            
+            return validResult;
         };
          
         this.isCheckboxTicked = function (field) {
-            return $(field).is(":checked");
+            
+            var validResult = $(field).is(':checked');
+            
+            this.options.checkbox.activeErrorMessage = validResult ? '' : this.options.checkbox.requiredErrorMessage;
+            
+            return validResult;
         };
          
         this.showErrorFor = function(field) {
@@ -484,15 +491,11 @@
             
             if($(field).data().errorMessage !== undefined) {
                 
-                if(self.options[$(field).data().fieldType].activeErrorMessage === defaults[$(field).data().fieldType].activeErrorMessage) {
-                    return $(field).data().errorMessage;
-                } else if(self.options[$(field).data().fieldType].activeErrorMessage.length === 0) {
-                    return $(field).data().errorMessage;
-                } else if($(field).data().errorMessage !== self.options[$(field).data().fieldType].activeErrorMessage) {
-                    return self.options[$(field).data().fieldType].activeErrorMessage;
-                } else {
-                    return $(field).data().errorMessage;
+                if(self.options[$(field).data().fieldType].activeErrorMessage.length === 0) {
+                    self.options[$(field).data().fieldType].activeErrorMessage = $(field).data().errorMessage;
                 }
+                
+                return self.options[$(field).data().fieldType].activeErrorMessage;
                 
             } else {
                 return self.options[$(field).data().fieldType].activeErrorMessage;

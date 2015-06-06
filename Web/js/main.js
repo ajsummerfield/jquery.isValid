@@ -10,7 +10,8 @@ $(document).ready(function() {
                     console.log(event);
                 }
             }
-        }
+        },
+        showErrorMessages: false
     });
     
     var formOne = $('#form-one').isValid({

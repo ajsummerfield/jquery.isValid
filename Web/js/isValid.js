@@ -3,129 +3,7 @@
 
     $.isValid = function (element, options) {
 
-        var self,
-            defaults = {
-                general: {
-                    activeErrorMessage: '',
-                    requiredErrorMessage: 'Field is required',
-                    callbacks: {
-                        onValidated: function (event) {},
-                        onInvalidated: function (event) {}
-                    }
-                },
-                letters: {
-                    activeErrorMessage: '',
-                    requiredErrorMessage: 'Field is required',
-                    invalidErrorMessage: 'Field is letters only',
-                    callbacks: {
-                        onValidated: function (event) {},
-                        onInvalidated: function (event) {}
-                    }
-                },
-                numbers: {
-                    activeErrorMessage: '',
-                    requiredErrorMessage: 'Field is required',
-                    invalidErrorMessage: 'Field is numbers only',
-                    callbacks: {
-                        onValidated: function (event) {},
-                        onInvalidated: function (event) {}
-                    }
-                },
-                decimals: {
-                    activeErrorMessage: '',
-                    requiredErrorMessage: 'Field is required',
-                    invalidErrorMessage: 'Field is decimals only',
-                    callbacks: {
-                        onValidated: function (event) {},
-                        onInvalidated: function (event) {}
-                    }
-                },
-                password: {
-                    minLength: 6,
-                    maxLength: 100,
-                    numbers: false,
-                    letters: true,
-                    passwordConfirm: false,
-                    activeErrorMessage: '',
-                    requiredErrorMessage: 'Password is required',
-                    formatErrorMessage: 'Password should contain numbers and letters',
-                    invalidErrorMessage: 'Password should be more than 6 characters',
-                    callbacks: {
-                        onValidated: function (event) {},
-                        onInvalidated: function (event) {}
-                    }
-                },
-                passwordConfirm: {
-                    activeErrorMessage: '',
-                    requiredErrorMessage: 'Confirming your Password is required',
-                    invalidErrorMessage: 'Passwords do not match',
-                    callbacks: {
-                        onValidated: function (event) {},
-                        onInvalidated: function (event) {}
-                    }
-                },
-                email: {
-                    domain: '',
-                    emailConfirm: false,
-                    activeErrorMessage: '',
-                    requiredErrorMessage: 'Email is required',
-                    domainErrorMessage: 'Email domain should be @xxxx.com',
-                    invalidErrorMessage: 'Please enter a valid email address',
-                    callbacks: {
-                        onValidated: function (event) {},
-                        onInvalidated: function (event) {}
-                    }
-                },
-                emailConfirm: {
-                    activeErrorMessage: '',
-                    requiredErrorMessage: 'Confirming your Email is required',
-                    invalidErrorMessage: 'Email addresses do not match',
-                    callbacks: {
-                        onValidated: function (event) {},
-                        onInvalidated: function (event) {}
-                    }
-                },
-                date: {
-                    format: 'DD/MM/YYYY',
-                    allowFutureDates: true,
-                    activeErrorMessage: '',
-                    requiredErrorMessage: 'Date is required',
-                    formatErrorMessage: 'Date format doesn\'t match DD/MM/YYYY',
-                    invalidErrorMessage: 'Please enter a valid Date',
-                    allowedDateErrorMessage: 'Date not allowed',
-                    callbacks: {
-                        onValidated: function (event) {},
-                        onInvalidated: function (event) {}
-                    }
-                },
-                postCode: {
-                    activeErrorMessage: '',
-                    requiredErrorMessage: 'Post Code is required',
-                    invalidErrorMessage: 'Please enter a valid Post Code',
-                    callbacks: {
-                        onValidated: function (event) {},
-                        onInvalidated: function (event) {}
-                    }
-                },
-                select: {
-                    activeErrorMessage: '',
-                    requiredErrorMessage: 'Choosing an option is required',
-                    callbacks: {
-                        onValidated: function (event) {},
-                        onInvalidated: function (event) {}
-                    }
-                },
-                checkbox: {
-                    activeErrorMessage: '',
-                    requiredErrorMessage: 'Checkbox is required',
-                    callbacks: {
-                        onValidated: function (event) {},
-                        onInvalidated: function (event) {}
-                    }
-                },
-                onFormValidated: function () {},
-                onFormInvalidated: function () {}
-            };
+        var self;
 
         this.init = function () {
 
@@ -134,7 +12,7 @@
             this.elem = element;
             this.$elem = $(element);
             this.isFieldValid = false;
-            this.options = $.extend(true, {}, defaults, options);
+            this.options = $.extend(true, {}, $.isValid.defaults, options);
             this.formID = '#' + this.$elem.attr('id');
             this.$elem.addClass('isValid');
 
@@ -150,7 +28,6 @@
         };
 
          this.isFormValidated = function () {
-
             return ($(this.formID + ' .invalid').length) ? false : true;
         };
 
@@ -482,22 +359,24 @@
         };
 
         this.showErrorFor = function (field) {
+            
+            if(this.options.showErrorMessages) {
+                if ($(field).siblings('.form-error').length) {
 
-            if ($(field).siblings('.form-error').length) {
+                    updateErrorContainer(field);
 
-                updateErrorContainer(field);
+                } else {
+                    var errorContainer = createErrorContainer(field);
+                    var errorContainerWidth = getErrorContainerWidth(field);
 
-            } else {
-                var errorContainer = createErrorContainer(field);
-                var errorContainerWidth = getErrorContainerWidth(field);
+                    $(field).parent().append(errorContainer);
 
-                $(field).parent().append(errorContainer);
-                $(field).addClass('invalid');
-
-                $(field).siblings('.form-error').css('width', errorContainerWidth + 'px');
-                $(field).siblings('.form-error').css('margin-left', $(field).position().left + 'px');
+                    $(field).siblings('.form-error').css('width', errorContainerWidth + 'px');
+                    $(field).siblings('.form-error').css('margin-left', $(field).position().left + 'px');
+                }
             }
             
+            $(field).addClass('invalid');
             $(field).trigger('isValid.fieldInvalidated');
         };
 
@@ -606,14 +485,16 @@
 
             isValid.formArray.each(function (index, field) {
 
-                $(field).on('blur change', function () {
+                if(isValid.options.validateOnBlur) {
+                    $(field).on('blur change', function () {
 
-                    if (!isValid.isValidField(field)) {
-                        isValid.showErrorFor(field);
-                    } else {
-                        isValid.hideErrorFor(field);
-                    }
-                });
+                        if (!isValid.isValidField(field)) {
+                            isValid.showErrorFor(field);
+                        } else {
+                            isValid.hideErrorFor(field);
+                        }
+                    });
+                }
                 
                 $(field).on('isValid.fieldInvalidated', function(event) {
                     
@@ -639,6 +520,131 @@
                 
             });
         });
+    };
+    
+    $.isValid.defaults = {
+        general: {
+            activeErrorMessage: '',
+            requiredErrorMessage: 'Field is required',
+            callbacks: {
+                onValidated: function (event) {},
+                onInvalidated: function (event) {}
+            }
+        },
+        letters: {
+            activeErrorMessage: '',
+            requiredErrorMessage: 'Field is required',
+            invalidErrorMessage: 'Field is letters only',
+            callbacks: {
+                onValidated: function (event) {},
+                onInvalidated: function (event) {}
+            }
+        },
+        numbers: {
+            activeErrorMessage: '',
+            requiredErrorMessage: 'Field is required',
+            invalidErrorMessage: 'Field is numbers only',
+            callbacks: {
+                onValidated: function (event) {},
+                onInvalidated: function (event) {}
+            }
+        },
+        decimals: {
+            activeErrorMessage: '',
+            requiredErrorMessage: 'Field is required',
+            invalidErrorMessage: 'Field is decimals only',
+            callbacks: {
+                onValidated: function (event) {},
+                onInvalidated: function (event) {}
+            }
+        },
+        password: {
+            minLength: 6,
+            maxLength: 100,
+            numbers: false,
+            letters: true,
+            passwordConfirm: false,
+            activeErrorMessage: '',
+            requiredErrorMessage: 'Password is required',
+            formatErrorMessage: 'Password should contain numbers and letters',
+            invalidErrorMessage: 'Password should be more than 6 characters',
+            callbacks: {
+                onValidated: function (event) {},
+                onInvalidated: function (event) {}
+            }
+        },
+        passwordConfirm: {
+            activeErrorMessage: '',
+            requiredErrorMessage: 'Confirming your Password is required',
+            invalidErrorMessage: 'Passwords do not match',
+            callbacks: {
+                onValidated: function (event) {},
+                onInvalidated: function (event) {}
+            }
+        },
+        email: {
+            domain: '',
+            emailConfirm: false,
+            activeErrorMessage: '',
+            requiredErrorMessage: 'Email is required',
+            domainErrorMessage: 'Email domain should be @xxxx.com',
+            invalidErrorMessage: 'Please enter a valid email address',
+            callbacks: {
+                onValidated: function (event) {},
+                onInvalidated: function (event) {}
+            }
+        },
+        emailConfirm: {
+            activeErrorMessage: '',
+            requiredErrorMessage: 'Confirming your Email is required',
+            invalidErrorMessage: 'Email addresses do not match',
+            callbacks: {
+                onValidated: function (event) {},
+                onInvalidated: function (event) {}
+            }
+        },
+        date: {
+            format: 'DD/MM/YYYY',
+            allowFutureDates: true,
+            activeErrorMessage: '',
+            requiredErrorMessage: 'Date is required',
+            formatErrorMessage: 'Date format doesn\'t match DD/MM/YYYY',
+            invalidErrorMessage: 'Please enter a valid Date',
+            allowedDateErrorMessage: 'Date not allowed',
+            callbacks: {
+                onValidated: function (event) {},
+                onInvalidated: function (event) {}
+            }
+        },
+        postCode: {
+            activeErrorMessage: '',
+            requiredErrorMessage: 'Post Code is required',
+            invalidErrorMessage: 'Please enter a valid Post Code',
+            callbacks: {
+                onValidated: function (event) {},
+                onInvalidated: function (event) {}
+            }
+        },
+        select: {
+            activeErrorMessage: '',
+            requiredErrorMessage: 'Choosing an option is required',
+            callbacks: {
+                onValidated: function (event) {},
+                onInvalidated: function (event) {}
+            }
+        },
+        checkbox: {
+            activeErrorMessage: '',
+            requiredErrorMessage: 'Checkbox is required',
+            callbacks: {
+                onValidated: function (event) {},
+                onInvalidated: function (event) {}
+            }
+        },
+        validateOnBlur: true,
+        showErrorMessages: true,
+        onFormValidated: function () {},
+        onFormInvalidated: function () {}
     };
 
 })(jQuery);

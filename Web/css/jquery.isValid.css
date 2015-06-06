@@ -14,7 +14,6 @@ form.isValid input[type="checkbox"].invalid {
 }
 
 form.isValid .invalid {
-    background-color: #E5BFBF;
     border: 1px solid #C0848E;
 }
 

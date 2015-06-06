@@ -1,6 +1,17 @@
 $(document).ready(function() {
 
-    var simpleForm = $('#simple-form').isValid();
+    var simpleForm = $('#simple-form').isValid({
+        general: {
+            callbacks: {
+                onValidated: function(event) {
+                    console.log(event);
+                },
+                onInvalidated: function(event) {
+                    console.log(event);
+                }
+            }
+        }
+    });
     
     var formOne = $('#form-one').isValid({
         password: {

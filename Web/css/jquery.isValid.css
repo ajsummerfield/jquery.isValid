@@ -9,8 +9,8 @@ form.isValid input {
 form.isValid input.invalid:focus, 
 form.isValid textarea.invalid:focus,
 form.isValid input[type="checkbox"].invalid {
-    border-color: #c4c4c4;
-    box-shadow: 0 0 10px #c4c4c4;
+    border-color: #C0848E;
+    box-shadow: none;
 }
 
 form.isValid .invalid {
@@ -24,7 +24,7 @@ form.isValid .form-error {
     font-size: 14px;
     line-height: 22px;
     background-color: #E5BFBF;
-    border: 1px solid #ebccd1;
+    border: 1px solid #C0848E;
     border-radius: 5px;
     padding: 12px 10px 10px 10px;
     box-sizing: border-box;

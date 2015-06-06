@@ -1,23 +1,14 @@
 $(document).ready(function() {
 
+    var simpleForm = $('#simple-form').isValid();
+    
     var formOne = $('#form-one').isValid({
-        general: {
-            callbacks: {
-                onValidated: function(event) {
-                    console.log(event);
-                },
-                onInvalidated: function(event) {
-                    console.log(event);
-                }
-            }
-        },
         password: {
             numbers: true,
             passwordConfirm: true
         },
         email: {
-            emailConfirm: true,
-            domain: '@gmail.com'
+            emailConfirm: true
         },
         emailConfirm: {
             invalidErrorMessage: 'Do not match'

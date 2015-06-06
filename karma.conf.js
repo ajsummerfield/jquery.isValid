@@ -11,11 +11,8 @@ module.exports = function(config) {
         ],
 
         exclude: [
+            'js/main.js'
         ],
-
-        preprocessors: {
-            'js/jquery.isValid.js': ['coverage']
-        },
 
         coverageReporter: {
             type : 'html',

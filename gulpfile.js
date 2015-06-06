@@ -24,7 +24,7 @@ gulp.task('reload', function () {
 // Watch for file changes and re-run tests on each change
 gulp.task('tests', function (done) {
     livereload.listen();
-    gulp.watch([__dirname + '/Web/specs/MainSpec.js', __dirname + '/Web/js/jquery.isValid.js'], ["reload"]);
+    gulp.watch([__dirname + '/Web/specs/MainSpec.js', __dirname + '/Web/js/isValid.js'], ["reload"]);
     karma.start({
         configFile: __dirname + '/karma.conf.js'
     }, function() {

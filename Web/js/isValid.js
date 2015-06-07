@@ -357,7 +357,7 @@
 
             return validResult;
         };
-
+        
         this.showErrorFor = function (field) {
             
             if(this.options.showErrorMessages) {
@@ -644,7 +644,8 @@
         validateOnBlur: true,
         showErrorMessages: true,
         onFormValidated: function () {},
-        onFormInvalidated: function () {}
+        onFormInvalidated: function () {},
+        validators: {}
     };
 
 })(jQuery);

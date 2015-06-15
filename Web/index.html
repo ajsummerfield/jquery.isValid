@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1" />
+        <meta name="keywords" content="" />
+        <meta name="description" content="" />
+        <title>isValid Form Plugin</title>
+        <link href='http://fonts.googleapis.com/css?family=Raleway:400,200,300,500,600,700' rel='stylesheet' type='text/css'>
+        <link href="css/libs/select2.min.css" rel="stylesheet" media="screen" type="text/css" />
+        <link href="css/libs/selectize.default.css" rel="stylesheet" media="screen" type="text/css" />
+        <link href="css/libs/jquery-ui.css" rel="stylesheet" media="screen" type="text/css" />
+        <link href="css/jquery.isValid.css" rel="stylesheet" media="screen" type="text/css" />
+        <link href="css/main.css" rel="stylesheet" media="screen" type="text/css" />
+    </head>
+    <body>
+        <div id="page-container">
+            <div id="container">
+                <div id="header">
+                    <div class="wrapper">
+                        <h1>jQuery.isValid</h1>
+                        <p>A simple jQuery form validation plugin</p>
+                    </div>
+                </div>
+                <div id="main">
+                    <div class="wrapper">
+                        <div id="test-one"></div>
+                        <div id="test-two"></div>
+                        <form id="simple-form" class="left-col-50" action="" method="POST">
+                            <div class="form-row">
+                                <label for="generalOne">General 1</label>
+                                <input type="text" 
+                                       data-field-type="general" 
+                                       data-required-error-message="Please enter something" 
+                                       name="generalOne" />
+                            </div>
+                            <div class="form-row">
+                                <label for="generalTwo">General 2</label>
+                                <input type="text" 
+                                       data-field-type="general" 
+                                       data-required-error-message="Please enter something else" 
+                                       name="generalTwo" />
+                            </div>
+                            <div class="form-row">
+                                <label for="email">Email</label>
+                                <input type="text" 
+                                       data-field-type="email"
+                                       data-required-error-message="Enter your email address"
+                                       placeholder="Enter email" 
+                                       name="email" />
+                            </div>
+                            <div class="form-row">
+                                <label for="email">Backup Email</label>
+                                <input type="text" 
+                                       data-field-type="email"
+                                       data-required-error-message="Enter your backup email address"
+                                       placeholder="Enter backup email" 
+                                       name="email" />
+                            </div>
+                            <div class="form-row">
+                                <label>&nbsp;</label>
+                                <input type="submit" value="Submit" class="form-btn" />
+                            </div>
+                        </form>
+                        <form id="form-one" action="" method="post" class="left-col-50">
+                            <div class="form-row">
+                                <label for="username">Username</label>
+                                <input type="text" data-field-type="general" data-error-message="Please enter a Username" placeholder="Enter Username" name="username" />
+                            </div>
+                            <div class="form-row">
+                                <label for="subject">Subject</label>
+                                <select id="subject" name="subject" data-field-type="select">
+                                    <option disabled selected>Choose Subject</option>
+                                    <option value="Question">Question</option>
+                                    <option value="Feedback">Feedback</option>
+                                    <option value="Mentor">Want to be a Mentor</option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <label for="role">Role</label>
+                                <select id="role" 
+                                        name="role" 
+                                        data-field-type="select"
+                                        data-required-error-message="Choosing a role is mandatory" >
+                                    <option disabled selected>Choose Role</option>
+                                    <option value="Junior">Junior</option>
+                                    <option value="Mid">Mid</option>
+                                    <option value="Senior">Senior</option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <label for="email">Email</label>
+                                <input type="text" 
+                                       data-field-type="email" 
+                                       placeholder="Enter email" 
+                                       name="email" />
+                            </div>
+                            <div class="form-row">
+                                <label for="emailConfirm">Email</label>
+                                <input type="text" 
+                                       data-field-type="emailConfirm" 
+                                       placeholder="Confirm Email" 
+                                       name="emailConfirm" />
+                            </div>
+                            <div class="form-row">
+                                <label for="password">Password</label>
+                                <input type="password" 
+                                       data-field-type="password"
+                                       data-format-error-message="Password is weak brah. Mix it up."
+                                       placeholder="Enter Password" 
+                                       name="password" />
+                            </div>
+                            <div class="form-row">
+                                <label for="passwordConfirm">Confirm</label>
+                                <input type="password" 
+                                       data-field-type="passwordConfirm" 
+                                       placeholder="Confirm Password" 
+                                       name="passwordConfirm" />
+                            </div>
+                            <div class="form-row">
+                                <label for="date">Date</label>
+                                <input type="text" 
+                                       id="datepicker"
+                                       data-field-type="date"
+                                       data-allowed-date-error-message="Date is in the future. Not allowed."
+                                       placeholder="DD/MM/YYYY" 
+                                       name="date" />
+                            </div>
+                            <div class="form-row">
+                                <label for="postcode">Post Code</label>
+                                <input type="text" 
+                                       data-field-type="postCode"
+                                       data-invalid-error-message="Postcode is made up. Try again."
+                                       placeholder="Enter PostCode" 
+                                       name="postCode" />
+                            </div>
+                            <div class="form-row">
+                                <label for="numbers">Number</label>
+                                <input type="text" 
+                                       data-field-type="numbers"
+                                       data-invalid-error-message="Do they look like numbers to you?"
+                                       placeholder="Enter number" 
+                                       name="numbers" />
+                            </div>
+                            <div class="form-row">
+                                <label for="terms">Terms</label>
+                                <input type="checkbox"
+                                       data-field-type="checkbox"
+                                       data-required-error-message="Tick it fool. Tick it."
+                                       name="terms" />
+                            </div>
+                            <div class="form-row">
+                                <label>&nbsp;</label>
+                                <input type="submit" value="Submit" class="form-btn" />
+                            </div>
+                        </form>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="push"></div>
+        </div>
+        <div id="footer">
+        
+        </div>
+        
+        <script type="text/javascript" src="js/libs/jquery-1.10.1.js"></script>
+        <script type="text/javascript" src="js/libs/jquery-ui.js"></script>
+        <script type="text/javascript" src="js/libs/select2.full.min.js"></script>
+        <script type="text/javascript" src="js/libs/selectize.js"></script>
+        <script type="text/javascript" src="js/isValid.js"></script>
+        <script type="text/javascript" src="js/checkPostCode.js"></script>
+        <script type="text/javascript" src="js/moment.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
+    </body>
+</html>

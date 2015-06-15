@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Jasmine Test - MainSpec.js</title>
+  <link rel="stylesheet" type="text/css" href="jasmine.css">
+  <script type="text/javascript" src="jasmine.js"></script>
+  <script type="text/javascript" src="jasmine-html.js"></script>
+  <script type="text/javascript" src="jasmineCompleteReporter.js"></script>
+  
+  
+</head>
+<body>
+<script type="text/javascript">
+    describe("jQuery.isValid Tests", function() {
+    
+        
+    var formOne;
+    
+    document.write("<form id='test-form' action='' method='post' class='left-col-75' style='display: none;'><div class='form-row'><label>Test</label><input type='text' id='empty' placeholder='Enter something' /></div><div class='form-row'><label>Test</label><input type='text' id='letters' data-field-info='letters' placeholder='Enter something' /></div><div class='form-row'><label>Test</label><input type='text' id='numbers' data-field-info='numbers' placeholder='Enter something' /></div><div class='form-row'><label>Test</label><input type='text' id='email' data-field-info='email' placeholder='Enter something' /></div><div class='form-row'><label>Test</label><input type='text' id='username' data-field-info='username' placeholder='Enter something' /></div><div class='form-row'><label>Test</label><input type='text' id='password' data-field-info='password' placeholder='Enter something' /></div><div class='form-row'><label>Test</label><input type='text' id='dob' data-field-info='dateofbirth' placeholder='Enter something' /></div><div class='form-row'><label>Test</label><input type='text' id='postcode' data-field-info='postcode' placeholder='Enter something' /></div><div class='form-row'><label>Test</label><input type='text' id='mobile' data-field-info='mobile' placeholder='Enter something' /></div></form>");
+    
+    beforeEach(function() {
+        formOne = $('#test-form').isValid().data('isValid');
+    });
+    
+    describe("isNotEmpty", function() {
+        it("Returns true if input is empty", function() {
+            var formOne = $('#test-form').isValid().data('isValid');
+            expect(formOne.isNotEmpty('#empty')).toBe(false);
+        });
+    });
+    
+    describe("isLetters", function() {
+        it("Returns true if field is only letters", function() {
+            var formOne = $('#test-form').isValid().data('isValid');
+            $('#letters').val('Test');
+            expect(formOne.isLetters('#letters')).toBe(true);
+        });
+    });
+    
+    describe("isNumbers", function() {
+        it("Returns true if input is only numbers", function() {
+            var formOne = $('#test-form').isValid().data('isValid');
+            $('#numbers').val('12345');
+            expect(formOne.isNumbers('#numbers')).toBe(true);
+        });
+    });
+    
+    describe("isEmailValid", function() {
+        it("Returns true if input is a valid email address", function() {
+            var formOne = $('#test-form').isValid().data('isValid');
+            $('#email').val('aj.summerfield93@gmail.com');
+            expect(formOne.isEmailValid('#email')).toBe(true);
+        });
+    });
+    
+    describe("isGeneralValid", function() {
+        it("Returns true if input is a valid input", function() {
+            var formOne = $('#test-form').isValid().data('isValid');
+            $('#username').val('AjDrummer93');
+            expect(formOne.isGeneralValid('#username')).toBe(true);
+        });
+    });
+    
+    describe("isPasswordValid", function() {
+        it("Returns true if input is a valid password", function() {
+            var formOne = $('#test-form').isValid().data('isValid');
+            $('#password').val('Pa55W0rD');
+            expect(formOne.isPasswordValid('#password')).toBe(true);
+        });
+    });
+    
+    describe("isDateValid", function() {
+        it("Returns true if input is a valid date", function() {
+            var formOne = $('#test-form').isValid().data('isValid');
+            $('#dob').val('18/07/1993');
+            expect(formOne.isDateValid('#dob')).toBe(true);
+        });
+    });
+    
+    describe("isPostCodeValid", function() {
+        it("Returns true if input is a valid postcode", function() {
+            var formOne = $('#test-form').isValid().data('isValid');
+            $('#postcode').val('SG5 3XB');
+            expect(formOne.isPostCodeValid('#postcode')).toBe(true);
+        });
+    });
+    
+    describe("isMobileValid", function() {
+        it("Returns true if input is a valid username ", function() {
+            var formOne = $('#test-form').isValid().data('isValid');
+            $('#mobile').val('07123456789');
+            expect(formOne.isMobileValid('#mobile')).toBe(true);
+        });
+    });
+    
+});
+    
+    
+    
+    
+    var myParent = window.parent;
+    var jasmineEnv = jasmine.getEnv();
+    jasmineEnv.updateInterval = 1000;
+
+    var htmlReporter = new jasmine.HtmlReporter();
+    var reportRunnerResults = htmlReporter.reportRunnerResults;
+
+    htmlReporter.reportRunnerResults = function(runner) {
+        reportRunnerResults(runner);
+
+        var specs = runner.specs();
+        var specResults;
+        var assertionCount = {total: 0, passed: 0, failed: 0};
+        var result = {};
+        for (var i = 0; i < specs.length; ++i) {
+            if (this.specFilter(specs[i])) {
+                specResults = specs[i].results();
+                assertionCount.total += specResults.totalCount;
+                assertionCount.passed += specResults.passedCount;
+                assertionCount.failed += specResults.failedCount;
+            }
+        }
+    
+        if (console && console.log) {
+            console.log('Total: ' + assertionCount.total);
+            console.log('Passed: ' + assertionCount.passed);
+            console.log('Failed: ' + assertionCount.failed);
+        }
+        
+        
+        if (assertionCount.failed) {
+            result.status = "failed";
+            result.message = assertionCount.failed + " failures";
+        } else {
+            result.status = "passed";
+            result.message = "Success! " + assertionCount.passed + " passed";
+        }
+        
+        if(myParent.reportComplete) {
+            console.log("myParent.reportComplete", result);
+            myParent.reportComplete(result);
+        }
+        
+        var totals = document.querySelectorAll(".grand-total .rs");
+        if(myParent.coverageComplete) {
+            myParent.coverageComplete({
+                message: totals && totals[0] ? totals[0].innerHTML + " coverage" : "No coverage"
+            });
+        }
+        
+    };
+   
+    jasmineEnv.addReporter(htmlReporter);
+    
+    jasmineEnv.specFilter = function(spec) {
+        return htmlReporter.specFilter(spec);
+    };
+
+    var currentWindowOnload = window.onload;
+                                                      
+    window.onload = function() {
+        if (currentWindowOnload) {
+            currentWindowOnload();
+        }
+        execJasmine();
+    };
+
+    function execJasmine() {
+        var oldCallback = jasmineEnv.currentRunner().finishCallback;
+        jasmineEnv.currentRunner().finishCallback = function () {
+            oldCallback.apply(this, arguments);
+            console.log(this, arguments);
+            
+            htmlReporter.reportRunnerResults();
+           
+        };
+        jasmineEnv.execute();
+    }
+</script>
+</body>
+</html>

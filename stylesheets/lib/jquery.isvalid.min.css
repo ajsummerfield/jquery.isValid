@@ -1,0 +1,1 @@
+form input.invalid:focus,form textarea.invalid:focus,form input[type="checkbox"].invalid{border-color:#c4c4c4;box-shadow:0 0 10px #c4c4c4}form .invalid{background:#ffbaba!important}form .form-error{font-weight:bold;margin:10px 0;font-size:14px;line-height:20px}

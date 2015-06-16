@@ -1,0 +1,212 @@
+.main-content {
+    width: 100%;
+    margin: 0 auto;
+    positon: relative;
+    max-width: 1170px;
+    padding: 20px 15px;
+}
+
+.main-content h2 {
+    font-size: 30px;
+}
+
+.main-content h3 {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+section {
+    margin-bottom: 45px;
+}
+
+.width-50 {
+    width: 50%;
+    float: left;
+}
+
+.clear {
+    clear: both;
+}
+
+span.bold {
+    font-weight: bold;
+}
+
+span.italic {
+    font-style: italic;
+}
+
+span.highlight {
+    color: #159957;
+}
+
+.main-content table {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.main-content table tbody {
+    width: 100%;
+}
+
+.main-content table td {
+    width: 400px;
+    font-size: 15px;
+}
+
+.field-options {
+    width: 100%;
+    position: relative;
+}
+
+.field-options ul {
+    width: 50%;
+    float: left;
+}
+
+.option-container {
+    width: 100%;
+    position: relative;
+}
+
+.option-splitter {
+    height: 1px;
+    width: 100%;
+    margin: 25px auto;
+    background: #155799;
+}
+
+.option-container .option-col {
+    width: 50%;
+    float: left;
+    position: relative;
+    font-size: 16px;
+}
+
+.option-container .option-col h4 {
+    margin-top: 0;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.option-container .option-col.option-descriptions {
+    font-size: 15px;
+    padding-left: 30px;
+}
+
+.option-container .option-col.option-descriptions p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.option-container .option-col.option-descriptions p.description {
+    padding-left: 25px;
+    margin-bottom: 10px;
+}
+
+form .form-row {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+form .form-row label {
+    display: inline-block;
+    min-width: 160px;
+    margin-right: 20px;
+    font-size: 25px;
+}
+
+form .form-row input {
+    height: 40px;
+    max-width: 300px;
+    font-size: 20px;
+    border: 1px solid #999999;
+    border-radius: 5px;
+    padding: 0 10px;
+    margin-top: -5px;
+}
+
+form .form-row input[type="checkbox"] {
+    width: auto;
+    height: auto;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+form .form-row input.small-input {
+    width: 50px;
+}
+
+form .form-row textarea {
+    border: 1px solid #999999;
+    border-radius: 5px;
+    width: 475px;
+    height: 300px;        
+    font-size: 18px;
+    padding: 10px;
+    resize: none;
+}
+
+form .form-row input:focus, 
+form .form-row textarea:focus,
+form .form-row input[type="checkbox"] {
+    outline: none;
+    border-color: #9ECAED;
+    box-shadow: 0 0 10px #9ECAED;
+}
+
+form .form-row input.invalid:focus, 
+form .form-row textarea.invalid:focus,
+form .form-row input[type="checkbox"].invalid {
+    border-color: #c4c4c4;
+    box-shadow: 0 0 10px #c4c4c4;
+}
+
+form .form-row input.form-btn {
+    min-width: 100px;
+    background-color: buttonface;
+}
+
+form .form-row input.form-btn:focus {
+    border-color: darkgray;
+    box-shadow: none;
+}
+
+form .form-row input.form-btn:hover {
+    cursor: pointer;
+    background-color: darkgray;
+}
+
+@media screen and (max-width: 480px) {
+    
+    .main-content .width-50 {
+        width: 100%;
+    }
+    
+    .main-content table {
+        width: 100%;
+    }
+
+    .main-content table tbody {
+        width: 100%;
+    }
+
+    .main-content table td {
+        width: 100%;
+        float: left;
+    }
+    
+    .main-content table td.description {
+        font-size: 14px;
+    }
+    
+    .field-options ul:first-child {
+        padding-left: 20px;
+    }
+    
+    .option-container .option-col {
+        width: 100%;
+    }
+}

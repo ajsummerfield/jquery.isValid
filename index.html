@@ -15,7 +15,7 @@
 
 <body>
     <section class="page-header">
-        <h1 class="project-name">isValid</h1>
+        <h1 class="project-name">jQuery.isValid</h1>
         <h2 class="project-tagline"></h2>
         <a href="https://github.com/AjDrummer93/isValid" class="btn">View on GitHub</a>
         <a href="https://github.com/AjDrummer93/isValid/zipball/master" class="btn">Download .zip</a>
@@ -33,18 +33,60 @@
             <pre>
                 <code>
 &lt;!-- Styles --&gt;   
-&lt;link type=&quot;text/css&quot; href=&quot;css/jquery.isValid.css&quot; rel=&quot;stylesheet&quot; /&gt;
+&lt;link type=&quot;text/css&quot; href=&quot;css/jQuery.isValid.css&quot; rel=&quot;stylesheet&quot; /&gt;
 
-&lt;!-- Scripts --&gt;   
-&lt;script type=&quot;text/javascript&quot; src=&quot;/js/checkPostCode.js&quot;&gt;&lt;/script&gt;
+&lt;!-- Scripts Unminified --&gt;   
 &lt;script type=&quot;text/javascript&quot; src=&quot;/js/moment.js&quot;&gt;&lt;/script&gt;
-&lt;script type=&quot;text/javascript&quot; src=&quot;/js/jquery.isValid.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;/js/checkPostCode.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;/js/jQuery.isValid.js&quot;&gt;&lt;/script&gt;
+
+&lt;!-- Scripts Minified --&gt;   
+&lt;script type=&quot;text/javascript&quot; src=&quot;/js/moment.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;/js/jQuery.isValid.min.js&quot;&gt;&lt;/script&gt;
                 </code>
             </pre>
+            <p>They can be found in the dist folder in the repository, both minified and unminified.</p>
             <p>There is a dependency on moment.js and the checkPostCode is a function just split out into a single file. Credit to John Gardner for this.</p>
         </section>
         <section id="how-it-works">
             <h2>How it works</h2>
+            <p>To validate the fields in your form using the plugin, add an attribute to the input/select/checkbox element that you need to validate called data-field-type and pass in the field option that the field represents. The html below shows how this is implemented. A more complicated implementation are shown in the examples section.</p>
+            <div class="width-50">
+                <pre>
+                    <code>
+&lt;form id=&quot;simple-form&quot;&gt;
+    &lt;div class=&quot;form-row&quot;&gt;
+        &lt;label for=&quot;general&quot;&gt;General Field&lt;/label&gt;
+        &lt;input type=&quot;text&quot; 
+               data-field-type=&quot;general&quot; 
+               name=&quot;general&quot; /&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;form-row&quot;&gt;
+        &lt;label for=&quot;emailAddress&quot;&gt;Email&lt;/label&gt;
+        &lt;input type=&quot;text&quot; 
+               data-field-type=&quot;email&quot; 
+               name=&quot;emailAddress&quot; /&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;form-row&quot;&gt;
+        &lt;label&gt;&amp;nbsp;&lt;/label&gt;
+        &lt;input type=&quot;submit&quot; value=&quot;Submit&quot; class=&quot;form-btn&quot; /&gt;
+    &lt;/div&gt;
+&lt;/form&gt;
+                    </code>
+                </pre>
+            </div>
+            <div class="width-50">
+                <p>You can see in the markup that the 2 inputs both have attributes of data-field-type. The first is the general option and the second is email. This is used in the plugin to know what validation methods to run against your field.</p>
+                <p>To then initialise the plugin, use the normal jQuery selector and then .isValid() as demonstrated in the javascript below. This will create an instance using all the defaults. Options may be customised through passed options into the plugin, using the html and adding more attributes or a combination of the two.</p>
+                <pre>
+                    <code>
+ $(document).ready(function() {
+    $(&#39;#simple-form&#39;).isValid();
+});                   
+                    </code>
+                </pre>
+            </div>
+            <div class="clear"></div>
         </section>
         <section id="examples">
             <h2>Examples</h2>
@@ -80,6 +122,175 @@
         &lt;input type=&quot;text&quot; 
                data-field-type=&quot;email&quot; 
                name=&quot;emailAddress&quot; /&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;form-row&quot;&gt;
+        &lt;label&gt;&amp;nbsp;&lt;/label&gt;
+        &lt;input type=&quot;submit&quot; value=&quot;Submit&quot; class=&quot;form-btn&quot; /&gt;
+    &lt;/div&gt;
+&lt;/form&gt;
+
+$(document).ready(function() {
+    $(&#39;#simple-form&#39;).isValid();
+});
+                </code>
+            </pre>
+            </div>
+            <div class="clear"></div>
+            <div class="width-50">
+                <form id="complex-form" class="left-col-50">
+                    <div class="form-row">
+                        <label for="username">Username</label>
+                        <input type="text" data-field-type="general" data-error-message="Please enter a Username" placeholder="Enter Username" name="username" />
+                    </div>
+                    <div class="form-row">
+                        <label for="subject">Subject</label>
+                        <select id="subject" name="subject" data-field-type="select">
+                            <option disabled selected>Choose Subject</option>
+                            <option value="Question">Question</option>
+                            <option value="Feedback">Feedback</option>
+                            <option value="Mentor">Want to be a Mentor</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <label for="role">Role</label>
+                        <select id="role" name="role" data-field-type="select" data-required-error-message="Choosing a role is mandatory">
+                            <option disabled selected>Choose Role</option>
+                            <option value="Junior">Junior</option>
+                            <option value="Mid">Mid</option>
+                            <option value="Senior">Senior</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <label for="email">Email</label>
+                        <input type="text" data-field-type="email" placeholder="Enter email" name="email" />
+                    </div>
+                    <div class="form-row">
+                        <label for="emailConfirm">Email</label>
+                        <input type="text" data-field-type="emailConfirm" placeholder="Confirm Email" name="emailConfirm" />
+                    </div>
+                    <div class="form-row">
+                        <label for="password">Password</label>
+                        <input type="password" data-field-type="password" data-format-error-message="Password is weak brah. Mix it up." placeholder="Enter Password" name="password" />
+                    </div>
+                    <div class="form-row">
+                        <label for="passwordConfirm">Confirm</label>
+                        <input type="password" data-field-type="passwordConfirm" placeholder="Confirm Password" name="passwordConfirm" />
+                    </div>
+                    <div class="form-row">
+                        <label for="date">Date</label>
+                        <input type="text" id="datepicker" data-field-type="date" data-allowed-date-error-message="Date is in the future. Not allowed." placeholder="DD/MM/YYYY" name="date" />
+                    </div>
+                    <div class="form-row">
+                        <label for="postcode">Post Code</label>
+                        <input type="text" data-field-type="postCode" data-invalid-error-message="Postcode is made up. Try again." placeholder="Enter PostCode" name="postCode" />
+                    </div>
+                    <div class="form-row">
+                        <label for="numbers">Number</label>
+                        <input type="text" data-field-type="numbers" data-invalid-error-message="Do they look like numbers to you?" placeholder="Enter number" name="numbers" />
+                    </div>
+                    <div class="form-row">
+                        <label for="terms">Terms</label>
+                        <input type="checkbox" data-field-type="checkbox" data-required-error-message="Tick it fool. Tick it." name="terms" />
+                    </div>
+                    <div class="form-row">
+                        <label>&nbsp;</label>
+                        <input type="submit" value="Submit" class="form-btn" />
+                    </div>
+                </form>
+            </div>
+            <div class="width-50">
+                <pre>
+                <code>
+&lt;form id=&quot;form-one&quot; action=&quot;&quot; method=&quot;post&quot; class=&quot;left-col-50&quot;&gt;
+    &lt;div class=&quot;form-row&quot;&gt;
+        &lt;label for=&quot;username&quot;&gt;Username&lt;/label&gt;
+        &lt;input type=&quot;text&quot; 
+               data-field-type=&quot;general&quot; 
+               data-error-message=&quot;Please enter a Username&quot; 
+               placeholder=&quot;Enter Username&quot; 
+               name=&quot;username&quot; /&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;form-row&quot;&gt;
+        &lt;label for=&quot;subject&quot;&gt;Subject&lt;/label&gt;
+        &lt;select id=&quot;subject&quot; name=&quot;subject&quot; data-field-type=&quot;select&quot;&gt;
+            &lt;option disabled selected&gt;Choose Subject&lt;/option&gt;
+            &lt;option value=&quot;Question&quot;&gt;Question&lt;/option&gt;
+            &lt;option value=&quot;Feedback&quot;&gt;Feedback&lt;/option&gt;
+            &lt;option value=&quot;Mentor&quot;&gt;Want to be a Mentor&lt;/option&gt;
+        &lt;/select&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;form-row&quot;&gt;
+        &lt;label for=&quot;role&quot;&gt;Role&lt;/label&gt;
+        &lt;select id=&quot;role&quot; 
+                name=&quot;role&quot; 
+                data-field-type=&quot;select&quot;
+                data-required-error-message=&quot;Choosing a role is mandatory&quot; &gt;
+            &lt;option disabled selected&gt;Choose Role&lt;/option&gt;
+            &lt;option value=&quot;Junior&quot;&gt;Junior&lt;/option&gt;
+            &lt;option value=&quot;Mid&quot;&gt;Mid&lt;/option&gt;
+            &lt;option value=&quot;Senior&quot;&gt;Senior&lt;/option&gt;
+        &lt;/select&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;form-row&quot;&gt;
+        &lt;label for=&quot;email&quot;&gt;Email&lt;/label&gt;
+        &lt;input type=&quot;text&quot; 
+               data-field-type=&quot;email&quot; 
+               placeholder=&quot;Enter email&quot; 
+               name=&quot;email&quot; /&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;form-row&quot;&gt;
+        &lt;label for=&quot;emailConfirm&quot;&gt;Email&lt;/label&gt;
+        &lt;input type=&quot;text&quot; 
+               data-field-type=&quot;emailConfirm&quot; 
+               placeholder=&quot;Confirm Email&quot; 
+               name=&quot;emailConfirm&quot; /&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;form-row&quot;&gt;
+        &lt;label for=&quot;password&quot;&gt;Password&lt;/label&gt;
+        &lt;input type=&quot;password&quot; 
+               data-field-type=&quot;password&quot;
+               data-format-error-message=&quot;Password is weak brah. Mix it up.&quot;
+               placeholder=&quot;Enter Password&quot; 
+               name=&quot;password&quot; /&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;form-row&quot;&gt;
+        &lt;label for=&quot;passwordConfirm&quot;&gt;Confirm&lt;/label&gt;
+        &lt;input type=&quot;password&quot; 
+               data-field-type=&quot;passwordConfirm&quot; 
+               placeholder=&quot;Confirm Password&quot; 
+               name=&quot;passwordConfirm&quot; /&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;form-row&quot;&gt;
+        &lt;label for=&quot;date&quot;&gt;Date&lt;/label&gt;
+        &lt;input type=&quot;text&quot; 
+               id=&quot;datepicker&quot;
+               data-field-type=&quot;date&quot;
+               data-allowed-date-error-message=&quot;Date is in the future. Not allowed.&quot;
+               placeholder=&quot;DD/MM/YYYY&quot; 
+               name=&quot;date&quot; /&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;form-row&quot;&gt;
+        &lt;label for=&quot;postcode&quot;&gt;Post Code&lt;/label&gt;
+        &lt;input type=&quot;text&quot; 
+               data-field-type=&quot;postCode&quot;
+               data-invalid-error-message=&quot;Postcode is made up. Try again.&quot;
+               placeholder=&quot;Enter PostCode&quot; 
+               name=&quot;postCode&quot; /&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;form-row&quot;&gt;
+        &lt;label for=&quot;numbers&quot;&gt;Number&lt;/label&gt;
+        &lt;input type=&quot;text&quot; 
+               data-field-type=&quot;numbers&quot;
+               data-invalid-error-message=&quot;Do they look like numbers to you?&quot;
+               placeholder=&quot;Enter number&quot; 
+               name=&quot;numbers&quot; /&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;form-row&quot;&gt;
+        &lt;label for=&quot;terms&quot;&gt;Terms&lt;/label&gt;
+        &lt;input type=&quot;checkbox&quot;
+               data-field-type=&quot;checkbox&quot;
+               data-required-error-message=&quot;Tick it fool. Tick it.&quot;
+               name=&quot;terms&quot; /&gt;
     &lt;/div&gt;
     &lt;div class=&quot;form-row&quot;&gt;
         &lt;label&gt;&amp;nbsp;&lt;/label&gt;
@@ -497,7 +708,7 @@ $(document).ready(function() {
             <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
         </footer>
     </section>
-    
+
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.js"></script>
     <script type="text/javascript" src="js/lib/moment.js"></script>
     <script type="text/javascript" src="js/lib/jquery.isvalid.min.js"></script>

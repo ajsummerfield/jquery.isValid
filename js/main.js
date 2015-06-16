@@ -5,4 +5,21 @@ $(document).ready(function() {
     });
     
     $('#simple-form').isValid();
+    
+    $('#complex-form').isValid({
+        password: {
+            numbers: true,
+            passwordConfirm: true
+        },
+        email: {
+            emailConfirm: true
+        },
+        emailConfirm: {
+            invalidErrorMessage: 'Do not match'
+        },
+        date: {
+            allowFutureDates: false,
+            invalidErrorMessage: 'Invalid Date entered'
+        }
+    });
 });

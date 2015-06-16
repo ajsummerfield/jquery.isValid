@@ -33,8 +33,9 @@ gulp.task('watch', function() {
 });
 
 gulp.task('scripts', function () {
-    return gulp.src(__dirname + '/Web/js/jquery.isValid.js')
+    return gulp.src(paths.isValidScipts)
         .pipe(concat('jQuery.isValid.js'))
+        .pipe(gulp.dest('dist/js'))
         .pipe(uglify())
         .pipe(rename('jQuery.isValid.min.js'))
         .pipe(gulp.dest('dist/js'));
@@ -43,6 +44,7 @@ gulp.task('scripts', function () {
 gulp.task('styles', function () {
     return gulp.src(paths.isValidStyles)
         .pipe(concat('jQuery.isValid.css'))
+        .pipe(gulp.dest('dist/css'))
         .pipe(minify_css())
         .pipe(rename('jQuery.isValid.min.css'))
         .pipe(gulp.dest('dist/css'));

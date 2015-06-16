@@ -163,5 +163,5 @@ Tools/RavenDB.Server.v2.5.2947/Raven/CompiledIndexCache/
 
 *.orig
 
-Athena.Web/coverage
+.brackets.json
 

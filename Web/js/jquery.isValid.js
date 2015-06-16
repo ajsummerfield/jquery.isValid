@@ -3,173 +3,7 @@
 
     $.isValid = function (element, options) {
 
-        var defaults = {
-            general: {
-                minLength: 1,
-                maxLength: 0,
-                errorDetails: [
-                    {
-                        id: "-general-length-error",
-                        type: "length",
-                        message: "Must be be at least 1 character and no more than x characters.",
-                        show: true
-                    }
-                ]
-            },
-            password: {
-                minLength: 6,
-                maxLength: 100,
-                numbers: false,
-                letters: true,
-                passwordconfirm: true,
-                errorDetails: [
-                    {
-                        id: "-password-length-error",
-                        type: "length",
-                        message: "Password must be at least 6 characters",
-                        show: true
-                    },
-                    {
-                        id: "-password-invalid-error",
-                        type: "invalid",
-                        message: "Password must contain letters and numbers.",
-                        show: false
-                    }
-                ]
-            },
-            passwordconfirm: {
-                errorDetails: [
-                    {
-                        id: "-passwordconfirm-invalid-error",
-                        type: "invalid",
-                        message: "Passwords do not match.",
-                        show: true
-                    }
-                ]
-            },
-            email: {
-                domain: '',
-                emailconfirm: true,
-                errorDetails: [
-                    {
-                        id: "-email-invalid-error",
-                        type: "invalid",
-                        message: "Email is an invalid email address.",
-                        show: true
-                    },
-                    {
-                        id: "-email-domain-error",
-                        type: "domain",
-                        message: "Email domain entered is invalid, only @xxxx.xxx is accepted.",
-                        show: false
-                    }
-                ]
-            },
-            emailconfirm: {
-                errorDetails: [
-                    {
-                        id: "-emailconfirm-invalid-error",
-                        type: "invalid",
-                        message: "Emails do not match.",
-                        show: true
-                    }
-                ]
-            },
-            letters: {
-                errorDetails: [
-                    {
-                        id: "-letters-invalid-error",
-                        type: "invalid",
-                        message: "Field is letters characters only.",
-                        show: true
-                    }
-                ]
-            },
-            numbers: {
-                errorDetails: [
-                    {
-                        id: "-numbers-invalid-error",
-                        type: "invalid",
-                        message: "Field is numbers only.",
-                        show: true
-                    }
-                ]
-            },
-            decimals: {
-                errorDetails: [
-                    {
-                        id: "-decimals-invalid-error",
-                        type: "invalid",
-                        message: "Field is decimals only",
-                        show: true
-                    }
-                ]
-            },
-            date: {
-                format: "DD/MM/YYYY",
-                allowFutureDates: true,
-                errorDetails: [
-                    {
-                        id: "-date-invalid-error",
-                        type: "invalid",
-                        message: "Please enter a valid Date. The date specified is in the future.",
-                        show: false
-                    },
-                    {
-                        id: "-date-format-error",
-                        type: "format",
-                        message: "Please enter Date format as DD/MM/YYYY as specified in the placeholder.",
-                        show: true
-                    }
-                ]
-            },
-            postcode: {
-                errorDetails: [
-                    {
-                        id: "-postcode-invalid-error",
-                        type: "invalid",
-                        message: "Not a valid Post Code.",
-                        show: true
-                    }
-                ]
-            },
-            mobile: {
-                numberLength: 11,
-                errorDetails: [
-                    {
-                        id: "-mobile-invalid-error",
-                        type: "invalid",
-                        message: "Invalid mobile number.",
-                        show: true
-                    }
-                ]
-            },
-            checkbox: {
-                errorDetails: [
-                    {
-                        id: "-checkbox-invalid-error",
-                        type: "invalid",
-                        message: "Checkbox must be checked.",
-                        show: true
-                    }
-                ]
-            },
-            select: {
-                errorDetails: [
-                    {
-                        id: "-select-invalid-error",
-                        type: "invalid",
-                        message: "Please choose an item from the dropdown.",
-                        show: true
-                    }
-                ]
-            },
-            submitButton: null,
-            turnOffErrors: false,
-            onFormValidated: function () { },
-            onFormInValidated: function () { }
-        },
-            self;
+        var self;
 
         this.init = function () {
 
@@ -177,200 +11,214 @@
 
             this.elem = element;
             this.$elem = $(element);
-            this.isFormValid = false;
-            this.isValid = false;
-            this.formID = "#" + this.$elem.attr('id');
-            this.formIDStr = this.$elem.attr('id');
-
-            this.options = $.extend(true, defaults, options);
-            this.options.submitButton = $(this.formID + ' :input[type="submit"]');
-
-            createErrorIds();
-            showErrors();
+            this.isFieldValid = false;
+            this.options = $.extend(true, {}, $.isValid.defaults, options);
+            this.formID = '#' + this.$elem.attr('id');
+            this.$elem.addClass('isValid');
 
             this.formArray = $(this.formID + ' :input[type="text"],' +
-                               this.formID + ' :input[type="email"],' +
-                               this.formID + ' :input[type="password"],' +
-                               this.formID + ' :input[type="tel"],' +
-                               this.formID + ' :input[type="number"],' +
-                               this.formID + ' :input[type="date"],' +
-                               this.formID + ' :input[type="checkbox"],' +
-                               this.formID + ' textarea,' +
-                               this.formID + ' select');
-
-            this.formArray.each(function (index, field) {
-                self.createErrorMessage(field);
-            });
-
-            return this;
+                this.formID + ' :input[type="email"],' +
+                this.formID + ' :input[type="password"],' +
+                this.formID + ' :input[type="tel"],' +
+                this.formID + ' :input[type="number"],' +
+                this.formID + ' :input[type="date"],' +
+                this.formID + ' :input[type="checkbox"],' +
+                this.formID + ' textarea,' +
+                this.formID + ' select');
         };
 
-        this.isFormValidated = function () {
-            
-            $(this.formID).submit();
-            
+         this.isFormValidated = function () {
             return ($(this.formID + ' .invalid').length) ? false : true;
-        };
-
-        this.resetForm = function () {
-            $(this.formID + ' .invalid').removeClass('invalid');
-            $(this.formID + ' .form-error').hide();
-            this.isFormValid = this.isFormValidated();
         };
 
         this.isValidField = function (field) {
 
-            if (field.disabled || $(field).attr('data-field-info') === "notrequired") {
-                this.isValid = true;
+            if (field.disabled || $(field).attr('data-field-type') === "notrequired") {
+                this.isFieldValid = true;
             } else {
-                var data = changeToLowercase(field);
-                var valMethodName;
+                var data = $(field).attr('data-field-type'),
+                    valMethodName;
 
                 switch (data) {
-                    case "general":
-                        valMethodName = "isGeneralValid";
+                    case 'general':
+                        valMethodName = 'isGeneralValid';
                         break;
 
-                    case "password":
-                        valMethodName = "isPasswordValid";
+                    case 'password':
+                        valMethodName = 'isPasswordValid';
                         break;
 
-                    case "passwordconfirm":
-                        valMethodName = "isPasswordConfirmValid";
+                    case 'passwordConfirm':
+                        valMethodName = 'isPasswordConfirmValid';
                         break;
 
-                    case "email":
-                        valMethodName = "isEmailValid";
+                    case 'email':
+                        valMethodName = 'isEmailValid';
                         break;
 
-                    case "emailconfirm":
-                        valMethodName = "isEmailConfirmValid";
+                    case 'emailConfirm':
+                        valMethodName = 'isEmailConfirmValid';
                         break;
 
-                    case "date":
-                        valMethodName = "isDateValid";
+                    case 'date':
+                        valMethodName = 'isDateValid';
                         break;
 
-                    case "letters":
-                        valMethodName = "isLetters";
+                    case 'letters':
+                        valMethodName = 'isLetters';
                         break;
 
-                    case "numbers":
-                        valMethodName = "isNumbers";
-                        break;
-                    
-                    case "decimals":
-                        valMethodName = "isDecimals";
+                    case 'numbers':
+                        valMethodName = 'isNumbers';
                         break;
 
-                    case "postcode":
-                        valMethodName = "isPostCodeValid";
+                    case 'decimals':
+                        valMethodName = 'isDecimals';
                         break;
 
-                    case "mobile":
-                        valMethodName = "isMobileValid";
+                    case 'postCode':
+                        valMethodName = 'isPostCodeValid';
                         break;
 
-                    case "checkbox":
-                        valMethodName = "isCheckboxTicked";
+                    case 'checkbox':
+                        valMethodName = 'isCheckboxTicked';
                         break;
 
-                    case "select":
-                        valMethodName = "isSelectChosen";
+                    case 'select':
+                        valMethodName = 'isSelectChosen';
                         break;
 
                     default:
-                        valMethodName = "isNotEmpty";
+                        valMethodName = 'isEmpty';
                         break;
                 }
 
-                this.isValid = completeAction(this, (this[valMethodName](field)), field);
+                this.isFieldValid = this[valMethodName](field);
             }
-
-            return this.isValid;
+            
+            return this.isFieldValid;
         };
 
-        this.isNotEmpty = function (field) {
-            return ($(field).val().length !== 0);
-        };
-
-        this.isLetters = function (field) {
-
-            var letterMatcher = /^[A-Za-z ]+$/;
-            var matchResult = letterMatcher.test($(field).val());
-
-            return matchResult;
-        };
-
-        this.isNumbers = function (field) {
-
-            var numberMatcher = /^[0-9 ]+$/;
-            var matchResult = numberMatcher.test($(field).val());
-
-            return matchResult;
-        };
-        
-        this.isDecimals = function (field) {
-
-            var decimalMatcher = /^(\d+\.?\d*|\.\d+)$/;
-            var matchResult = decimalMatcher.test($(field).val());
-            this.options.decimals.showInvalidError = !matchResult;
-
-            return matchResult;
+        this.isEmpty = function (field) {
+            return ($(field).val().length === 0);
         };
 
         this.isGeneralValid = function (field) {
 
-            var lengthResult = false,
-                showError;
+            var isEmpty = this.isEmpty(field);
 
-            lengthResult = this.isNotEmpty(field);
+            if (isEmpty) {
+                this.options.general.activeErrorMessage = getErrorMessage(field, 'required');
+            }
+            
+            return !isEmpty;
+        };
 
-            $(field).attr("data-show-error", !lengthResult);
+        this.isLetters = function (field) {
 
-            showError = $(field).attr("data-show-error");
+            var isEmpty = this.isEmpty(field),
+                validResult = /^[A-Za-z ]+$/.test($(field).val());
 
-            return lengthResult;
+            if (!isEmpty) {
+                this.options.letters.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'invalid');
+                return validResult;
+            } else {
+                this.options.letters.activeErrorMessage = getErrorMessage(field, 'required');
+                return !isEmpty;
+            }
+        };
+
+        this.isNumbers = function (field) {
+
+            var isEmpty = this.isEmpty(field),
+                validResult = /^[0-9 ]+$/.test($(field).val());
+
+            if (!isEmpty) {
+                this.options.numbers.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'invalid');
+                return validResult;
+            } else {
+                this.options.numbers.activeErrorMessage = getErrorMessage(field, 'required');
+                return !isEmpty;
+            }
+        };
+
+        this.isDecimals = function (field) {
+
+            var isEmpty = this.isEmpty(field),
+                validResult = /^(\d+\.?\d*|\.\d+)$/.test($(field).val());
+
+            if (!isEmpty) {
+                this.options.decimals.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'invalid');
+                return validResult;
+            } else {
+                this.options.decimals.activeErrorMessage = getErrorMessage(field, 'required');
+                return !isEmpty;
+            }
         };
 
         this.isPasswordValid = function (field) {
 
             var passwordMatcher = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/,
+                isEmpty,
                 lengthResult,
-                matchResult;
+                formatResult;
+
+            isEmpty = this.isEmpty(field);
 
             lengthResult = isBetween($(field).val().length, this.options.password.minLength, this.options.password.maxLength);
 
             if (this.options.password.numbers && this.options.password.letters) {
 
-                matchResult = (passwordMatcher.test($(field).val()));
-                this.isPasswordConfirmValid($(this.formID + " input[data-field-info='passwordconfirm']"));
+                formatResult = (passwordMatcher.test($(field).val()));
 
-                return (lengthResult) ? matchResult : false;
+                if (!isEmpty) {
+                    this.options.password.activeErrorMessage = lengthResult && !formatResult ? getErrorMessage(field, 'format') : getErrorMessage(field, 'invalid');
+                    return (lengthResult) ? formatResult : false;
+                } else {
+                    this.options.password.activeErrorMessage = getErrorMessage(field, 'required');
+                    return !isEmpty;
+                }
             }
 
-            return lengthResult;
+            this.isPasswordConfirmValid($(this.formID + ' input[data-field-type="passwordConfirm"]'));
+
+            if (!isEmpty) {
+                this.options.password.activeErrorMessage = lengthResult ? '' : getErrorMessage(field, 'invalid');
+                return lengthResult;
+            } else {
+                this.options.password.activeErrorMessage = getErrorMessage(field, 'required');
+                return !isEmpty;
+            }
         };
 
         this.isPasswordConfirmValid = function (field) {
 
-            if (this.options.password.passwordconfirm) {
+            if (this.options.password.passwordConfirm) {
 
-                var matchResult = $(field).val() === $(this.formID + " input[data-field-info='password']").val();
+                var isEmpty = this.isEmpty(field),
+                    validResult = $(field).val() === $(this.formID + ' input[data-field-type="password"]').val();
 
-                return matchResult;
+                if (!isEmpty) {
+                    this.options.passwordConfirm.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'invalid');
+                    return validResult;
+                } else {
+                    this.options.passwordConfirm.activeErrorMessage = getErrorMessage(field, 'required');
+                    return !isEmpty;
+                }
             }
         };
 
         this.isEmailValid = function (field) {
 
             var emailMatcher = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
+                isEmpty,
                 validResult,
                 domainResult;
 
+            isEmpty = this.isEmpty(field);
+
             // Remove whitespace as some phones put a spacebar in if you use the autocomplete option on the phone
-            var whiteSpace = /\s/;
-            var isWhiteSpace = whiteSpace.test($(field).val());
+            var isWhiteSpace = /\s/.test($(field).val());
             if (isWhiteSpace) {
                 $(field).val($(field).val().replace(/\s/g, ''));
             }
@@ -378,394 +226,426 @@
             validResult = emailMatcher.test($(field).val());
 
             if (this.options.email.domain !== '') {
+
                 domainResult = ($(field).val().indexOf(this.options.email.domain, $(field).val().length - this.options.email.domain.length) !== -1);
-                return (validResult) ? domainResult : false;
+
+                if (!isEmpty) {
+                    this.options.email.activeErrorMessage = validResult && !domainResult ? getErrorMessage(field, 'domain') : getErrorMessage(field, 'invalid');
+                    return (validResult) ? domainResult : false;
+                } else {
+                    this.options.email.activeErrorMessage = getErrorMessage(field, 'required');
+                    return !isEmpty;
+                }
             }
 
-            this.isEmailConfirmValid($(this.formID + " input[data-field-info='emailconfirm']"));
+            this.isEmailConfirmValid($(this.formID + ' input[data-field-type="emailConfirm"]'));
 
-            return validResult;
+            if (!isEmpty) {
+                this.options.email.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'invalid');
+                return validResult;
+            } else {
+                this.options.email.activeErrorMessage = getErrorMessage(field, 'required');
+                return !isEmpty;
+            }
         };
 
         this.isEmailConfirmValid = function (field) {
 
-            if (this.options.email.emailconfirm) {
+            if (this.options.email.emailConfirm) {
 
-                var matchResult = $(field).val() === $(this.formID + " input[data-field-info='email']").val();
-                return matchResult;
+                var isEmpty = this.isEmpty(field),
+                    validResult = $(field).val() === $(this.formID + ' input[data-field-type="email"]').val();
+
+                if (!isEmpty) {
+                    this.options.emailConfirm.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'invalid');
+                    return validResult;
+                } else {
+                    this.options.emailConfirm.activeErrorMessage = getErrorMessage(field, 'required');
+                    return !isEmpty;
+                }
             }
         };
 
         this.isDateValid = function (field) {
 
             var date = $(field).val(),
+                isEmpty,
                 validResult,
+                allowedResult,
                 formatResult;
 
-            var momentObject = new moment(date, this.options.date.format, true);
+            isEmpty = this.isEmpty(field);
 
-            formatResult = momentObject.isValid();
+            var momentObject = new moment(date, this.options.date.format, true); // jshint ignore:line
 
-            this.options.date.showFormatError = !formatResult;
+            validResult = momentObject.isValid();
+            formatResult = (momentObject._pf.charsLeftOver === 0);
 
             if (!this.options.date.allowFutureDates) {
 
-                validResult = isBetween(Date.parse(momentObject._d), 0, Date.now());
-                this.options.date.showInvalidError = !validResult;
-
-                return formatResult ? validResult : false;
+                if (validResult) {
+                    allowedResult = isBetween(Date.parse(momentObject._d), 0, Date.now());
+                }
             }
 
-            return formatResult;
+            if (!isEmpty) {
+
+                if (!validResult) {
+
+                    if (!formatResult) {
+
+                        if (momentObject._pf.unusedTokens.length === 1 || momentObject._pf.unusedTokens.length === 2 && momentObject._pf.charsLeftOver === 2) {
+                            this.options.date.activeErrorMessage = getErrorMessage(field, 'format');
+                        } else {
+                            this.options.date.activeErrorMessage = getErrorMessage(field, 'invalid');
+                        }
+
+                    } else {
+                        this.options.date.activeErrorMessage = getErrorMessage(field, 'invalid');
+                    }
+                } else {
+                    if (!formatResult) {
+                        this.options.date.activeErrorMessage = getErrorMessage(field, 'format');
+                    } else {
+                        if (!allowedResult) {
+                            this.options.date.activeErrorMessage = getErrorMessage(field, 'allowedDate');
+                        }
+                    }
+                }
+
+                return validResult && formatResult && allowedResult;
+            } else {
+                this.options.date.activeErrorMessage = getErrorMessage(field, 'required');
+                return !isEmpty;
+            }
         };
 
         this.isPostCodeValid = function (field) {
 
-            var validResult,
-                postCode = checkPostCode($(field).val());
+            var isEmpty = this.isEmpty(field),
+                validResult = checkPostCode($(field).val());
 
-            validResult = !postCode ? false : true;
-
-            return validResult;
-        },
-
-            this.isMobileValid = function (field) {
-
-                var isNumbers = this.isNumbers(field),
-                    lengthResult = $(field).val().length === this.options.mobile.numberLength;
-
-                return isNumbers && lengthResult;
-            };
-
-        this.isCheckboxTicked = function (field) {
-
-            var isChecked = $(field).is(":checked");
-
-            return isChecked;
+            if (!isEmpty) {
+                this.options.postCode.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'invalid');
+                return validResult;
+            } else {
+                this.options.postCode.activeErrorMessage = getErrorMessage(field, 'required');
+                return !isEmpty;
+            }
         };
 
         this.isSelectChosen = function (field) {
 
-            var isChosen = ($(field).val() !== null);
+            var validResult = true;
 
-            this.options.select.showInvalidError = !isChosen;
-
-            return isChosen;
-        };
-
-        this.createErrorMessage = function (field) {
-
-            var data = changeToLowercase(field);
-
-            if (data !== "" && data !== "notrequired") {
-                collectErrorInformation(field, self.options[data].errorDetails);
+            if ($(field).val() === null) {
+                validResult = false;
+            } else if ($(field).val().length === 0) {
+                validResult = false;
             }
+
+            this.options.select.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'required');
+
+            return validResult;
         };
 
-        this.controlErrorMessages = function (field) {
+        this.isCheckboxTicked = function (field) {
 
-            var data = changeToLowercase(field);
+            var validResult = $(field).is(':checked');
 
-            if (data !== "" && data !== "notrequired") {
-                errorMessageDisplay(field, self.options[data].errorDetails);
+            this.options.checkbox.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'required');
+
+            return validResult;
+        };
+        
+        this.showErrorFor = function (field) {
+            
+            if(this.options.showErrorMessages) {
+                if ($(field).siblings('.form-error').length) {
+
+                    updateErrorContainer(field);
+
+                } else {
+                    var errorContainer = createErrorContainer(field);
+                    var errorContainerWidth = getErrorContainerWidth(field);
+
+                    $(field).parent().append(errorContainer);
+
+                    $(field).siblings('.form-error').css('width', errorContainerWidth + 'px');
+                    $(field).siblings('.form-error').css('margin-left', $(field).position().left + 'px');
+                }
             }
+            
+            $(field).addClass('invalid');
+            $(field).trigger('isValid.fieldInvalidated');
         };
 
-        // Private Methods
+        this.hideErrorFor = function (field) {
 
-        var changeToLowercase = function (field) {
-            return ($(field).attr('data-field-info') !== undefined) ? $(field).attr('data-field-info').toLowerCase() : "";
+            $(field).removeClass('invalid');
+            $(field).siblings('.form-error').remove();
+            
+            $(field).trigger('isValid.fieldValidated');
         };
 
         var isBetween = function (val, min, max) {
             return (val >= min && val <= max);
         };
 
-        var showErrors = function () {
+        var createErrorContainer = function (field) {
 
-            if (self.options.turnOffErrors) {
+            var errorMessage = self.options[$(field).data().fieldType].activeErrorMessage;
 
-                for (var option in self.options) {
+            return '<div class="form-error">' + errorMessage + '</div>';
+        };
 
-                    for (var property in self.options[option]) {
+        var updateErrorContainer = function (field) {
 
-                        if (self.options[option].hasOwnProperty(property) && /show/.test(property)) {
-                            self.options[option][property] = false;
-                        }
-                    }
-                }
+            var errorMessage = self.options[$(field).data().fieldType].activeErrorMessage;
+
+            $(field).siblings('.form-error').text(errorMessage);
+        };
+
+        var getErrorContainerWidth = function (field) {
+
+            if ($(field).attr('aria-hidden') === undefined && $(field).is(':visible')) {
+                return $(field).outerWidth();
+            } else {
+                return Math.max.apply(Math, $(field).parent().children().map(function () {
+                    return $(this).width();
+                }).get());
             }
         };
 
-        var createErrorIds = function () {
+        var getErrorMessage = function (field, errorType) {
 
-            for (var option in self.options) {
+            var fieldData = $(field).data(),
+                errorMessageType;
 
-                if (self.options[option].hasOwnProperty("errorDetails")) {
+            switch (errorType) {
 
-                    self.options[option].errorDetails.forEach(function (errorProperty, index) {
+                case 'required':
+                    errorMessageType = 'requiredErrorMessage';
+                    break;
 
-                        for (var property in errorProperty) {
+                case 'invalid':
+                    errorMessageType = 'invalidErrorMessage';
+                    break;
+                    
+                case 'format':
+                    errorMessageType = 'formatErrorMessage';
+                    break;
+                    
+                case 'domain':
+                    errorMessageType = 'domainErrorMessage';
+                    break;
+                    
+                case 'allowedDate':
+                    errorMessageType = 'allowedDateErrorMessage';
+                    break;
+            }
 
-                            if (property === "id") {
-                                errorProperty[property] = self.formIDStr + errorProperty[property];
-                            }
-                        }
-                    });
-                }
+            if (fieldData[errorMessageType] !== undefined) {
+                return fieldData[errorMessageType];
+            } else {
+                return self.options[$(field).data().fieldType][errorMessageType];
             }
         };
 
-        var completeAction = function (self, isValid, field) {
-            return (isValid) ? validAction(self, field) : invalidAction(self, field);
-        };
-
-        var validAction = function (self, field) {
-
-            $(field).removeClass('invalid');
-
-            self.controlErrorMessages(field);
-
-            return true;
-        };
-
-        var invalidAction = function (self, field) {
-
-            $(field).addClass('invalid');
-
-            self.controlErrorMessages(field);
-
-            return false;
-        };
-
-        var collectErrorInformation = function (field, errorDetails) {
-
-            var errorID = $(field).attr("data-error-container");
-
-            errorDetails.forEach(function (errorProperty, index) {
-
-                if (errorID === errorProperty.id) {
-                    buildErrorContainer(errorProperty.id, field, errorProperty.message);
-                }
-
-                if (errorID === undefined && errorProperty.show) {
-                    buildErrorContainer(errorProperty.id, field, errorProperty.message);
-                }
-            });
-        };
-
-        var buildErrorContainer = function (id, field, error) {
-            $(field).after('<div id="' + id + '" class="form-error" />');
-            $('#' + id).append(error);
-        };
-
-        var errorMessageDisplay = function (field, errorDetails, type) {
-
-            var errorID = $(field).attr("data-error-container"),
-                show = $(field).attr("data-show-error") || $(field).hasClass("invalid");
-
-            errorDetails.forEach(function (errorProperty, index) {
-
-                if (errorID === errorProperty.id) {
-                    (show === "true") ? $("#" + errorProperty.id).show() : $("#" + errorProperty.id).hide();
-                }
-
-                if (errorID === undefined) {
-                    (show) ? $("#" + errorProperty.id).show() : $("#" + errorProperty.id).hide();
-                }
-            });
-        };
-    }
+    };
 
     $.fn.isValid = function (options) {
 
         return this.each(function () {
 
-            var newIsValid = new $.isValid(this, options);
-            $(this).data('isValid', newIsValid);
+            var isValid = new $.isValid(this, options);
+            $(this).data('isValid', isValid);
 
-            newIsValid.init();
+            isValid.init();
 
-            var submitButton = newIsValid.options.submitButton === null ? $(newIsValid.formID + ' :input[type="submit"]') : newIsValid.options.submitButton;
-            
+            var submitButton = $(isValid.formID + ' :input[type="submit"]');
+
             submitButton.click(function (e) {
 
-                newIsValid.formArray.each(function (index, field) {
+                isValid.formArray.each(function (index, field) {
 
-                    newIsValid.isValid = newIsValid.isValidField(field);
-                    newIsValid.isFormValid = newIsValid.isFormValidated();
+                    if (!isValid.isValidField(field)) {
+                        isValid.showErrorFor(field);
+                    } else {
+                        isValid.hideErrorFor(field);
+                    }
+                    
+                    isValid.isFormValid = isValid.isFormValidated();
 
-                    if (!newIsValid.isFormValid) {
+                    if (!isValid.isFormValid) {
                         e.preventDefault();
                     }
                 });
-
-                newIsValid.isFormValid ? newIsValid.options.onFormValidated() : newIsValid.options.onFormInValidated();
             });
 
-            $(newIsValid.formID).on('submit', function(event) {
-                
-                if(!newIsValid.isFormValid) {
-                    event.preventDefault();
-                    newIsValid.options.onFormInValidated();
-                } else {
-                    newIsValid.options.onFormValidated();
+            isValid.formArray.each(function (index, field) {
+
+                if(isValid.options.validateOnBlur) {
+                    $(field).on('blur change', function () {
+
+                        if (!isValid.isValidField(field)) {
+                            isValid.showErrorFor(field);
+                        } else {
+                            isValid.hideErrorFor(field);
+                        }
+                    });
                 }
-            });
-            
-            newIsValid.formArray.each(function (index, field) {
-                $(field).blur(function () {
-                    newIsValid.isValid = newIsValid.isValidField(field);
+                
+                $(field).on('isValid.fieldInvalidated', function(event) {
+                    
+                    var eventObject = {
+                        isValid: false,
+                        fieldElement: $(event.currentTarget),
+                        fieldData: $(event.currentTarget).data()
+                    };
+                    
+                    isValid.options[$(field).data().fieldType].callbacks.onInvalidated(eventObject);
                 });
-            });
-            
-            newIsValid.formArray.each(function (index, field) {
-                $(field).change(function () {
-                    newIsValid.isValid = newIsValid.isValidField(field);
+
+                $(field).on('isValid.fieldValidated', function(event) {
+                    
+                    var eventObject = {
+                        isValid: true,
+                        fieldElement: $(event.currentTarget),
+                        fieldData: $(event.currentTarget).data()
+                    };
+                    
+                    isValid.options[$(field).data().fieldType].callbacks.onValidated(eventObject);
                 });
+                
             });
-
-            newIsValid.$elem.find(':reset').click(function () {
-                newIsValid.resetForm();
-            });
-
         });
+    };
+    
+    $.isValid.defaults = {
+        general: {
+            activeErrorMessage: '',
+            requiredErrorMessage: 'Field is required',
+            callbacks: {
+                onValidated: function (event) {},
+                onInvalidated: function (event) {}
+            }
+        },
+        letters: {
+            activeErrorMessage: '',
+            requiredErrorMessage: 'Field is required',
+            invalidErrorMessage: 'Field is letters only',
+            callbacks: {
+                onValidated: function (event) {},
+                onInvalidated: function (event) {}
+            }
+        },
+        numbers: {
+            activeErrorMessage: '',
+            requiredErrorMessage: 'Field is required',
+            invalidErrorMessage: 'Field is numbers only',
+            callbacks: {
+                onValidated: function (event) {},
+                onInvalidated: function (event) {}
+            }
+        },
+        decimals: {
+            activeErrorMessage: '',
+            requiredErrorMessage: 'Field is required',
+            invalidErrorMessage: 'Field is decimals only',
+            callbacks: {
+                onValidated: function (event) {},
+                onInvalidated: function (event) {}
+            }
+        },
+        password: {
+            minLength: 6,
+            maxLength: 100,
+            numbers: false,
+            letters: true,
+            passwordConfirm: false,
+            activeErrorMessage: '',
+            requiredErrorMessage: 'Password is required',
+            formatErrorMessage: 'Password should contain numbers and letters',
+            invalidErrorMessage: 'Password should be more than 6 characters',
+            callbacks: {
+                onValidated: function (event) {},
+                onInvalidated: function (event) {}
+            }
+        },
+        passwordConfirm: {
+            activeErrorMessage: '',
+            requiredErrorMessage: 'Confirming your Password is required',
+            invalidErrorMessage: 'Passwords do not match',
+            callbacks: {
+                onValidated: function (event) {},
+                onInvalidated: function (event) {}
+            }
+        },
+        email: {
+            domain: '',
+            emailConfirm: false,
+            activeErrorMessage: '',
+            requiredErrorMessage: 'Email is required',
+            domainErrorMessage: 'Email domain should be @xxxx.com',
+            invalidErrorMessage: 'Please enter a valid email address',
+            callbacks: {
+                onValidated: function (event) {},
+                onInvalidated: function (event) {}
+            }
+        },
+        emailConfirm: {
+            activeErrorMessage: '',
+            requiredErrorMessage: 'Confirming your Email is required',
+            invalidErrorMessage: 'Email addresses do not match',
+            callbacks: {
+                onValidated: function (event) {},
+                onInvalidated: function (event) {}
+            }
+        },
+        date: {
+            format: 'DD/MM/YYYY',
+            allowFutureDates: true,
+            activeErrorMessage: '',
+            requiredErrorMessage: 'Date is required',
+            formatErrorMessage: 'Date format doesn\'t match DD/MM/YYYY',
+            invalidErrorMessage: 'Please enter a valid Date',
+            allowedDateErrorMessage: 'Date not allowed',
+            callbacks: {
+                onValidated: function (event) {},
+                onInvalidated: function (event) {}
+            }
+        },
+        postCode: {
+            activeErrorMessage: '',
+            requiredErrorMessage: 'Post Code is required',
+            invalidErrorMessage: 'Please enter a valid Post Code',
+            callbacks: {
+                onValidated: function (event) {},
+                onInvalidated: function (event) {}
+            }
+        },
+        select: {
+            activeErrorMessage: '',
+            requiredErrorMessage: 'Choosing an option is required',
+            callbacks: {
+                onValidated: function (event) {},
+                onInvalidated: function (event) {}
+            }
+        },
+        checkbox: {
+            activeErrorMessage: '',
+            requiredErrorMessage: 'Checkbox is required',
+            callbacks: {
+                onValidated: function (event) {},
+                onInvalidated: function (event) {}
+            }
+        },
+        validateOnBlur: true,
+        showErrorMessages: true,
+        onFormValidated: function () {},
+        onFormInvalidated: function () {},
+        validators: {}
     };
 
 })(jQuery);
-
-/*==================================================================================================
-
-Application:   Utility Function
-Author:        John Gardner
-
-Version:       V1.0
-Date:          18th November 2003
-Description:   Used to check the validity of a UK postcode
-
-Version:       V2.0
-Date:          8th March 2005
-Description:   BFPO postcodes implemented.
-               The rules concerning which alphabetic characters are allowed in which part of the 
-               postcode were more stringently implementd.
-
-Version:       V3.0
-Date:          8th August 2005
-Description:   Support for Overseas Territories added                 
-
-Version:       V3.1
-Date:          23rd March 2008
-Description:   Problem corrected whereby valid postcode not returned, and 'BD23 DX' was invalidly 
-               treated as 'BD2 3DX' (thanks Peter Graves)        
-
-Version:       V4.0
-Date:          7th October 2009
-Description:   Character 3 extended to allow 'pmnrvxy' (thanks to Jaco de Groot)  
-
-Version:       V4.1
-               8th September 2011
-               Support for Anguilla overseas territory added    
-
-Version:       V5.0
-Date:          8th November 2012
-               Specific support added for new BFPO postcodes           
-
-Parameters:    toCheck - postcodeto be checked. 
-
-This function checks the value of the parameter for a valid postcode format. The space between the 
-inward part and the outward part is optional, although is inserted if not there as it is part of the 
-official postcode.
-
-If the postcode is found to be in a valid format, the function returns the postcode properly 
-formatted (in capitals with the outward code and the inward code separated by a space. If the 
-postcode is deemed to be incorrect a value of false is returned.
-
-Example call:
-
-  if (checkPostCode (myPostCode)) {
-    alert ("Postcode has a valid format")
-  } 
-  else {alert ("Postcode has invalid format")};
-
---------------------------------------------------------------------------------------------------*/
-
-function checkPostCode(toCheck) {
-
-    // Permitted letters depend upon their position in the postcode.
-    var alpha1 = "[abcdefghijklmnoprstuwyz]"; // Character 1
-    var alpha2 = "[abcdefghklmnopqrstuvwxy]"; // Character 2
-    var alpha3 = "[abcdefghjkpmnrstuvwxy]"; // Character 3
-    var alpha4 = "[abehmnprvwxy]"; // Character 4
-    var alpha5 = "[abdefghjlnpqrstuwxyz]"; // Character 5
-    var BFPOa5 = "[abdefghjlnpqrst]"; // BFPO alpha5
-    var BFPOa6 = "[abdefghjlnpqrstuwzyz]"; // BFPO alpha6
-
-    // Array holds the regular expressions for the valid postcodes
-    var pcexp = [];
-
-    // BFPO postcodes
-    pcexp.push(new RegExp("^(bf1)(\\s*)([0-6]{1}" + BFPOa5 + "{1}" + BFPOa6 + "{1})$", "i"));
-
-    // Expression for postcodes: AN NAA, ANN NAA, AAN NAA, and AANN NAA
-    pcexp.push(new RegExp("^(" + alpha1 + "{1}" + alpha2 + "?[0-9]{1,2})(\\s*)([0-9]{1}" + alpha5 + "{2})$", "i"));
-
-    // Expression for postcodes: ANA NAA
-    pcexp.push(new RegExp("^(" + alpha1 + "{1}[0-9]{1}" + alpha3 + "{1})(\\s*)([0-9]{1}" + alpha5 + "{2})$", "i"));
-
-    // Expression for postcodes: AANA  NAA
-    pcexp.push(new RegExp("^(" + alpha1 + "{1}" + alpha2 + "{1}" + "?[0-9]{1}" + alpha4 + "{1})(\\s*)([0-9]{1}" + alpha5 + "{2})$", "i"));
-
-    // Exception for the special postcode GIR 0AA
-    pcexp.push(/^(GIR)(\s*)(0AA)$/i);
-
-    // Standard BFPO numbers
-    pcexp.push(/^(bfpo)(\s*)([0-9]{1,4})$/i);
-
-    // c/o BFPO numbers
-    pcexp.push(/^(bfpo)(\s*)(c\/o\s*[0-9]{1,3})$/i);
-
-    // Overseas Territories
-    pcexp.push(/^([A-Z]{4})(\s*)(1ZZ)$/i);
-
-    // Anguilla
-    pcexp.push(/^(ai-2640)$/i);
-
-    // Load up the string to check
-    var postCode = toCheck;
-
-    // Assume we're not going to find a valid postcode
-    var valid = false;
-
-    // Check the string against the types of post codes
-    for (var i = 0; i < pcexp.length; i++) {
-
-        if (pcexp[i].test(postCode)) {
-
-            // The post code is valid - split the post code into component parts
-            pcexp[i].exec(postCode);
-
-            // Copy it back into the original string, converting it to uppercase and inserting a space 
-            // between the inward and outward codes
-            postCode = RegExp.$1.toUpperCase() + " " + RegExp.$3.toUpperCase();
-
-            // If it is a BFPO c/o type postcode, tidy up the "c/o" part
-            postCode = postCode.replace(/C\/O\s*/, "c/o ");
-
-            // If it is the Anguilla overseas territory postcode, we need to treat it specially
-            if (toCheck.toUpperCase() == 'AI-2640') {
-                postCode = 'AI-2640';
-            }
-
-            // Load new postcode back into the form element
-            valid = true;
-
-            // Remember that we have found that the code is valid and break from loop
-            break;
-        }
-    }
-
-    // Return with either the reformatted valid postcode or the original invalid postcode
-    if (valid) {
-        return postCode;
-    } else return false;
-};

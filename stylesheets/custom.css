@@ -120,7 +120,7 @@ form .form-row label {
 
 form .form-row input {
     height: 40px;
-    max-width: 300px;
+    width: 265px;
     font-size: 20px;
     border: 1px solid #999999;
     border-radius: 5px;

@@ -201,7 +201,7 @@ $(document).ready(function() {
             <div class="width-50">
                 <pre>
                 <code>
-&lt;form id=&quot;form-one&quot; action=&quot;&quot; method=&quot;post&quot; class=&quot;left-col-50&quot;&gt;
+&lt;form id=&quot;complex-form&quot; class=&quot;isValid&quot;&gt;
     &lt;div class=&quot;form-row&quot;&gt;
         &lt;label for=&quot;username&quot;&gt;Username&lt;/label&gt;
         &lt;input type=&quot;text&quot; 
@@ -298,8 +298,21 @@ $(document).ready(function() {
     &lt;/div&gt;
 &lt;/form&gt;
 
-$(document).ready(function() {
-    $(&#39;#simple-form&#39;).isValid();
+$(&#39;#complex-form&#39;).isValid({
+    password: {
+        numbers: true,
+        passwordConfirm: true
+    },
+    email: {
+        emailConfirm: true
+    },
+    emailConfirm: {
+        invalidErrorMessage: &#39;Do not match&#39;
+    },
+    date: {
+        allowFutureDates: false,
+        invalidErrorMessage: &#39;Invalid Date entered&#39;
+    }
 });
                 </code>
             </pre>

@@ -135,11 +135,11 @@
 
             if (!isEmpty) {
                 this.options.numbers.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'invalid');
-                return validResult;
             } else {
                 this.options.numbers.activeErrorMessage = getErrorMessage(field, 'required');
-                return !isEmpty;
             }
+            
+            return !isEmpty && validResult;
         };
 
         this.isDecimals = function (field) {
@@ -149,11 +149,11 @@
 
             if (!isEmpty) {
                 this.options.decimals.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'invalid');
-                return validResult;
             } else {
                 this.options.decimals.activeErrorMessage = getErrorMessage(field, 'required');
-                return !isEmpty;
             }
+            
+            return !isEmpty && validResult;
         };
 
         this.isPasswordValid = function (field) {

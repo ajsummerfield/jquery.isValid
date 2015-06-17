@@ -27,7 +27,7 @@
                 this.formID + ' select');
         };
 
-         this.isFormValidated = function () {
+        this.isFormValidated = function () {
             return ($(this.formID + ' .invalid').length) ? false : true;
         };
 
@@ -40,62 +40,62 @@
                     valMethodName;
 
                 switch (data) {
-                    case 'general':
-                        valMethodName = 'isGeneralValid';
-                        break;
+                case 'general':
+                    valMethodName = 'isGeneralValid';
+                    break;
 
-                    case 'password':
-                        valMethodName = 'isPasswordValid';
-                        break;
+                case 'password':
+                    valMethodName = 'isPasswordValid';
+                    break;
 
-                    case 'passwordConfirm':
-                        valMethodName = 'isPasswordConfirmValid';
-                        break;
+                case 'passwordConfirm':
+                    valMethodName = 'isPasswordConfirmValid';
+                    break;
 
-                    case 'email':
-                        valMethodName = 'isEmailValid';
-                        break;
+                case 'email':
+                    valMethodName = 'isEmailValid';
+                    break;
 
-                    case 'emailConfirm':
-                        valMethodName = 'isEmailConfirmValid';
-                        break;
+                case 'emailConfirm':
+                    valMethodName = 'isEmailConfirmValid';
+                    break;
 
-                    case 'date':
-                        valMethodName = 'isDateValid';
-                        break;
+                case 'date':
+                    valMethodName = 'isDateValid';
+                    break;
 
-                    case 'letters':
-                        valMethodName = 'isLetters';
-                        break;
+                case 'letters':
+                    valMethodName = 'isLetters';
+                    break;
 
-                    case 'numbers':
-                        valMethodName = 'isNumbers';
-                        break;
+                case 'numbers':
+                    valMethodName = 'isNumbers';
+                    break;
 
-                    case 'decimals':
-                        valMethodName = 'isDecimals';
-                        break;
+                case 'decimals':
+                    valMethodName = 'isDecimals';
+                    break;
 
-                    case 'postCode':
-                        valMethodName = 'isPostCodeValid';
-                        break;
+                case 'postCode':
+                    valMethodName = 'isPostCodeValid';
+                    break;
 
-                    case 'checkbox':
-                        valMethodName = 'isCheckboxTicked';
-                        break;
+                case 'checkbox':
+                    valMethodName = 'isCheckboxTicked';
+                    break;
 
-                    case 'select':
-                        valMethodName = 'isSelectChosen';
-                        break;
+                case 'select':
+                    valMethodName = 'isSelectChosen';
+                    break;
 
-                    default:
-                        valMethodName = 'isEmpty';
-                        break;
+                default:
+                    valMethodName = 'isEmpty';
+                    break;
                 }
 
                 this.isFieldValid = this[valMethodName](field);
             }
-            
+
             return this.isFieldValid;
         };
 
@@ -110,7 +110,7 @@
             if (isEmpty) {
                 this.options.general.activeErrorMessage = getErrorMessage(field, 'required');
             }
-            
+
             return !isEmpty;
         };
 
@@ -121,11 +121,11 @@
 
             if (!isEmpty) {
                 this.options.letters.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'invalid');
-                return validResult;
             } else {
                 this.options.letters.activeErrorMessage = getErrorMessage(field, 'required');
-                return !isEmpty;
             }
+
+            return !isEmpty && validResult;
         };
 
         this.isNumbers = function (field) {
@@ -138,7 +138,7 @@
             } else {
                 this.options.numbers.activeErrorMessage = getErrorMessage(field, 'required');
             }
-            
+
             return !isEmpty && validResult;
         };
 
@@ -152,7 +152,7 @@
             } else {
                 this.options.decimals.activeErrorMessage = getErrorMessage(field, 'required');
             }
-            
+
             return !isEmpty && validResult;
         };
 
@@ -161,51 +161,41 @@
             var passwordMatcher = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/,
                 isEmpty,
                 lengthResult,
-                formatResult;
+                formatResult = true;
 
             isEmpty = this.isEmpty(field);
 
             lengthResult = isBetween($(field).val().length, this.options.password.minLength, this.options.password.maxLength);
 
             if (this.options.password.numbers && this.options.password.letters) {
-
                 formatResult = (passwordMatcher.test($(field).val()));
-
-                if (!isEmpty) {
-                    this.options.password.activeErrorMessage = lengthResult && !formatResult ? getErrorMessage(field, 'format') : getErrorMessage(field, 'invalid');
-                    return (lengthResult) ? formatResult : false;
-                } else {
-                    this.options.password.activeErrorMessage = getErrorMessage(field, 'required');
-                    return !isEmpty;
-                }
             }
 
-            this.isPasswordConfirmValid($(this.formID + ' input[data-field-type="passwordConfirm"]'));
+            if (this.options.password.passwordConfirm) {
+                this.isPasswordConfirmValid($(this.formID + ' input[data-field-type="passwordConfirm"]'));
+            }
 
             if (!isEmpty) {
-                this.options.password.activeErrorMessage = lengthResult ? '' : getErrorMessage(field, 'invalid');
-                return lengthResult;
+                this.options.password.activeErrorMessage = lengthResult && !formatResult ? getErrorMessage(field, 'format') : getErrorMessage(field, 'invalid');
             } else {
                 this.options.password.activeErrorMessage = getErrorMessage(field, 'required');
-                return !isEmpty;
             }
+
+            return (lengthResult && !isEmpty) ? formatResult : false;
         };
 
         this.isPasswordConfirmValid = function (field) {
 
-            if (this.options.password.passwordConfirm) {
+            var isEmpty = this.isEmpty(field),
+                validResult = $(field).val() === $(this.formID + ' input[data-field-type="password"]').val();
 
-                var isEmpty = this.isEmpty(field),
-                    validResult = $(field).val() === $(this.formID + ' input[data-field-type="password"]').val();
-
-                if (!isEmpty) {
-                    this.options.passwordConfirm.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'invalid');
-                    return validResult;
-                } else {
-                    this.options.passwordConfirm.activeErrorMessage = getErrorMessage(field, 'required');
-                    return !isEmpty;
-                }
+            if (!isEmpty) {
+                this.options.passwordConfirm.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'invalid');
+            } else {
+                this.options.passwordConfirm.activeErrorMessage = getErrorMessage(field, 'required');
             }
+
+            return !isEmpty && validResult;
         };
 
         this.isEmailValid = function (field) {
@@ -213,11 +203,11 @@
             var emailMatcher = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
                 isEmpty,
                 validResult,
-                domainResult;
+                domainResult = true;
 
             isEmpty = this.isEmpty(field);
 
-            // Remove whitespace as some phones put a spacebar in if you use the autocomplete option on the phone
+            // Remove whitespace as some mobiles/tablets put a spacebar in if you use the autocomplete option on a the device
             var isWhiteSpace = /\s/.test($(field).val());
             if (isWhiteSpace) {
                 $(field).val($(field).val().replace(/\s/g, ''));
@@ -226,44 +216,34 @@
             validResult = emailMatcher.test($(field).val());
 
             if (this.options.email.domain !== '') {
-
                 domainResult = ($(field).val().indexOf(this.options.email.domain, $(field).val().length - this.options.email.domain.length) !== -1);
-
-                if (!isEmpty) {
-                    this.options.email.activeErrorMessage = validResult && !domainResult ? getErrorMessage(field, 'domain') : getErrorMessage(field, 'invalid');
-                    return (validResult) ? domainResult : false;
-                } else {
-                    this.options.email.activeErrorMessage = getErrorMessage(field, 'required');
-                    return !isEmpty;
-                }
             }
-
-            this.isEmailConfirmValid($(this.formID + ' input[data-field-type="emailConfirm"]'));
+            
+            if (this.options.email.emailConfirm) {
+                this.isEmailConfirmValid($(this.formID + ' input[data-field-type="emailConfirm"]'));
+            }
 
             if (!isEmpty) {
-                this.options.email.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'invalid');
-                return validResult;
+                this.options.email.activeErrorMessage = validResult && !domainResult ? getErrorMessage(field, 'domain') : getErrorMessage(field, 'invalid');
             } else {
                 this.options.email.activeErrorMessage = getErrorMessage(field, 'required');
-                return !isEmpty;
             }
+            
+            return (validResult && !isEmpty) ? domainResult : false;
         };
 
         this.isEmailConfirmValid = function (field) {
 
-            if (this.options.email.emailConfirm) {
+            var isEmpty = this.isEmpty(field),
+                validResult = $(field).val() === $(this.formID + ' input[data-field-type="email"]').val();
 
-                var isEmpty = this.isEmpty(field),
-                    validResult = $(field).val() === $(this.formID + ' input[data-field-type="email"]').val();
-
-                if (!isEmpty) {
-                    this.options.emailConfirm.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'invalid');
-                    return validResult;
-                } else {
-                    this.options.emailConfirm.activeErrorMessage = getErrorMessage(field, 'required');
-                    return !isEmpty;
-                }
+            if (!isEmpty) {
+                this.options.emailConfirm.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'invalid');
+            } else {
+                this.options.emailConfirm.activeErrorMessage = getErrorMessage(field, 'required');
             }
+            
+            return !isEmpty && validResult;
         };
 
         this.isDateValid = function (field) {
@@ -312,12 +292,11 @@
                         }
                     }
                 }
-
-                return validResult && formatResult && allowedResult;
             } else {
                 this.options.date.activeErrorMessage = getErrorMessage(field, 'required');
-                return !isEmpty;
             }
+            
+            return !isEmpty && validResult && formatResult && allowedResult;
         };
 
         this.isPostCodeValid = function (field) {
@@ -327,11 +306,11 @@
 
             if (!isEmpty) {
                 this.options.postCode.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'invalid');
-                return validResult;
             } else {
                 this.options.postCode.activeErrorMessage = getErrorMessage(field, 'required');
-                return !isEmpty;
             }
+            
+            return !isEmpty && validResult;
         };
 
         this.isSelectChosen = function (field) {
@@ -357,10 +336,10 @@
 
             return validResult;
         };
-        
+
         this.showErrorFor = function (field) {
-            
-            if(this.options.showErrorMessages) {
+
+            if (this.options.showErrorMessages) {
                 if ($(field).siblings('.form-error').length) {
 
                     updateErrorContainer(field);
@@ -375,7 +354,7 @@
                     $(field).siblings('.form-error').css('margin-left', $(field).position().left + 'px');
                 }
             }
-            
+
             $(field).addClass('invalid');
             $(field).trigger('isValid.fieldInvalidated');
         };
@@ -384,7 +363,7 @@
 
             $(field).removeClass('invalid');
             $(field).siblings('.form-error').remove();
-            
+
             $(field).trigger('isValid.fieldValidated');
         };
 
@@ -424,25 +403,25 @@
 
             switch (errorType) {
 
-                case 'required':
-                    errorMessageType = 'requiredErrorMessage';
-                    break;
+            case 'required':
+                errorMessageType = 'requiredErrorMessage';
+                break;
 
-                case 'invalid':
-                    errorMessageType = 'invalidErrorMessage';
-                    break;
-                    
-                case 'format':
-                    errorMessageType = 'formatErrorMessage';
-                    break;
-                    
-                case 'domain':
-                    errorMessageType = 'domainErrorMessage';
-                    break;
-                    
-                case 'allowedDate':
-                    errorMessageType = 'allowedDateErrorMessage';
-                    break;
+            case 'invalid':
+                errorMessageType = 'invalidErrorMessage';
+                break;
+
+            case 'format':
+                errorMessageType = 'formatErrorMessage';
+                break;
+
+            case 'domain':
+                errorMessageType = 'domainErrorMessage';
+                break;
+
+            case 'allowedDate':
+                errorMessageType = 'allowedDateErrorMessage';
+                break;
             }
 
             if (fieldData[errorMessageType] !== undefined) {
@@ -474,7 +453,7 @@
                     } else {
                         isValid.hideErrorFor(field);
                     }
-                    
+
                     isValid.isFormValid = isValid.isFormValidated();
 
                     if (!isValid.isFormValid) {
@@ -485,7 +464,7 @@
 
             isValid.formArray.each(function (index, field) {
 
-                if(isValid.options.validateOnBlur) {
+                if (isValid.options.validateOnBlur) {
                     $(field).on('blur change', function () {
 
                         if (!isValid.isValidField(field)) {
@@ -495,33 +474,33 @@
                         }
                     });
                 }
-                
-                $(field).on('isValid.fieldInvalidated', function(event) {
-                    
+
+                $(field).on('isValid.fieldInvalidated', function (event) {
+
                     var eventObject = {
                         isValid: false,
                         fieldElement: $(event.currentTarget),
                         fieldData: $(event.currentTarget).data()
                     };
-                    
+
                     isValid.options[$(field).data().fieldType].callbacks.onInvalidated(eventObject);
                 });
 
-                $(field).on('isValid.fieldValidated', function(event) {
-                    
+                $(field).on('isValid.fieldValidated', function (event) {
+
                     var eventObject = {
                         isValid: true,
                         fieldElement: $(event.currentTarget),
                         fieldData: $(event.currentTarget).data()
                     };
-                    
+
                     isValid.options[$(field).data().fieldType].callbacks.onValidated(eventObject);
                 });
-                
+
             });
         });
     };
-    
+
     $.isValid.defaults = {
         general: {
             activeErrorMessage: '',

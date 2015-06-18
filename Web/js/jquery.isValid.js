@@ -71,6 +71,10 @@
                     case 'numbers':
                         valMethodName = 'isNumbers';
                         break;
+                        
+                    case 'age':
+                        valMethodName = 'isAgeValid';
+                        break;
 
                     case 'decimals':
                         valMethodName = 'isDecimals';
@@ -139,6 +143,20 @@
                 this.options.numbers.activeErrorMessage = getErrorMessage(field, 'required');
             }
             
+            return !isEmpty && validResult;
+        };
+        
+        this.isAgeValid = function(field) {
+        
+            var isEmpty = this.isEmpty(field),
+                validResult = (/^[0-9 ]+$/.test($(field).val())) && ($(field).val() > 0) && ($(field).val() < 150);
+
+            if (!isEmpty) {
+                this.options.age.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'invalid');
+            } else {
+                this.options.age.activeErrorMessage = getErrorMessage(field, 'required');
+            }
+
             return !isEmpty && validResult;
         };
 
@@ -544,6 +562,15 @@
             activeErrorMessage: '',
             requiredErrorMessage: 'Field is required',
             invalidErrorMessage: 'Field is numbers only',
+            callbacks: {
+                onValidated: function (event) {},
+                onInvalidated: function (event) {}
+            }
+        },
+        age: {
+            activeErrorMessage: '',
+            requiredErrorMessage: 'Field is required',
+            invalidErrorMessage: 'Age is invalid',
             callbacks: {
                 onValidated: function (event) {},
                 onInvalidated: function (event) {}

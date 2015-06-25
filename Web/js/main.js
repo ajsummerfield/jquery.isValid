@@ -21,7 +21,8 @@ $(document).ready(function() {
             passwordConfirm: true
         },
         email: {
-            emailConfirm: true
+            emailConfirm: true,
+            domain: 'gmail.com'
         },
         emailConfirm: {
             invalidErrorMessage: 'Do not match'

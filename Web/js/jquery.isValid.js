@@ -15,28 +15,31 @@
             this.options = $.extend(true, {}, $.isValid.defaults, options);
             this.formID = '#' + this.$elem.attr('id');
             this.$elem.addClass('isValid');
+            this.FIELD_VALIDATED = 'isValid.fieldValidated';
+            this.FIELD_INVALIDATED = 'isValid.fieldInvalidated';
 
-            this.formArray = $(this.formID + ' :input[type="text"],' +
-                this.formID + ' :input[type="email"],' +
-                this.formID + ' :input[type="password"],' +
-                this.formID + ' :input[type="tel"],' +
-                this.formID + ' :input[type="number"],' +
-                this.formID + ' :input[type="date"],' +
-                this.formID + ' :input[type="checkbox"],' +
-                this.formID + ' textarea,' +
-                this.formID + ' select');
+            this.formArray = 
+                $(' :input[type="text"],' +
+                ' :input[type="email"],' +
+                ' :input[type="password"],' +
+                ' :input[type="tel"],' +
+                ' :input[type="number"],' +
+                ' :input[type="date"],' +
+                ' :input[type="checkbox"],' +
+                ' textarea,' +
+                ' select', this.formID);
         };
 
         this.isFormValidated = function () {
-            return ($(this.formID + ' .invalid').length) ? false : true;
+            return ($(' .invalid', this.formID).length) ? false : true;
         };
 
         this.isValidField = function (field) {
 
-            if (field.disabled || $(field).attr('data-field-type') === "notrequired") {
+            if (field.disabled || field.attr('data-field-type') === "notrequired") {
                 this.isFieldValid = true;
             } else {
-                var data = $(field).attr('data-field-type'),
+                var data = field.attr('data-field-type'),
                     valMethodName;
 
                 switch (data) {
@@ -104,7 +107,7 @@
         };
 
         this.isEmpty = function (field) {
-            return ($(field).val().length === 0);
+            return (field.val().length === 0);
         };
 
         this.isGeneralValid = function (field) {
@@ -121,7 +124,7 @@
         this.isLetters = function (field) {
 
             var isEmpty = this.isEmpty(field),
-                validResult = /^[A-Za-z ]+$/.test($(field).val());
+                validResult = /^[A-Za-z ]+$/.test(field.val());
 
             if (!isEmpty) {
                 this.options.letters.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'invalid');
@@ -135,7 +138,7 @@
         this.isNumbers = function (field) {
 
             var isEmpty = this.isEmpty(field),
-                validResult = /^[0-9 ]+$/.test($(field).val());
+                validResult = /^[0-9 ]+$/.test(field.val());
 
             if (!isEmpty) {
                 this.options.numbers.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'invalid');
@@ -149,7 +152,7 @@
         this.isAgeValid = function(field) {
         
             var isEmpty = this.isEmpty(field),
-                validResult = (/^[0-9 ]+$/.test($(field).val())) && ($(field).val() > 0) && ($(field).val() < 150);
+                validResult = (/^[0-9 ]+$/.test(field.val())) && (field.val() > 0) && (field.val() < 150);
 
             if (!isEmpty) {
                 this.options.age.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'invalid');
@@ -163,7 +166,7 @@
         this.isDecimals = function (field) {
 
             var isEmpty = this.isEmpty(field),
-                validResult = /^(\d+\.?\d*|\.\d+)$/.test($(field).val());
+                validResult = /^(\d+\.?\d*|\.\d+)$/.test(field.val());
 
             if (!isEmpty) {
                 this.options.decimals.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'invalid');
@@ -183,14 +186,14 @@
 
             isEmpty = this.isEmpty(field);
 
-            lengthResult = isBetween($(field).val().length, this.options.password.minLength, this.options.password.maxLength);
+            lengthResult = isBetween(field.val().length, this.options.password.minLength, this.options.password.maxLength);
 
             if (this.options.password.numbers && this.options.password.letters) {
-                formatResult = (passwordMatcher.test($(field).val()));
+                formatResult = (passwordMatcher.test(field.val()));
             }
 
             if (this.options.password.passwordConfirm) {
-                this.isPasswordConfirmValid($(this.formID + ' input[data-field-type="passwordConfirm"]'));
+                this.isPasswordConfirmValid($(' input[data-field-type="passwordConfirm"]', this.formID));
             }
 
             if (!isEmpty) {
@@ -205,7 +208,7 @@
         this.isPasswordConfirmValid = function (field) {
 
             var isEmpty = this.isEmpty(field),
-                validResult = $(field).val() === $(this.formID + ' input[data-field-type="password"]').val();
+                validResult = field.val() === $(' input[data-field-type="password"]', this.formID).val();
 
             if (!isEmpty) {
                 this.options.passwordConfirm.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'invalid');
@@ -226,19 +229,21 @@
             isEmpty = this.isEmpty(field);
 
             // Remove whitespace as some mobiles/tablets put a spacebar in if you use the autocomplete option on a the device
-            var isWhiteSpace = /\s/.test($(field).val());
+            var isWhiteSpace = /\s/.test(field.val());
             if (isWhiteSpace) {
-                $(field).val($(field).val().replace(/\s/g, ''));
+                field.val(field.val().replace(/\s/g, ''));
             }
 
-            validResult = emailMatcher.test($(field).val());
+            validResult = emailMatcher.test(field.val());
 
             if (this.options.email.domain !== '') {
-                domainResult = ($(field).val().indexOf(this.options.email.domain, $(field).val().length - this.options.email.domain.length) !== -1);
+                
+                var regExp = new RegExp('@' + this.options.email.domain + '$', 'g');
+                domainResult = regExp.test(field.val());
             }
             
             if (this.options.email.emailConfirm) {
-                this.isEmailConfirmValid($(this.formID + ' input[data-field-type="emailConfirm"]'));
+                this.isEmailConfirmValid($(' input[data-field-type="emailConfirm"]', this.formID));
             }
 
             if (!isEmpty) {
@@ -253,7 +258,7 @@
         this.isEmailConfirmValid = function (field) {
 
             var isEmpty = this.isEmpty(field),
-                validResult = $(field).val() === $(this.formID + ' input[data-field-type="email"]').val();
+                validResult = field.val() === $(' input[data-field-type="email"]', this.formID).val();
 
             if (!isEmpty) {
                 this.options.emailConfirm.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'invalid');
@@ -266,7 +271,7 @@
 
         this.isDateValid = function (field) {
 
-            var date = $(field).val(),
+            var date = field.val(),
                 isEmpty,
                 validResult,
                 allowedResult,
@@ -320,7 +325,7 @@
         this.isPostCodeValid = function (field) {
 
             var isEmpty = this.isEmpty(field),
-                validResult = checkPostCode($(field).val());
+                validResult = checkPostCode(field.val());
 
             if (!isEmpty) {
                 this.options.postCode.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'invalid');
@@ -337,7 +342,7 @@
 
             if ($(field).val() === null) {
                 validResult = false;
-            } else if ($(field).val().length === 0) {
+            } else if (field.val().length === 0) {
                 validResult = false;
             }
 
@@ -348,7 +353,7 @@
 
         this.isCheckboxTicked = function (field) {
 
-            var validResult = $(field).is(':checked');
+            var validResult = field.is(':checked');
 
             this.options.checkbox.activeErrorMessage = validResult ? '' : getErrorMessage(field, 'required');
 
@@ -356,9 +361,9 @@
         };
 
         this.showErrorFor = function (field) {
-
+            
             if (this.options.showErrorMessages) {
-                if ($(field).siblings('.form-error').length) {
+                if (field.siblings('.form-error').length) {
 
                     updateErrorContainer(field);
 
@@ -366,22 +371,22 @@
                     var errorContainer = createErrorContainer(field);
                     var errorContainerWidth = getErrorContainerWidth(field);
 
-                    $(field).parent().append(errorContainer);
+                    field.parent().append(errorContainer);
 
-                    $(field).siblings('.form-error').css('width', errorContainerWidth + 'px').css('margin-left', $(field).position().left + 'px');
+                    field.siblings('.form-error').css('width', errorContainerWidth + 'px').css('margin-left', field.position().left + 'px');
                 }
             }
 
-            $(field).addClass('invalid');
-            $(field).trigger('isValid.fieldInvalidated');
+            field.addClass('invalid');
+            field.trigger(self.FIELD_INVALIDATED);
         };
 
         this.hideErrorFor = function (field) {
 
-            $(field).removeClass('invalid');
-            $(field).siblings('.form-error').remove();
+            field.removeClass('invalid');
+            field.siblings('.form-error').remove();
 
-            $(field).trigger('isValid.fieldValidated');
+            field.trigger(self.FIELD_VALIDATED);
         };
 
         var isBetween = function (val, min, max) {
@@ -390,62 +395,47 @@
 
         var createErrorContainer = function (field) {
 
-            var errorMessage = self.options[$(field).data().fieldType].activeErrorMessage;
+            var errorMessage = self.options[field.data().fieldType].activeErrorMessage;
 
             return '<div class="form-error">' + errorMessage + '</div>';
         };
 
         var updateErrorContainer = function (field) {
 
-            var errorMessage = self.options[$(field).data().fieldType].activeErrorMessage;
+            var errorMessage = self.options[field.data().fieldType].activeErrorMessage;
 
-            $(field).siblings('.form-error').text(errorMessage);
+            field.siblings('.form-error').text(errorMessage);
         };
 
         var getErrorContainerWidth = function (field) {
 
-            if ($(field).attr('aria-hidden') === undefined && $(field).is(':visible')) {
-                return $(field).outerWidth();
+            if (field.attr('aria-hidden') === undefined && field.is(':visible')) {
+                return field.outerWidth();
             } else {
-                return Math.max.apply(Math, $(field).parent().children().map(function () {
+                return Math.max.apply(Math, field.parent().children().map(function () {
                     return $(this).width();
                 }).get());
             }
         };
-
+        
         var getErrorMessage = function (field, errorType) {
 
-            var fieldData = $(field).data(),
-                errorMessageType;
-
-            switch (errorType) {
-
-            case 'required':
-                errorMessageType = 'requiredErrorMessage';
-                break;
-
-            case 'invalid':
-                errorMessageType = 'invalidErrorMessage';
-                break;
-
-            case 'format':
-                errorMessageType = 'formatErrorMessage';
-                break;
-
-            case 'domain':
-                errorMessageType = 'domainErrorMessage';
-                break;
-
-            case 'allowedDate':
-                errorMessageType = 'allowedDateErrorMessage';
-                break;
-            }
+            var fieldData = field.data(),
+                errorMessageType = ErrorType[errorType];
 
             if (fieldData[errorMessageType] !== undefined) {
                 return fieldData[errorMessageType];
             } else {
-                return self.options[$(field).data().fieldType][errorMessageType];
+                return self.options[field.data().fieldType][errorMessageType];
             }
+        };
+        
+        var ErrorType = {
+            'required': 'requiredErrorMessage',
+            'invalid': 'invalidErrorMessage',
+            'format': 'formatErrorMessage',
+            'domain': 'domainErrorMessage',
+            'allowedDate': 'allowedDateErrorMessage',
         };
 
     };
@@ -459,16 +449,16 @@
 
             isValid.init();
 
-            var submitButton = $(isValid.formID + ' :input[type="submit"]');
+            var submitButton = $(' :input[type="submit"]', isValid.formID);
 
             submitButton.click(function (e) {
 
                 isValid.formArray.each(function (index, field) {
 
-                    if (!isValid.isValidField(field)) {
-                        isValid.showErrorFor(field);
+                    if (!isValid.isValidField($(field))) {
+                        isValid.showErrorFor($(field));
                     } else {
-                        isValid.hideErrorFor(field);
+                        isValid.hideErrorFor($(field));
                     }
 
                     isValid.isFormValid = isValid.isFormValidated();
@@ -484,15 +474,15 @@
                 if (isValid.options.validateOnBlur) {
                     $(field).on('blur change', function () {
 
-                        if (!isValid.isValidField(field)) {
-                            isValid.showErrorFor(field);
+                        if (!isValid.isValidField($(field))) {
+                            isValid.showErrorFor($(field));
                         } else {
-                            isValid.hideErrorFor(field);
+                            isValid.hideErrorFor($(field));
                         }
                     });
                 }
 
-                $(field).on('isValid.fieldInvalidated', function (event) {
+                $(field).on(isValid.FIELD_INVALIDATED, function (event) {
 
                     var eventObject = {
                         isValid: false,
@@ -503,7 +493,7 @@
                     isValid.options[$(field).data().fieldType].callbacks.onInvalidated(eventObject);
                 });
 
-                $(field).on('isValid.fieldValidated', function (event) {
+                $(field).on(isValid.FIELD_VALIDATED, function (event) {
 
                     var eventObject = {
                         isValid: true,

@@ -368,8 +368,7 @@
 
                     $(field).parent().append(errorContainer);
 
-                    $(field).siblings('.form-error').css('width', errorContainerWidth + 'px');
-                    $(field).siblings('.form-error').css('margin-left', $(field).position().left + 'px');
+                    $(field).siblings('.form-error').css('width', errorContainerWidth + 'px').css('margin-left', $(field).position().left + 'px');
                 }
             }
 

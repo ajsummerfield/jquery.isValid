@@ -362,7 +362,7 @@
             field.siblings('.form-error').css('width', errorContainerWidth + 'px').css('margin-left', field.position().left + 'px');
         };
 
-        var updateErrorContainer = function (field) {
+        var updateErrorContainer = function (field, errorMessage) {
             field.siblings('.form-error').text(errorMessage);
         };
 

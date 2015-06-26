@@ -11,12 +11,12 @@
 
             this.elem = element;
             this.$elem = $(element);
-            this.isFieldValid = false;
             this.settings = $.extend(true, {}, $.isValid.defaults, options);
             this.formID = '#' + this.$elem.attr('id');
             this.$elem.addClass('isValid');
             this.FIELD_VALIDATED = 'isValid.fieldValidated';
             this.FIELD_INVALIDATED = 'isValid.fieldInvalidated';
+            this.submitButton = this.settings.submitButton !== null ? this.setting.submitButton : $(' :input[type="submit"]', this.formID);
 
             this.formArray =
                 $(' :input[type="text"],' +
@@ -39,7 +39,7 @@
             var fieldType = field.attr('data-field-type');
 
             if (field.prop('disabled') || field.attr('type') == 'hidden' || fieldType === "notrequired") {
-                this.isFieldValid = true;
+                return true;
             } else {
                 var valMethodName;
 
@@ -50,13 +50,11 @@
                 }
 
                 if(this[valMethodName] !== undefined) {
-                    this.isFieldValid = this[valMethodName](field);
+                    return this[valMethodName](field);
                 } else {
-                    this.isFieldValid = this.settings.validators[fieldType].method(this, field);
+                    return this.settings.validators[fieldType].method(this, field);
                 }
             }
-
-            return this.isFieldValid;
         };
 
         this.isEmpty = function (field) {
@@ -328,10 +326,13 @@
         this.showErrorFor = function (field) {
 
             if (this.settings.enableErrorMessages) {
+
+                var errorMessage = self.settings.fieldTypes[field.data().fieldType].activeErrorMessage;
+
                 if (field.siblings('.form-error').length) {
-                    updateErrorContainer(field);
+                    updateErrorContainer(field, errorMessage);
                 } else {
-                    var errorContainer = createErrorContainer(field);
+                    var errorContainer = createErrorContainer(field, errorMessage);
                     var errorContainerWidth = getErrorContainerWidth(field);
                     positionErrorContainer(errorContainer, errorContainerWidth, field);
                 }
@@ -342,7 +343,6 @@
         };
 
         this.hideErrorFor = function (field) {
-
             field.removeClass('invalid');
             field.siblings('.form-error').remove();
 
@@ -353,21 +353,16 @@
             return (val >= min && val <= max);
         };
 
-        var createErrorContainer = function (field) {
-
-            var errorMessage = self.settings.fieldTypes[field.data().fieldType].activeErrorMessage;
+        var createErrorContainer = function (field, errorMessage) {
             return '<div class="form-error">' + errorMessage + '</div>';
         };
 
         var positionErrorContainer = function(errorContainer, errorContainerWidth, field) {
-
             field.parent().append(errorContainer);
             field.siblings('.form-error').css('width', errorContainerWidth + 'px').css('margin-left', field.position().left + 'px');
         };
 
         var updateErrorContainer = function (field) {
-
-            var errorMessage = self.settings.fieldTypes[field.data().fieldType].activeErrorMessage;
             field.siblings('.form-error').text(errorMessage);
         };
 
@@ -392,9 +387,7 @@
 
             isValid.init();
 
-            var submitButton = $(' :input[type="submit"]', isValid.formID);
-
-            submitButton.click(function (e) {
+            isValid.submitButton.click(function (e) {
 
                 isValid.formArray.each(function (index, field) {
 
@@ -583,8 +576,7 @@
         },
         validateOnBlur: true,
         enableErrorMessages: true,
-        onFormValidated: function () {},
-        onFormInvalidated: function () {},
+        submitButton: null,
         errorTypes: {
             required: 'requiredErrorMessage',
             invalid: 'invalidErrorMessage',
@@ -645,7 +637,9 @@
                 name: 'isSelectChosen',
                 method: function() {}
             }
-        }
+        },
+        onFormValidated: function () {},
+        onFormInvalidated: function () {},
     };
 
 })(jQuery);

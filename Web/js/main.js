@@ -11,9 +11,39 @@ $(document).ready(function() {
                         console.log(event);
                     }
                 }
+            },
+            username: {
+                activeErrorMessage: '',
+                requiredErrorMessage: 'Username is required',
+                invalidErrorMessage: 'Username should include more characters',
+                callbacks: {
+                    onValidated: function(event) {
+                        console.log(event);
+                    },
+                    onInvalidated: function(event) {
+                        console.log(event);
+                    }
+                }
             }
         },
-        showErrorMessages: false
+        validators: {
+            username: {
+                name: 'isUsernameValid',
+                method: function(self, field) {
+                    var isEmpty = self.isEmpty(field),
+                        validResult = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/.test(field.val());
+
+                    if (!isEmpty) {
+                        self.settings.fieldTypes.username.activeErrorMessage = validResult ? '' : self.getErrorMessage(field, 'invalid');
+                    } else {
+                        self.settings.fieldTypes.username.activeErrorMessage = self.getErrorMessage(field, 'required');
+                    }
+
+                    return !isEmpty && validResult;
+                }
+            }
+        },
+        enableErrorMessages: true
     }).data('isValid');
 
 

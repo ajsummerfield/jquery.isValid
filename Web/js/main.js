@@ -15,7 +15,7 @@ $(document).ready(function() {
             username: {
                 activeErrorMessage: '',
                 requiredErrorMessage: 'Username is required',
-                invalidErrorMessage: 'Username should include more characters',
+                customErrorMessage: 'Username should include more characters',
                 callbacks: {
                     onValidated: function(event) {
                         console.log(event);
@@ -26,6 +26,9 @@ $(document).ready(function() {
                 }
             }
         },
+        errorTypes: {
+            custom: 'customErrorMessage'
+        },
         validators: {
             username: {
                 name: 'isUsernameValid',
@@ -34,7 +37,7 @@ $(document).ready(function() {
                         validResult = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/.test(field.val());
 
                     if (!isEmpty) {
-                        self.settings.fieldTypes.username.activeErrorMessage = validResult ? '' : self.getErrorMessage(field, 'invalid');
+                        self.settings.fieldTypes.username.activeErrorMessage = validResult ? '' : self.getErrorMessage(field, 'custom');
                     } else {
                         self.settings.fieldTypes.username.activeErrorMessage = self.getErrorMessage(field, 'required');
                     }

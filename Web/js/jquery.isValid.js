@@ -316,7 +316,7 @@
         this.getErrorMessage = function (field, errorType) {
 
             var fieldData = field.data(),
-                errorMessageType = ErrorType[errorType];
+                errorMessageType = this.settings.errorTypes[errorType];
 
             if (fieldData[errorMessageType] !== undefined) {
                 return fieldData[errorMessageType];
@@ -356,7 +356,6 @@
         var createErrorContainer = function (field) {
 
             var errorMessage = self.settings.fieldTypes[field.data().fieldType].activeErrorMessage;
-
             return '<div class="form-error">' + errorMessage + '</div>';
         };
 
@@ -369,7 +368,6 @@
         var updateErrorContainer = function (field) {
 
             var errorMessage = self.settings.fieldTypes[field.data().fieldType].activeErrorMessage;
-
             field.siblings('.form-error').text(errorMessage);
         };
 
@@ -383,15 +381,6 @@
                 }).get());
             }
         };
-
-        var ErrorType = {
-            'required': 'requiredErrorMessage',
-            'invalid': 'invalidErrorMessage',
-            'format': 'formatErrorMessage',
-            'domain': 'domainErrorMessage',
-            'allowedDate': 'allowedDateErrorMessage',
-        };
-
     };
 
     $.fn.isValid = function (options) {
@@ -464,138 +453,145 @@
 
     $.isValid.defaults = {
         fieldTypes: {
-          general: {
-              activeErrorMessage: '',
-              requiredErrorMessage: 'Field is required',
-              callbacks: {
-                  onValidated: function (event) {},
-                  onInvalidated: function (event) {}
-              }
-          },
-          letters: {
-              activeErrorMessage: '',
-              requiredErrorMessage: 'Field is required',
-              invalidErrorMessage: 'Field is letters only',
-              callbacks: {
-                  onValidated: function (event) {},
-                  onInvalidated: function (event) {}
-              }
-          },
-          numbers: {
-              activeErrorMessage: '',
-              requiredErrorMessage: 'Field is required',
-              invalidErrorMessage: 'Field is numbers only',
-              callbacks: {
-                  onValidated: function (event) {},
-                  onInvalidated: function (event) {}
-              }
-          },
-          age: {
-              activeErrorMessage: '',
-              requiredErrorMessage: 'Field is required',
-              invalidErrorMessage: 'Age is invalid',
-              callbacks: {
-                  onValidated: function (event) {},
-                  onInvalidated: function (event) {}
-              }
-          },
-          decimals: {
-              activeErrorMessage: '',
-              requiredErrorMessage: 'Field is required',
-              invalidErrorMessage: 'Field is decimals only',
-              callbacks: {
-                  onValidated: function (event) {},
-                  onInvalidated: function (event) {}
-              }
-          },
-          password: {
-              minLength: 6,
-              maxLength: 100,
-              numbers: false,
-              letters: true,
-              passwordConfirm: false,
-              activeErrorMessage: '',
-              requiredErrorMessage: 'Password is required',
-              formatErrorMessage: 'Password should contain numbers and letters',
-              invalidErrorMessage: 'Password should be more than 6 characters',
-              callbacks: {
-                  onValidated: function (event) {},
-                  onInvalidated: function (event) {}
-              }
-          },
-          passwordConfirm: {
-              activeErrorMessage: '',
-              requiredErrorMessage: 'Confirming your Password is required',
-              invalidErrorMessage: 'Passwords do not match',
-              callbacks: {
-                  onValidated: function (event) {},
-                  onInvalidated: function (event) {}
-              }
-          },
-          email: {
-              domain: '',
-              emailConfirm: false,
-              activeErrorMessage: '',
-              requiredErrorMessage: 'Email is required',
-              domainErrorMessage: 'Email domain should be @xxxx.com',
-              invalidErrorMessage: 'Please enter a valid email address',
-              callbacks: {
-                  onValidated: function (event) {},
-                  onInvalidated: function (event) {}
-              }
-          },
-          emailConfirm: {
-              activeErrorMessage: '',
-              requiredErrorMessage: 'Confirming your Email is required',
-              invalidErrorMessage: 'Email addresses do not match',
-              callbacks: {
-                  onValidated: function (event) {},
-                  onInvalidated: function (event) {}
-              }
-          },
-          date: {
-              format: 'DD/MM/YYYY',
-              allowFutureDates: true,
-              activeErrorMessage: '',
-              requiredErrorMessage: 'Date is required',
-              formatErrorMessage: 'Date format doesn\'t match DD/MM/YYYY',
-              invalidErrorMessage: 'Please enter a valid Date',
-              allowedDateErrorMessage: 'Date not allowed',
-              callbacks: {
-                  onValidated: function (event) {},
-                  onInvalidated: function (event) {}
-              }
-          },
-          postCode: {
-              activeErrorMessage: '',
-              requiredErrorMessage: 'Post Code is required',
-              invalidErrorMessage: 'Please enter a valid Post Code',
-              callbacks: {
-                  onValidated: function (event) {},
-                  onInvalidated: function (event) {}
-              }
-          },
-          select: {
-              activeErrorMessage: '',
-              requiredErrorMessage: 'Choosing an option is required',
-              callbacks: {
-                  onValidated: function (event) {},
-                  onInvalidated: function (event) {}
-              }
-          },
-          checkbox: {
-              activeErrorMessage: '',
-              requiredErrorMessage: 'Checkbox is required',
-              callbacks: {
-                  onValidated: function (event) {},
-                  onInvalidated: function (event) {}
-              }
-          }
+            general: {
+                activeErrorMessage: '',
+                requiredErrorMessage: 'Field is required',
+                callbacks: {
+                    onValidated: function (event) {},
+                    onInvalidated: function (event) {}
+                }
+            },
+            letters: {
+                activeErrorMessage: '',
+                requiredErrorMessage: 'Field is required',
+                invalidErrorMessage: 'Field is letters only',
+                callbacks: {
+                    onValidated: function (event) {},
+                    onInvalidated: function (event) {}
+                }
+            },
+            numbers: {
+                activeErrorMessage: '',
+                requiredErrorMessage: 'Field is required',
+                invalidErrorMessage: 'Field is numbers only',
+                callbacks: {
+                    onValidated: function (event) {},
+                    onInvalidated: function (event) {}
+                }
+            },
+            age: {
+                activeErrorMessage: '',
+                requiredErrorMessage: 'Field is required',
+                invalidErrorMessage: 'Age is invalid',
+                callbacks: {
+                    onValidated: function (event) {},
+                    onInvalidated: function (event) {}
+                }
+            },
+            decimals: {
+                activeErrorMessage: '',
+                requiredErrorMessage: 'Field is required',
+                invalidErrorMessage: 'Field is decimals only',
+                callbacks: {
+                    onValidated: function (event) {},
+                    onInvalidated: function (event) {}
+                }
+            },
+            password: {
+                minLength: 6,
+                maxLength: 100,
+                numbers: false,
+                letters: true,
+                passwordConfirm: false,
+                activeErrorMessage: '',
+                requiredErrorMessage: 'Password is required',
+                formatErrorMessage: 'Password should contain numbers and letters',
+                invalidErrorMessage: 'Password should be more than 6 characters',
+                callbacks: {
+                    onValidated: function (event) {},
+                    onInvalidated: function (event) {}
+                }
+            },
+            passwordConfirm: {
+                activeErrorMessage: '',
+                requiredErrorMessage: 'Confirming your Password is required',
+                invalidErrorMessage: 'Passwords do not match',
+                callbacks: {
+                    onValidated: function (event) {},
+                    onInvalidated: function (event) {}
+                }
+            },
+            email: {
+                domain: '',
+                emailConfirm: false,
+                activeErrorMessage: '',
+                requiredErrorMessage: 'Email is required',
+                domainErrorMessage: 'Email domain should be @xxxx.com',
+                invalidErrorMessage: 'Please enter a valid email address',
+                callbacks: {
+                    onValidated: function (event) {},
+                    onInvalidated: function (event) {}
+                }
+            },
+            emailConfirm: {
+                activeErrorMessage: '',
+                requiredErrorMessage: 'Confirming your Email is required',
+                invalidErrorMessage: 'Email addresses do not match',
+                callbacks: {
+                    onValidated: function (event) {},
+                    onInvalidated: function (event) {}
+                }
+            },
+            date: {
+                format: 'DD/MM/YYYY',
+                allowFutureDates: true,
+                activeErrorMessage: '',
+                requiredErrorMessage: 'Date is required',
+                formatErrorMessage: 'Date format doesn\'t match DD/MM/YYYY',
+                invalidErrorMessage: 'Please enter a valid Date',
+                allowedDateErrorMessage: 'Date not allowed',
+                callbacks: {
+                    onValidated: function (event) {},
+                    onInvalidated: function (event) {}
+                }
+            },
+            postCode: {
+                activeErrorMessage: '',
+                requiredErrorMessage: 'Post Code is required',
+                invalidErrorMessage: 'Please enter a valid Post Code',
+                callbacks: {
+                    onValidated: function (event) {},
+                    onInvalidated: function (event) {}
+                }
+            },
+            select: {
+                activeErrorMessage: '',
+                requiredErrorMessage: 'Choosing an option is required',
+                callbacks: {
+                    onValidated: function (event) {},
+                    onInvalidated: function (event) {}
+                }
+            },
+            checkbox: {
+                activeErrorMessage: '',
+                requiredErrorMessage: 'Checkbox is required',
+                callbacks: {
+                    onValidated: function (event) {},
+                    onInvalidated: function (event) {}
+                }
+            }
         },
         validateOnBlur: true,
         enableErrorMessages: true,
         onFormValidated: function () {},
         onFormInvalidated: function () {},
+        errorTypes: {
+            required: 'requiredErrorMessage',
+            invalid: 'invalidErrorMessage',
+            format: 'formatErrorMessage',
+            domain: 'domainErrorMessage',
+            allowedDate: 'allowedDateErrorMessage',
+        },
         validators: {
             general: {
                 name: 'isGeneralValid',

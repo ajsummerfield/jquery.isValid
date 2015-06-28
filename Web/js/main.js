@@ -2,32 +2,17 @@ $(document).ready(function() {
 
     var simpleForm = $('#simple-form').isValid({
         fieldTypes: {
-            general: {
-                callbacks: {
-                    onValidated: function(event) {
-                        console.log(event);
-                    },
-                    onInvalidated: function(event) {
-                        console.log(event);
-                    }
-                }
-            },
             username: {
-                activeErrorMessage: '',
                 requiredErrorMessage: 'Username is required',
                 customErrorMessage: 'Username should include more characters',
-                callbacks: {
-                    onValidated: function(event) {},
-                    onInvalidated: function(event) {}
-                }
             },
             idNumber: {
-                activeErrorMessage: '',
                 requiredErrorMessage: 'Please specify your ID Number',
                 formatErrorMessage: 'ID Number is incorrect format',
                 callbacks: {
-                    onValidated: function(event) {},
-                    onInvalidated: function(event) {}
+                    onValidated: function(event) {
+                        console.log(event);
+                    }
                 }
             }
         },
@@ -40,31 +25,39 @@ $(document).ready(function() {
                 method: function(self, field) {
 
                     var isEmpty = self.isEmpty(field),
-                        validResult = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/.test(field.val());
+                        validResult = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/.test(field.val()),
+                        errorType;
 
                     if (!isEmpty) {
-                        self.settings.fieldTypes.username.activeErrorMessage = validResult ? '' : self.getErrorMessage(field, 'custom');
+                        errorType = validResult ? '' : 'custom';
                     } else {
-                        self.settings.fieldTypes.username.activeErrorMessage = self.getErrorMessage(field, 'required');
+                        errorType = 'required';
                     }
 
-                    return !isEmpty && validResult;
+                    return {
+                        isValid: !isEmpty && validResult,
+                        activeErrorType: errorType
+                    };
                 }
             },
             idNumber: {
                 name: 'isIDNumberValid',
                 method: function(self, field) {
 
-                    var isEmpty = self.isEmpty(field);
-                        validResult = field.val().length === 6 && /^[0-9]+$/.test(field.val());
+                    var isEmpty = self.isEmpty(field),
+                        validResult = field.val().length === 6 && /^[0-9]+$/.test(field.val()),
+                        errorType;
 
                     if (!isEmpty) {
-                        self.settings.fieldTypes.idNumber.activeErrorMessage = validResult ? '' : self.getErrorMessage(field, 'format');
+                        errorType = validResult ? '' : 'format';
                     } else {
-                        self.settings.fieldTypes.idNumber.activeErrorMessage = self.getErrorMessage(field, 'required');
+                        errorType = 'required';
                     }
 
-                    return !isEmpty && validResult;
+                    return {
+                        isValid: !isEmpty && validResult,
+                        activeErrorType: errorType
+                    };
                 }
             }
         },

@@ -16,8 +16,7 @@
             this.$elem.addClass('isValid');
             this.FIELD_VALIDATED = 'isValid.fieldValidated';
             this.FIELD_INVALIDATED = 'isValid.fieldInvalidated';
-            this.submitButton = this.settings.submitButton !== null ? this.setting.submitButton : $(' :input[type="submit"]', this.formID);
-
+            this.settings.submitButton = this.settings.submitButton !== null ? this.setting.submitButton : $(' :input[type="submit"]', this.formID);
             this.formArray =
                 $(' :input[type="text"],' +
                 ' :input[type="email"],' +
@@ -28,6 +27,8 @@
                 ' :input[type="checkbox"],' +
                 ' textarea,' +
                 ' select', this.formID);
+
+            addCallbacks(this.settings);
         };
 
         this.isFormValidated = function () {
@@ -41,19 +42,22 @@
             if (field.prop('disabled') || field.attr('type') == 'hidden' || fieldType === "notrequired") {
                 return true;
             } else {
-                var valMethodName;
+                var valMethodName = 'isEmpty',
+                    currentField;
 
                 if(this.settings.validators[fieldType].name) {
                     valMethodName = this.settings.validators[fieldType].name;
-                } else {
-                    valMethodName = 'isEmpty';
                 }
 
                 if(this[valMethodName] !== undefined) {
-                    return this[valMethodName](field);
+                    currentField = this[valMethodName](field);
                 } else {
-                    return this.settings.validators[fieldType].method(this, field);
+                    currentField = this.settings.validators[fieldType].method(this, field);
                 }
+
+                this.setActiveErrorMessageFor(field, fieldType, currentField.activeErrorType);
+
+                return currentField.isValid;
             }
         };
 
@@ -63,69 +67,89 @@
 
         this.isGeneralValid = function (field) {
 
-            var isEmpty = this.isEmpty(field);
+            var isEmpty = this.isEmpty(field),
+                errorType;
 
             if (isEmpty) {
-                this.settings.fieldTypes.general.activeErrorMessage = this.getErrorMessage(field, 'required');
+                errorType = 'required';
             }
 
-            return !isEmpty;
+            return {
+                isValid: !isEmpty,
+                activeErrorType: errorType
+            };
         };
 
         this.isLetters = function (field) {
 
             var isEmpty = this.isEmpty(field),
-                validResult = /^[A-Za-z ]+$/.test(field.val());
+                validResult = /^[A-Za-z ]+$/.test(field.val()),
+                errorType;
 
             if (!isEmpty) {
-                this.settings.fieldTypes.letters.activeErrorMessage = validResult ? '' : this.getErrorMessage(field, 'invalid');
+                errorType = validResult ? '' : 'invalid';
             } else {
-                this.settings.fieldTypes.letters.activeErrorMessage = this.getErrorMessage(field, 'required');
+                errorType = 'required';
             }
 
-            return !isEmpty && validResult;
+            return {
+                isValid: !isEmpty && validResult,
+                activeErrorType: errorType
+            };
         };
 
         this.isNumbers = function (field) {
 
             var isEmpty = this.isEmpty(field),
-                validResult = /^[0-9 ]+$/.test(field.val());
+                validResult = /^[0-9 ]+$/.test(field.val()),
+                errorType;
 
             if (!isEmpty) {
-                this.settings.fieldTypes.numbers.activeErrorMessage = validResult ? '' : this.getErrorMessage(field, 'invalid');
+                errorType = validResult ? '' : 'invalid';
             } else {
-                this.settings.fieldTypes.numbers.activeErrorMessage = this.getErrorMessage(field, 'required');
+                errorType = 'required';
             }
 
-            return !isEmpty && validResult;
+            return {
+                isValid: !isEmpty && validResult,
+                activeErrorType: errorType
+            };
         };
 
         this.isAgeValid = function(field) {
 
             var isEmpty = this.isEmpty(field),
-                validResult = (/^[0-9 ]+$/.test(field.val())) && (field.val() > 0) && (field.val() < 150);
+                validResult = (/^[0-9 ]+$/.test(field.val())) && (field.val() > 0) && (field.val() < 150),
+                errorType;
 
             if (!isEmpty) {
-                this.settings.fieldTypes.age.activeErrorMessage = validResult ? '' : this.getErrorMessage(field, 'invalid');
+                errorType = validResult ? '' : 'invalid';
             } else {
-                this.settings.fieldTypes.age.activeErrorMessage = this.getErrorMessage(field, 'required');
+                errorType = 'required';
             }
 
-            return !isEmpty && validResult;
+            return {
+                isValid: !isEmpty && validResult,
+                activeErrorType: errorType
+            };
         };
 
         this.isDecimals = function (field) {
 
             var isEmpty = this.isEmpty(field),
-                validResult = /^(\d+\.?\d*|\.\d+)$/.test(field.val());
+                validResult = /^(\d+\.?\d*|\.\d+)$/.test(field.val()),
+                errorType;
 
             if (!isEmpty) {
-                this.settings.fieldTypes.decimals.activeErrorMessage = validResult ? '' : this.getErrorMessage(field, 'invalid');
+                errorType = validResult ? '' : 'invalid';
             } else {
-                this.settings.fieldTypes.decimals.activeErrorMessage = this.getErrorMessage(field, 'required');
+                errorType = 'required';
             }
 
-            return !isEmpty && validResult;
+            return {
+                isValid: !isEmpty && validResult,
+                activeErrorType: errorType
+            };
         };
 
         this.isPasswordValid = function (field) {
@@ -133,14 +157,15 @@
             var passwordMatcher = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/,
                 isEmpty,
                 lengthResult,
-                formatResult = true;
+                formatResult = true,
+                errorType;
 
             isEmpty = this.isEmpty(field);
 
             lengthResult = isBetween(field.val().length, this.settings.fieldTypes.password.minLength, this.settings.fieldTypes.password.maxLength);
 
             if (this.settings.fieldTypes.password.numbers && this.settings.fieldTypes.password.letters) {
-                formatResult = (passwordMatcher.test(field.val()));
+                formatResult = passwordMatcher.test(field.val());
             }
 
             if (this.settings.fieldTypes.password.passwordConfirm) {
@@ -148,26 +173,33 @@
             }
 
             if (!isEmpty) {
-                this.settings.fieldTypes.password.activeErrorMessage = lengthResult && !formatResult ? this.getErrorMessage(field, 'format') : this.getErrorMessage(field, 'invalid');
+                errorType = lengthResult && !formatResult ? 'format' : 'invalid';
             } else {
-                this.settings.fieldTypes.password.activeErrorMessage = this.getErrorMessage(field, 'required');
+                errorType = 'required';
             }
 
-            return (lengthResult && !isEmpty) ? formatResult : false;
+            return {
+                isValid: (lengthResult && !isEmpty) ? formatResult : false,
+                activeErrorType: errorType
+            };
         };
 
         this.isPasswordConfirmValid = function (field) {
 
             var isEmpty = this.isEmpty(field),
-                validResult = field.val() === $(' input[data-field-type="password"]', this.formID).val();
+                validResult = field.val() === $(' input[data-field-type="password"]', this.formID).val(),
+                errorType;
 
             if (!isEmpty) {
-                this.settings.fieldTypes.passwordConfirm.activeErrorMessage = validResult ? '' : this.getErrorMessage(field, 'invalid');
+                errorType = validResult ? '' : 'invalid';
             } else {
-                this.settings.fieldTypes.passwordConfirm.activeErrorMessage = this.getErrorMessage(field, 'required');
+                errorType = 'required';
             }
 
-            return !isEmpty && validResult;
+            return {
+                isValid: !isEmpty && validResult,
+                activeErrorType: errorType
+            };
         };
 
         this.isEmailValid = function (field) {
@@ -175,7 +207,8 @@
             var emailMatcher = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
                 isEmpty,
                 validResult,
-                domainResult = true;
+                domainResult = true,
+                errorType;
 
             isEmpty = this.isEmpty(field);
 
@@ -188,7 +221,6 @@
             validResult = emailMatcher.test(field.val());
 
             if (this.settings.fieldTypes.email.domain !== '') {
-
                 var regExp = new RegExp('@' + this.settings.fieldTypes.email.domain + '$', 'g');
                 domainResult = regExp.test(field.val());
             }
@@ -198,26 +230,33 @@
             }
 
             if (!isEmpty) {
-                this.settings.fieldTypes.email.activeErrorMessage = validResult && !domainResult ? this.getErrorMessage(field, 'domain') : this.getErrorMessage(field, 'invalid');
+                errorType = validResult && !domainResult ? 'domain' : 'invalid';
             } else {
-                this.settings.fieldTypes.email.activeErrorMessage = this.getErrorMessage(field, 'required');
+                errorType = 'required';
             }
 
-            return (validResult && !isEmpty) ? domainResult : false;
+            return {
+                isValid: (validResult && !isEmpty) ? domainResult : false,
+                activeErrorType: errorType
+            };
         };
 
         this.isEmailConfirmValid = function (field) {
 
             var isEmpty = this.isEmpty(field),
-                validResult = field.val() === $(' input[data-field-type="email"]', this.formID).val();
+                validResult = field.val() === $(' input[data-field-type="email"]', this.formID).val(),
+                errorType;
 
             if (!isEmpty) {
-                this.settings.fieldTypes.emailConfirm.activeErrorMessage = validResult ? '' : this.getErrorMessage(field, 'invalid');
+                errorType = validResult ? '' : 'invalid';
             } else {
-                this.settings.fieldTypes.emailConfirm.activeErrorMessage = this.getErrorMessage(field, 'required');
+                errorType = 'required';
             }
 
-            return !isEmpty && validResult;
+            return {
+                isValid: !isEmpty && validResult,
+                activeErrorType: errorType
+            };
         };
 
         this.isDateValid = function (field) {
@@ -226,7 +265,8 @@
                 isEmpty,
                 validResult,
                 allowedResult,
-                formatResult;
+                formatResult,
+                errorType;
 
             isEmpty = this.isEmpty(field);
 
@@ -243,53 +283,57 @@
             }
 
             if (!isEmpty) {
-
                 if (!validResult) {
-
                     if (!formatResult) {
-
                         if (momentObject._pf.unusedTokens.length === 1 || momentObject._pf.unusedTokens.length === 2 && momentObject._pf.charsLeftOver === 2) {
-                            this.settings.fieldTypes.date.activeErrorMessage = this.getErrorMessage(field, 'format');
+                            errorType = 'format';
                         } else {
-                            this.settings.fieldTypes.date.activeErrorMessage = this.getErrorMessage(field, 'invalid');
+                            errorType = 'invalid';
                         }
-
                     } else {
-                        this.settings.fieldTypes.date.activeErrorMessage = this.getErrorMessage(field, 'invalid');
+                        errorType = 'invalid';
                     }
                 } else {
                     if (!formatResult) {
-                        this.settings.fieldTypes.date.activeErrorMessage = this.getErrorMessage(field, 'format');
+                        errorType = 'format';
                     } else {
                         if (!allowedResult) {
-                            this.settings.fieldTypes.date.activeErrorMessage = this.getErrorMessage(field, 'allowedDate');
+                            errorType = 'allowedDate';
                         }
                     }
                 }
             } else {
-                this.settings.fieldTypes.date.activeErrorMessage = this.getErrorMessage(field, 'required');
+                errorType = 'required';
             }
 
-            return !isEmpty && validResult && formatResult && allowedResult;
+            return {
+                isValid: !isEmpty && validResult && formatResult && allowedResult,
+                activeErrorType: errorType
+            };
         };
 
         this.isPostCodeValid = function (field) {
 
             var isEmpty = this.isEmpty(field),
-                validResult = checkPostCode(field.val());
+                validResult = checkPostCode(field.val()),
+                errorType;
 
             if (!isEmpty) {
-                this.settings.fieldTypes.postCode.activeErrorMessage = validResult ? '' : this.getErrorMessage(field, 'invalid');
+                errorType = validResult ? '' : 'invalid';
             } else {
-                this.settings.fieldTypes.postCode.activeErrorMessage = this.getErrorMessage(field, 'required');
+                errorType = 'required';
             }
 
-            return !isEmpty && validResult;
+            return {
+                isValid: !isEmpty && validResult,
+                activeErrorType: errorType
+            };
         };
 
         this.isSelectChosen = function (field) {
 
-            var validResult = true;
+            var validResult = true,
+                errorType;
 
             if ($(field).val() === null) {
                 validResult = false;
@@ -297,18 +341,21 @@
                 validResult = false;
             }
 
-            this.settings.fieldTypes.select.activeErrorMessage = validResult ? '' : this.getErrorMessage(field, 'required');
-
-            return validResult;
+            return {
+                isValid: validResult,
+                activeErrorType: validResult ? '' : 'required'
+            };
         };
 
         this.isCheckboxTicked = function (field) {
 
-            var validResult = field.is(':checked');
+            var validResult = field.is(':checked'),
+                errorType;
 
-            this.settings.fieldTypes.checkbox.activeErrorMessage = validResult ? '' : this.getErrorMessage(field, 'required');
-
-            return validResult;
+            return {
+                isValid: validResult,
+                activeErrorType: validResult ? '' : 'required'
+            };
         };
 
         this.getErrorMessage = function (field, errorType) {
@@ -319,8 +366,12 @@
             if (fieldData[errorMessageType] !== undefined) {
                 return fieldData[errorMessageType];
             } else {
-                return self.settings.fieldTypes[field.data().fieldType][errorMessageType];
+                return this.settings.fieldTypes[field.data().fieldType][errorMessageType];
             }
+        };
+
+        this.setActiveErrorMessageFor = function(field, fieldType, errorType) {
+            this.settings.fieldTypes[fieldType].activeErrorMessage = this.getErrorMessage(field, errorType);
         };
 
         this.showErrorFor = function (field) {
@@ -376,6 +427,24 @@
                 }).get());
             }
         };
+
+        var addCallbacks= function(settings) {
+
+            $.map(settings.fieldTypes, function(field, fieldType) {
+                if(settings.fieldTypes[fieldType].callbacks === undefined) {
+                    settings.fieldTypes[fieldType].callbacks = {
+                        onValidated: function (event) {},
+                        onInvalidated: function (event) {}
+                    };
+                } else {
+                    if(settings.fieldTypes[fieldType].callbacks.onValidated === undefined) {
+                        settings.fieldTypes[fieldType].callbacks.onValidated = function (event) {};
+                    } else if(settings.fieldTypes[fieldType].callbacks.onInvalidated === undefined) {
+                        settings.fieldTypes[fieldType].callbacks.onInvalidated = function (event) {};
+                    }
+                }
+            });
+        };
     };
 
     $.fn.isValid = function (options) {
@@ -387,7 +456,7 @@
 
             isValid.init();
 
-            isValid.submitButton.click(function (e) {
+            isValid.settings.submitButton.click(function (e) {
 
                 isValid.formArray.each(function (index, field) {
 
@@ -447,7 +516,6 @@
     $.isValid.defaults = {
         fieldTypes: {
             general: {
-                activeErrorMessage: '',
                 requiredErrorMessage: 'Field is required',
                 callbacks: {
                     onValidated: function (event) {},
@@ -455,7 +523,6 @@
                 }
             },
             letters: {
-                activeErrorMessage: '',
                 requiredErrorMessage: 'Field is required',
                 invalidErrorMessage: 'Field is letters only',
                 callbacks: {
@@ -464,7 +531,6 @@
                 }
             },
             numbers: {
-                activeErrorMessage: '',
                 requiredErrorMessage: 'Field is required',
                 invalidErrorMessage: 'Field is numbers only',
                 callbacks: {
@@ -473,7 +539,6 @@
                 }
             },
             age: {
-                activeErrorMessage: '',
                 requiredErrorMessage: 'Field is required',
                 invalidErrorMessage: 'Age is invalid',
                 callbacks: {
@@ -482,7 +547,6 @@
                 }
             },
             decimals: {
-                activeErrorMessage: '',
                 requiredErrorMessage: 'Field is required',
                 invalidErrorMessage: 'Field is decimals only',
                 callbacks: {
@@ -496,7 +560,6 @@
                 numbers: false,
                 letters: true,
                 passwordConfirm: false,
-                activeErrorMessage: '',
                 requiredErrorMessage: 'Password is required',
                 formatErrorMessage: 'Password should contain numbers and letters',
                 invalidErrorMessage: 'Password should be more than 6 characters',
@@ -506,7 +569,6 @@
                 }
             },
             passwordConfirm: {
-                activeErrorMessage: '',
                 requiredErrorMessage: 'Confirming your Password is required',
                 invalidErrorMessage: 'Passwords do not match',
                 callbacks: {
@@ -517,7 +579,6 @@
             email: {
                 domain: '',
                 emailConfirm: false,
-                activeErrorMessage: '',
                 requiredErrorMessage: 'Email is required',
                 domainErrorMessage: 'Email domain should be @xxxx.com',
                 invalidErrorMessage: 'Please enter a valid email address',
@@ -527,7 +588,6 @@
                 }
             },
             emailConfirm: {
-                activeErrorMessage: '',
                 requiredErrorMessage: 'Confirming your Email is required',
                 invalidErrorMessage: 'Email addresses do not match',
                 callbacks: {
@@ -538,7 +598,6 @@
             date: {
                 format: 'DD/MM/YYYY',
                 allowFutureDates: true,
-                activeErrorMessage: '',
                 requiredErrorMessage: 'Date is required',
                 formatErrorMessage: 'Date format doesn\'t match DD/MM/YYYY',
                 invalidErrorMessage: 'Please enter a valid Date',
@@ -549,7 +608,6 @@
                 }
             },
             postCode: {
-                activeErrorMessage: '',
                 requiredErrorMessage: 'Post Code is required',
                 invalidErrorMessage: 'Please enter a valid Post Code',
                 callbacks: {
@@ -558,7 +616,6 @@
                 }
             },
             select: {
-                activeErrorMessage: '',
                 requiredErrorMessage: 'Choosing an option is required',
                 callbacks: {
                     onValidated: function (event) {},
@@ -566,7 +623,6 @@
                 }
             },
             checkbox: {
-                activeErrorMessage: '',
                 requiredErrorMessage: 'Checkbox is required',
                 callbacks: {
                     onValidated: function (event) {},
@@ -587,7 +643,7 @@
         validators: {
             general: {
                 name: 'isGeneralValid',
-                method: function() {}
+                method: $.isValid.isGeneralValid
             },
             password: {
                 name: 'isPasswordValid',

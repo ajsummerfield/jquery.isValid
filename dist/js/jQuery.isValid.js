@@ -436,6 +436,12 @@
                         onValidated: function (event) {},
                         onInvalidated: function (event) {}
                     };
+                } else {
+                    if(settings.fieldTypes[fieldType].callbacks.onValidated === undefined) {
+                        settings.fieldTypes[fieldType].callbacks.onValidated = function (event) {};
+                    } else if(settings.fieldTypes[fieldType].callbacks.onInvalidated === undefined) {
+                        settings.fieldTypes[fieldType].callbacks.onInvalidated = function (event) {};
+                    }
                 }
             });
         };

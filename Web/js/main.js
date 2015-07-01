@@ -2,6 +2,9 @@ $(document).ready(function() {
 
     var simpleForm = $('#simple-form').isValid({
         fieldTypes: {
+            general: {
+              requiredErrorMessage: false,
+            },
             username: {
                 requiredErrorMessage: 'Username is required',
                 customErrorMessage: 'Username should include more characters',

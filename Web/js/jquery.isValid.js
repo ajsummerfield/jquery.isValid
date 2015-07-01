@@ -327,14 +327,19 @@
 
             if (this.settings.enableErrorMessages) {
 
-                var errorMessage = self.settings.fieldTypes[field.data().fieldType].activeErrorMessage;
+                var errorMessage = this.settings.fieldTypes[field.data().fieldType].activeErrorMessage;
 
-                if (field.siblings('.form-error').length) {
-                    updateErrorContainer(field, errorMessage);
+                if(errorMessage) {
+
+                    if (field.siblings('.form-error').length) {
+                        updateErrorContainer(field, errorMessage);
+                    } else {
+                        var errorContainer = createErrorContainer(field, errorMessage);
+                        var errorContainerWidth = getErrorContainerWidth(field);
+                        positionErrorContainer(errorContainer, errorContainerWidth, field);
+                    }
                 } else {
-                    var errorContainer = createErrorContainer(field, errorMessage);
-                    var errorContainerWidth = getErrorContainerWidth(field);
-                    positionErrorContainer(errorContainer, errorContainerWidth, field);
+                    this.hideErrorFor(field);
                 }
             }
 
@@ -379,17 +384,19 @@
 
         var addCallbacks= function(settings) {
 
-            $.map(settings.fieldTypes, function(field, fieldType) {
-                if(settings.fieldTypes[fieldType].callbacks === undefined) {
-                    settings.fieldTypes[fieldType].callbacks = {
+            var fieldTypes = settings.fieldTypes;
+
+            $.map(fieldTypes, function(field, fieldType) {
+                if(fieldTypes[fieldType].callbacks === undefined) {
+                    fieldTypes[fieldType].callbacks = {
                         onValidated: function (event) {},
                         onInvalidated: function (event) {}
                     };
                 } else {
-                    if(settings.fieldTypes[fieldType].callbacks.onValidated === undefined) {
-                        settings.fieldTypes[fieldType].callbacks.onValidated = function (event) {};
-                    } else if(settings.fieldTypes[fieldType].callbacks.onInvalidated === undefined) {
-                        settings.fieldTypes[fieldType].callbacks.onInvalidated = function (event) {};
+                    if(fieldTypes[fieldType].callbacks.onValidated === undefined) {
+                        fieldTypes[fieldType].callbacks.onValidated = function (event) {};
+                    } else if(fieldTypes[fieldType].callbacks.onInvalidated === undefined) {
+                        fieldTypes[fieldType].callbacks.onInvalidated = function (event) {};
                     }
                 }
             });

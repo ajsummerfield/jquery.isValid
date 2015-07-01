@@ -22,40 +22,26 @@ $(document).ready(function() {
         validators: {
             username: {
                 name: 'isUsernameValid',
-                method: function(self, field) {
+                method: function(field) {
 
-                    var isEmpty = self.isEmpty(field),
-                        validResult = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/.test(field.val()),
-                        errorType;
-
-                    if (!isEmpty) {
+                    var validResult = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/.test(field.val()),
                         errorType = validResult ? '' : 'custom';
-                    } else {
-                        errorType = 'required';
-                    }
 
                     return {
-                        isValid: !isEmpty && validResult,
+                        isValid: validResult,
                         activeErrorType: errorType
                     };
                 }
             },
             idNumber: {
                 name: 'isIDNumberValid',
-                method: function(self, field) {
+                method: function(field) {
 
-                    var isEmpty = self.isEmpty(field),
-                        validResult = field.val().length === 6 && /^[0-9]+$/.test(field.val()),
-                        errorType;
-
-                    if (!isEmpty) {
+                    var validResult = field.val().length === 6 && /^[0-9]+$/.test(field.val()),
                         errorType = validResult ? '' : 'format';
-                    } else {
-                        errorType = 'required';
-                    }
 
                     return {
-                        isValid: !isEmpty && validResult,
+                        isValid: validResult,
                         activeErrorType: errorType
                     };
                 }

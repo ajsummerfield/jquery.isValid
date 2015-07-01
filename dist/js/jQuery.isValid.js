@@ -43,25 +43,44 @@
                 return true;
             } else {
                 var valMethodName = 'isEmpty',
-                    currentField;
+                    currentField,
+                    isEmpty;
 
-                if(this.settings.validators[fieldType].name) {
-                    valMethodName = this.settings.validators[fieldType].name;
+                isEmpty = this[valMethodName](field);
+
+                if (!isEmpty) {
+
+                    if(this.settings.validators[fieldType].name) {
+                        valMethodName = this.settings.validators[fieldType].name;
+                    }
+
+                    if(this[valMethodName] !== undefined) {
+                        currentField = this[valMethodName](field);
+                    } else {
+                        currentField = this.settings.validators[fieldType].method(field);
+                    }
+
+                    this.setActiveErrorMessageFor(field, fieldType, currentField.activeErrorType);
+
+                    return currentField.isValid;
                 }
 
-                if(this[valMethodName] !== undefined) {
-                    currentField = this[valMethodName](field);
-                } else {
-                    currentField = this.settings.validators[fieldType].method(this, field);
-                }
+                this.setActiveErrorMessageFor(field, fieldType, 'required');
 
-                this.setActiveErrorMessageFor(field, fieldType, currentField.activeErrorType);
-
-                return currentField.isValid;
+                return !isEmpty;
             }
         };
 
         this.isEmpty = function (field) {
+
+            if(field.val() === undefined) {
+                return true;
+            }
+
+            if(field.val() === null) {
+                return true;
+            }
+
             return (field.val().length === 0);
         };
 
@@ -82,72 +101,44 @@
 
         this.isLetters = function (field) {
 
-            var isEmpty = this.isEmpty(field),
-                validResult = /^[A-Za-z ]+$/.test(field.val()),
-                errorType;
-
-            if (!isEmpty) {
+            var validResult = /^[A-Za-z ]+$/.test(field.val()),
                 errorType = validResult ? '' : 'invalid';
-            } else {
-                errorType = 'required';
-            }
 
             return {
-                isValid: !isEmpty && validResult,
+                isValid: validResult,
                 activeErrorType: errorType
             };
         };
 
         this.isNumbers = function (field) {
 
-            var isEmpty = this.isEmpty(field),
-                validResult = /^[0-9 ]+$/.test(field.val()),
-                errorType;
-
-            if (!isEmpty) {
+            var validResult = /^[0-9 ]+$/.test(field.val()),
                 errorType = validResult ? '' : 'invalid';
-            } else {
-                errorType = 'required';
-            }
 
             return {
-                isValid: !isEmpty && validResult,
+                isValid: validResult,
                 activeErrorType: errorType
             };
         };
 
         this.isAgeValid = function(field) {
 
-            var isEmpty = this.isEmpty(field),
-                validResult = (/^[0-9 ]+$/.test(field.val())) && (field.val() > 0) && (field.val() < 150),
-                errorType;
-
-            if (!isEmpty) {
+            var validResult = (/^[0-9 ]+$/.test(field.val())) && (field.val() > 0) && (field.val() < 150),
                 errorType = validResult ? '' : 'invalid';
-            } else {
-                errorType = 'required';
-            }
 
             return {
-                isValid: !isEmpty && validResult,
+                isValid: validResult,
                 activeErrorType: errorType
             };
         };
 
         this.isDecimals = function (field) {
 
-            var isEmpty = this.isEmpty(field),
-                validResult = /^(\d+\.?\d*|\.\d+)$/.test(field.val()),
-                errorType;
-
-            if (!isEmpty) {
+            var validResult = /^(\d+\.?\d*|\.\d+)$/.test(field.val()),
                 errorType = validResult ? '' : 'invalid';
-            } else {
-                errorType = 'required';
-            }
 
             return {
-                isValid: !isEmpty && validResult,
+                isValid: validResult,
                 activeErrorType: errorType
             };
         };
@@ -155,12 +146,9 @@
         this.isPasswordValid = function (field) {
 
             var passwordMatcher = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/,
-                isEmpty,
                 lengthResult,
                 formatResult = true,
                 errorType;
-
-            isEmpty = this.isEmpty(field);
 
             lengthResult = isBetween(field.val().length, this.settings.fieldTypes.password.minLength, this.settings.fieldTypes.password.maxLength);
 
@@ -172,32 +160,21 @@
                 this.isPasswordConfirmValid($(' input[data-field-type="passwordConfirm"]', this.formID));
             }
 
-            if (!isEmpty) {
-                errorType = lengthResult && !formatResult ? 'format' : 'invalid';
-            } else {
-                errorType = 'required';
-            }
+            errorType = lengthResult && !formatResult ? 'format' : 'invalid';
 
             return {
-                isValid: (lengthResult && !isEmpty) ? formatResult : false,
+                isValid: lengthResult ? formatResult : false,
                 activeErrorType: errorType
             };
         };
 
         this.isPasswordConfirmValid = function (field) {
 
-            var isEmpty = this.isEmpty(field),
-                validResult = field.val() === $(' input[data-field-type="password"]', this.formID).val(),
-                errorType;
-
-            if (!isEmpty) {
+            var validResult = field.val() === $(' input[data-field-type="password"]', this.formID).val(),
                 errorType = validResult ? '' : 'invalid';
-            } else {
-                errorType = 'required';
-            }
 
             return {
-                isValid: !isEmpty && validResult,
+                isValid: validResult,
                 activeErrorType: errorType
             };
         };
@@ -205,12 +182,9 @@
         this.isEmailValid = function (field) {
 
             var emailMatcher = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
-                isEmpty,
                 validResult,
                 domainResult = true,
                 errorType;
-
-            isEmpty = this.isEmpty(field);
 
             // Remove whitespace as some mobiles/tablets put a spacebar in if you use the autocomplete option on a the device
             var isWhiteSpace = /\s/.test(field.val());
@@ -229,32 +203,21 @@
                 this.isEmailConfirmValid($(' input[data-field-type="emailConfirm"]', this.formID));
             }
 
-            if (!isEmpty) {
-                errorType = validResult && !domainResult ? 'domain' : 'invalid';
-            } else {
-                errorType = 'required';
-            }
+            errorType = validResult && !domainResult ? 'domain' : 'invalid';
 
             return {
-                isValid: (validResult && !isEmpty) ? domainResult : false,
+                isValid: validResult ? domainResult : false,
                 activeErrorType: errorType
             };
         };
 
         this.isEmailConfirmValid = function (field) {
 
-            var isEmpty = this.isEmpty(field),
-                validResult = field.val() === $(' input[data-field-type="email"]', this.formID).val(),
-                errorType;
-
-            if (!isEmpty) {
+            var validResult = field.val() === $(' input[data-field-type="email"]', this.formID).val(),
                 errorType = validResult ? '' : 'invalid';
-            } else {
-                errorType = 'required';
-            }
 
             return {
-                isValid: !isEmpty && validResult,
+                isValid: validResult,
                 activeErrorType: errorType
             };
         };
@@ -262,13 +225,10 @@
         this.isDateValid = function (field) {
 
             var date = field.val(),
-                isEmpty,
                 validResult,
                 allowedResult,
                 formatResult,
                 errorType;
-
-            isEmpty = this.isEmpty(field);
 
             var momentObject = new moment(date, this.settings.fieldTypes.date.format, true); // jshint ignore:line
 
@@ -282,50 +242,39 @@
                 }
             }
 
-            if (!isEmpty) {
-                if (!validResult) {
-                    if (!formatResult) {
-                        if (momentObject._pf.unusedTokens.length === 1 || momentObject._pf.unusedTokens.length === 2 && momentObject._pf.charsLeftOver === 2) {
-                            errorType = 'format';
-                        } else {
-                            errorType = 'invalid';
-                        }
+            if (!validResult) {
+                if (!formatResult) {
+                    if (momentObject._pf.unusedTokens.length === 1 || momentObject._pf.unusedTokens.length === 2 && momentObject._pf.charsLeftOver === 2) {
+                        errorType = 'format';
                     } else {
                         errorType = 'invalid';
                     }
                 } else {
-                    if (!formatResult) {
-                        errorType = 'format';
-                    } else {
-                        if (!allowedResult) {
-                            errorType = 'allowedDate';
-                        }
-                    }
+                    errorType = 'invalid';
                 }
             } else {
-                errorType = 'required';
+                if (!formatResult) {
+                    errorType = 'format';
+                } else {
+                    if (!allowedResult) {
+                        errorType = 'allowedDate';
+                    }
+                }
             }
 
             return {
-                isValid: !isEmpty && validResult && formatResult && allowedResult,
+                isValid: validResult && formatResult && allowedResult,
                 activeErrorType: errorType
             };
         };
 
         this.isPostCodeValid = function (field) {
 
-            var isEmpty = this.isEmpty(field),
-                validResult = checkPostCode(field.val()),
-                errorType;
-
-            if (!isEmpty) {
+            var validResult = checkPostCode(field.val()),
                 errorType = validResult ? '' : 'invalid';
-            } else {
-                errorType = 'required';
-            }
 
             return {
-                isValid: !isEmpty && validResult,
+                isValid: validResult,
                 activeErrorType: errorType
             };
         };
@@ -643,7 +592,7 @@
         validators: {
             general: {
                 name: 'isGeneralValid',
-                method: $.isValid.isGeneralValid
+                method: function() {}
             },
             password: {
                 name: 'isPasswordValid',

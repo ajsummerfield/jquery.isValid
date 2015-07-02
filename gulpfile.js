@@ -58,15 +58,7 @@ gulp.task('styles', function () {
         .pipe(gulp.dest('dist/css'));
 });
 
-gulp.task('tests', function () {
-  gulp.src(__dirname + '/tests/*.js')
-    .pipe(jasmine())
-    .on('error', notify.onError({
-      title: 'Jasmine Test Failed'
-    }));
-});
-
-gulp.task('test', function (done) {
+gulp.task('tests', function (done) {
   return karma.start({
     configFile: __dirname + '/karma.conf.js',
     singleRun: false

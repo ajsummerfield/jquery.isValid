@@ -87,7 +87,7 @@
         this.isGeneralValid = function (field) {
 
             var isEmpty = this.isEmpty(field),
-                errorType;
+                errorType = '';
 
             if (isEmpty) {
                 errorType = 'required';
@@ -148,7 +148,7 @@
             var passwordMatcher = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/,
                 lengthResult,
                 formatResult = true,
-                errorType;
+                errorType = '';
 
             lengthResult = isBetween(field.val().length, this.settings.fieldTypes.password.minLength, this.settings.fieldTypes.password.maxLength);
 
@@ -156,14 +156,14 @@
                 formatResult = passwordMatcher.test(field.val());
             }
 
-            if (this.settings.fieldTypes.password.passwordConfirm) {
-                this.isPasswordConfirmValid($(' input[data-field-type="passwordConfirm"]', this.formID));
+            if(lengthResult && !formatResult) {
+                errorType = 'format';
+            } else if(!lengthResult || !lengthResult && formatResult) {
+                errorType = 'invalid';
             }
 
-            errorType = lengthResult && !formatResult ? 'format' : 'invalid';
-
             return {
-                isValid: lengthResult ? formatResult : false,
+                isValid: lengthResult && formatResult,
                 activeErrorType: errorType
             };
         };
@@ -184,13 +184,10 @@
             var emailMatcher = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
                 validResult,
                 domainResult = true,
-                errorType;
+                errorType = '';
 
-            // Remove whitespace as some mobiles/tablets put a spacebar in if you use the autocomplete option on a the device
-            var isWhiteSpace = /\s/.test(field.val());
-            if (isWhiteSpace) {
-                field.val(field.val().replace(/\s/g, ''));
-            }
+            // Remove whitespace as some mobiles/tablets put a space in if you use the autocomplete option on a the device
+            field.val(field.val().replace(/\s/g, ''));
 
             validResult = emailMatcher.test(field.val());
 
@@ -199,14 +196,14 @@
                 domainResult = regExp.test(field.val());
             }
 
-            if (this.settings.fieldTypes.email.emailConfirm) {
-                this.isEmailConfirmValid($(' input[data-field-type="emailConfirm"]', this.formID));
+            if(validResult && !domainResult) {
+                errorType = 'domain';
+            } else if(!validResult || !validResult && domainResult) {
+                errorType = 'invalid';
             }
 
-            errorType = validResult && !domainResult ? 'domain' : 'invalid';
-
             return {
-                isValid: validResult ? domainResult : false,
+                isValid: validResult && domainResult,
                 activeErrorType: errorType
             };
         };
@@ -226,9 +223,9 @@
 
             var date = field.val(),
                 validResult,
-                allowedResult,
+                allowedResult = true,
                 formatResult,
-                errorType;
+                errorType = '';
 
             var momentObject = new moment(date, this.settings.fieldTypes.date.format, true); // jshint ignore:line
 
@@ -282,7 +279,7 @@
         this.isSelectChosen = function (field) {
 
             var validResult = true,
-                errorType;
+                errorType = '';
 
             if ($(field).val() === null) {
                 validResult = false;
@@ -299,7 +296,7 @@
         this.isCheckboxTicked = function (field) {
 
             var validResult = field.is(':checked'),
-                errorType;
+                errorType = '';
 
             return {
                 isValid: validResult,

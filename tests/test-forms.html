@@ -7,27 +7,27 @@
       <form id="isValid-Test-Form" action="" method="post" class="left-col-50">
           <div class="form-row">
               <label for="generalOne">General 1</label>
-              <input type="text"
+              <input id="general" type="text"
                      data-field-type="general"
                      name="generalOne" />
           </div>
           <div class="form-row">
               <label for="username">Username</label>
-              <input type="text"
+              <input id="username" type="text"
                      data-field-type="username"
                      data-custom-error-message="Username not allowed"
                      name="username" />
           </div>
           <div class="form-row">
               <label for="idNumber">ID Number</label>
-              <input type="text"
+              <input id="idNumber" type="text"
                      data-field-type="idNumber"
                      placeholder="Enter ID Number"
                      name="idNumber" />
           </div>
           <div class="form-row">
               <label for="age">Age</label>
-              <input type="text"
+              <input id="age" type="text"
                      data-field-type="age"
                      data-required-error-message="Please enter your age"
                      name="age" />
@@ -55,21 +55,21 @@
           </div>
           <div class="form-row">
               <label for="email">Email</label>
-              <input type="text"
+              <input id="email" type="text"
                      data-field-type="email"
                      placeholder="Enter email"
                      name="email" />
           </div>
           <div class="form-row">
               <label for="emailConfirm">Email</label>
-              <input type="text"
+              <input id="emailConfirm" type="text"
                      data-field-type="emailConfirm"
                      placeholder="Confirm Email"
                      name="emailConfirm" />
           </div>
           <div class="form-row">
               <label for="password">Password</label>
-              <input type="password"
+              <input id="password" type="password"
                      data-field-type="password"
                      data-format-error-message="Password is weak brah. Mix it up."
                      placeholder="Enter Password"
@@ -77,15 +77,14 @@
           </div>
           <div class="form-row">
               <label for="passwordConfirm">Confirm</label>
-              <input type="password"
+              <input id="passwordConfirm" type="password"
                      data-field-type="passwordConfirm"
                      placeholder="Confirm Password"
                      name="passwordConfirm" />
           </div>
           <div class="form-row">
               <label for="date">Date</label>
-              <input type="text"
-                     id="datepicker"
+              <input id="datepicker" type="text"
                      data-field-type="date"
                      data-allowed-date-error-message="Date is in the future. Not allowed."
                      placeholder="DD/MM/YYYY"
@@ -93,7 +92,7 @@
           </div>
           <div class="form-row">
               <label for="postcode">Post Code</label>
-              <input type="text"
+              <input id="postcode" type="text"
                      data-field-type="postCode"
                      data-invalid-error-message="Postcode is made up. Try again."
                      placeholder="Enter PostCode"
@@ -101,7 +100,7 @@
           </div>
           <div class="form-row">
               <label for="numbers">Number</label>
-              <input type="text"
+              <input id="numbers" type="text"
                      data-field-type="numbers"
                      data-invalid-error-message="Do they look like numbers to you?"
                      placeholder="Enter number"
@@ -109,14 +108,14 @@
           </div>
           <div class="form-row">
               <label for="decimals">Decimals</label>
-              <input type="text"
+              <input id="decimals" type="text"
                      data-field-type="decimals"
                      placeholder="Enter a decimal number"
                      name="decimals" />
           </div>
           <div class="form-row">
               <label for="letters">Letters</label>
-              <input type="text"
+              <input id="letters" type="text"
                      data-field-type="letters"
                      data-invalid-error-message="Field only allows letters"
                      placeholder="Enter letters"
@@ -124,7 +123,7 @@
           </div>
           <div class="form-row">
               <label for="terms">Terms</label>
-              <input type="checkbox"
+              <input id="checkbox" type="checkbox"
                      data-field-type="checkbox"
                      data-required-error-message="Tick it fool. Tick it."
                      name="terms" />

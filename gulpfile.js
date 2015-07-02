@@ -2,12 +2,17 @@ var pkg = require('./package.json');
 
 var gulp = require('gulp');
 
+var karma = require('karma').server;
+var debug = require('gulp-debug');
 var livereload = require('gulp-livereload');
 var jshint = require('gulp-jshint');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var minify_css = require('gulp-minify-css');
+
+var jasmine = require('gulp-jasmine');
+var notify = require('gulp-notify');
 
 var paths = {
     scripts: __dirname + '/Web/js/**/*.js',
@@ -30,6 +35,9 @@ gulp.task('hint', function() {
 
 gulp.task('watch', function() {
     gulp.watch(__dirname + '/Web/js/jquery.isValid.js', ['hint']);
+    return karma.server.start({
+      configFile: __dirname + '/karma.conf.js'
+    });
 });
 
 gulp.task('scripts', function () {
@@ -48,6 +56,21 @@ gulp.task('styles', function () {
         .pipe(minify_css())
         .pipe(rename('jQuery.isValid.min.css'))
         .pipe(gulp.dest('dist/css'));
+});
+
+gulp.task('tests', function () {
+  gulp.src(__dirname + '/tests/*.js')
+    .pipe(jasmine())
+    .on('error', notify.onError({
+      title: 'Jasmine Test Failed'
+    }));
+});
+
+gulp.task('test', function (done) {
+  return karma.start({
+    configFile: __dirname + '/karma.conf.js',
+    singleRun: false
+  }, done);
 });
 
 gulp.task('default', ['watch']);

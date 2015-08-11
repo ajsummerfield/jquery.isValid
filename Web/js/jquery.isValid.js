@@ -16,7 +16,7 @@
             this.$elem.addClass('isValid');
             this.FIELD_VALIDATED = 'isValid.fieldValidated';
             this.FIELD_INVALIDATED = 'isValid.fieldInvalidated';
-            this.settings.submitButton = this.settings.submitButton !== null ? this.setting.submitButton : $(' :input[type="submit"]', this.formID);
+            this.settings.submitButton = this.settings.submitButton !== null ? this.settings.submitButton : $(' :input[type="submit"]', this.formID);
             this.formArray =
                 $(' :input[type="text"],' +
                 ' :input[type="email"],' +
@@ -39,7 +39,7 @@
 
             var fieldType = field.attr('data-field-type');
 
-            if (field.prop('disabled') || field.attr('type') == 'hidden' || fieldType === "notrequired") {
+            if (field.prop('disabled') || field.attr('type') === 'hidden' || fieldType === "notrequired") {
                 return true;
             } else {
                 var valMethodName = 'isEmpty',
@@ -57,7 +57,7 @@
                     if(this[valMethodName] !== undefined) {
                         currentField = this[valMethodName](field);
                     } else {
-                        currentField = this.settings.validators[fieldType].method(field);
+                        currentField = this.settings.validators[fieldType].validate(field);
                     }
 
                     this.setActiveErrorMessageFor(field, fieldType, currentField.activeErrorType);
@@ -156,10 +156,6 @@
                 formatResult = passwordMatcher.test(field.val());
             }
 
-            if (this.settings.fieldTypes.password.passwordConfirm) {
-                this.isPasswordConfirmValid($(' input[data-field-type="passwordConfirm"]', this.formID));
-            }
-
             errorType = lengthResult && !formatResult ? 'format' : 'invalid';
 
             return {
@@ -186,21 +182,14 @@
                 domainResult = true,
                 errorType;
 
-            // Remove whitespace as some mobiles/tablets put a spacebar in if you use the autocomplete option on a the device
-            var isWhiteSpace = /\s/.test(field.val());
-            if (isWhiteSpace) {
-                field.val(field.val().replace(/\s/g, ''));
-            }
+            // Remove whitespace as some mobiles/tablets put a spacebar in if you use the autocomplete option on the device
+            field.val(field.val().replace(/\s/g, ''));
 
             validResult = emailMatcher.test(field.val());
 
             if (this.settings.fieldTypes.email.domain !== '') {
                 var regExp = new RegExp('@' + this.settings.fieldTypes.email.domain + '$', 'g');
                 domainResult = regExp.test(field.val());
-            }
-
-            if (this.settings.fieldTypes.email.emailConfirm) {
-                this.isEmailConfirmValid($(' input[data-field-type="emailConfirm"]', this.formID));
             }
 
             errorType = validResult && !domainResult ? 'domain' : 'invalid';
@@ -599,55 +588,55 @@
         validators: {
             general: {
                 name: 'isGeneralValid',
-                method: function() {}
+                validate: function() {}
             },
             password: {
                 name: 'isPasswordValid',
-                method: function() {}
+                validate: function() {}
             },
             passwordConfirm: {
                 name: 'isPasswordConfirmValid',
-                method: function() {}
+                validate: function() {}
             },
             email: {
                 name: 'isEmailValid',
-                method: function () {}
+                validate: function () {}
             },
             emailConfirm: {
                 name: 'isEmailConfirmValid',
-                method: function() {}
+                validate: function() {}
             },
             date: {
                 name: 'isDateValid',
-                method: function() {}
+                validate: function() {}
             },
             letters: {
                 name: 'isLetters',
-                method: function() {}
+                validate: function() {}
             },
             numbers: {
                 name: 'isNumbers',
-                method: function () {}
+                validate: function () {}
             },
             age: {
                 name: 'isAgeValid',
-                method: function() {}
+                validate: function() {}
             },
             decimals: {
                 name: 'isDecimals',
-                method: function() {}
+                validate: function() {}
             },
             postCode: {
                 name: 'isPostCodeValid',
-                method: function() {}
-            },
-            checkbox: {
-                name: 'isCheckboxTicked',
-                method: function() {}
+                validate: function() {}
             },
             select: {
                 name: 'isSelectChosen',
-                method: function() {}
+                validate: function() {}
+            },
+            checkbox: {
+                name: 'isCheckboxTicked',
+                validate: function() {}
             }
         },
         onFormValidated: function () {},

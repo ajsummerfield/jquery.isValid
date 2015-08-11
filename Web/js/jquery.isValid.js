@@ -268,10 +268,10 @@
         this.isPostCodeValid = function (field) {
 
             var validResult = checkPostCode(field.val()),
-                errorType = validResult ? '' : 'invalid';
+                errorType = validResult.length > 0 ? '' : 'invalid';
 
             return {
-                isValid: validResult,
+                isValid: validResult.length > 0,
                 activeErrorType: errorType
             };
         };

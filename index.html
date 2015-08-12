@@ -32,15 +32,15 @@
             <p>To use jQuery.isValid, make sure you have jQuery and then add the following markup to your html:</p>
             <pre>
                 <code>
-&lt;!-- Styles --&gt;   
+&lt;!-- Styles --&gt;
 &lt;link type=&quot;text/css&quot; href=&quot;css/jQuery.isValid.css&quot; rel=&quot;stylesheet&quot; /&gt;
 
-&lt;!-- Scripts Unminified --&gt;   
+&lt;!-- Scripts Unminified --&gt;
 &lt;script type=&quot;text/javascript&quot; src=&quot;/js/moment.js&quot;&gt;&lt;/script&gt;
 &lt;script type=&quot;text/javascript&quot; src=&quot;/js/checkPostCode.js&quot;&gt;&lt;/script&gt;
 &lt;script type=&quot;text/javascript&quot; src=&quot;/js/jQuery.isValid.js&quot;&gt;&lt;/script&gt;
 
-&lt;!-- Scripts Minified --&gt;   
+&lt;!-- Scripts Minified --&gt;
 &lt;script type=&quot;text/javascript&quot; src=&quot;/js/moment.js&quot;&gt;&lt;/script&gt;
 &lt;script type=&quot;text/javascript&quot; src=&quot;/js/jQuery.isValid.min.js&quot;&gt;&lt;/script&gt;
                 </code>
@@ -57,14 +57,14 @@
 &lt;form id=&quot;simple-form&quot;&gt;
     &lt;div class=&quot;form-row&quot;&gt;
         &lt;label for=&quot;general&quot;&gt;General Field&lt;/label&gt;
-        &lt;input type=&quot;text&quot; 
-               data-field-type=&quot;general&quot; 
+        &lt;input type=&quot;text&quot;
+               data-field-type=&quot;general&quot;
                name=&quot;general&quot; /&gt;
     &lt;/div&gt;
     &lt;div class=&quot;form-row&quot;&gt;
         &lt;label for=&quot;emailAddress&quot;&gt;Email&lt;/label&gt;
-        &lt;input type=&quot;text&quot; 
-               data-field-type=&quot;email&quot; 
+        &lt;input type=&quot;text&quot;
+               data-field-type=&quot;email&quot;
                name=&quot;emailAddress&quot; /&gt;
     &lt;/div&gt;
     &lt;div class=&quot;form-row&quot;&gt;
@@ -82,7 +82,7 @@
                     <code>
  $(document).ready(function() {
     $(&#39;#simple-form&#39;).isValid();
-});                   
+});
                     </code>
                 </pre>
             </div>
@@ -113,14 +113,14 @@
 &lt;form id=&quot;simple-form&quot;&gt;
     &lt;div class=&quot;form-row&quot;&gt;
         &lt;label for=&quot;general&quot;&gt;General Field&lt;/label&gt;
-        &lt;input type=&quot;text&quot; 
-               data-field-type=&quot;general&quot; 
+        &lt;input type=&quot;text&quot;
+               data-field-type=&quot;general&quot;
                name=&quot;general&quot; /&gt;
     &lt;/div&gt;
     &lt;div class=&quot;form-row&quot;&gt;
         &lt;label for=&quot;emailAddress&quot;&gt;Email&lt;/label&gt;
-        &lt;input type=&quot;text&quot; 
-               data-field-type=&quot;email&quot; 
+        &lt;input type=&quot;text&quot;
+               data-field-type=&quot;email&quot;
                name=&quot;emailAddress&quot; /&gt;
     &lt;/div&gt;
     &lt;div class=&quot;form-row&quot;&gt;
@@ -204,10 +204,10 @@ $(document).ready(function() {
 &lt;form id=&quot;complex-form&quot; class=&quot;isValid&quot;&gt;
     &lt;div class=&quot;form-row&quot;&gt;
         &lt;label for=&quot;username&quot;&gt;Username&lt;/label&gt;
-        &lt;input type=&quot;text&quot; 
-               data-field-type=&quot;general&quot; 
-               data-error-message=&quot;Please enter a Username&quot; 
-               placeholder=&quot;Enter Username&quot; 
+        &lt;input type=&quot;text&quot;
+               data-field-type=&quot;general&quot;
+               data-error-message=&quot;Please enter a Username&quot;
+               placeholder=&quot;Enter Username&quot;
                name=&quot;username&quot; /&gt;
     &lt;/div&gt;
     &lt;div class=&quot;form-row&quot;&gt;
@@ -221,8 +221,8 @@ $(document).ready(function() {
     &lt;/div&gt;
     &lt;div class=&quot;form-row&quot;&gt;
         &lt;label for=&quot;role&quot;&gt;Role&lt;/label&gt;
-        &lt;select id=&quot;role&quot; 
-                name=&quot;role&quot; 
+        &lt;select id=&quot;role&quot;
+                name=&quot;role&quot;
                 data-field-type=&quot;select&quot;
                 data-required-error-message=&quot;Choosing a role is mandatory&quot; &gt;
             &lt;option disabled selected&gt;Choose Role&lt;/option&gt;
@@ -233,56 +233,56 @@ $(document).ready(function() {
     &lt;/div&gt;
     &lt;div class=&quot;form-row&quot;&gt;
         &lt;label for=&quot;email&quot;&gt;Email&lt;/label&gt;
-        &lt;input type=&quot;text&quot; 
-               data-field-type=&quot;email&quot; 
-               placeholder=&quot;Enter email&quot; 
+        &lt;input type=&quot;text&quot;
+               data-field-type=&quot;email&quot;
+               placeholder=&quot;Enter email&quot;
                name=&quot;email&quot; /&gt;
     &lt;/div&gt;
     &lt;div class=&quot;form-row&quot;&gt;
         &lt;label for=&quot;emailConfirm&quot;&gt;Email&lt;/label&gt;
-        &lt;input type=&quot;text&quot; 
-               data-field-type=&quot;emailConfirm&quot; 
-               placeholder=&quot;Confirm Email&quot; 
+        &lt;input type=&quot;text&quot;
+               data-field-type=&quot;emailConfirm&quot;
+               placeholder=&quot;Confirm Email&quot;
                name=&quot;emailConfirm&quot; /&gt;
     &lt;/div&gt;
     &lt;div class=&quot;form-row&quot;&gt;
         &lt;label for=&quot;password&quot;&gt;Password&lt;/label&gt;
-        &lt;input type=&quot;password&quot; 
+        &lt;input type=&quot;password&quot;
                data-field-type=&quot;password&quot;
                data-format-error-message=&quot;Password is weak brah. Mix it up.&quot;
-               placeholder=&quot;Enter Password&quot; 
+               placeholder=&quot;Enter Password&quot;
                name=&quot;password&quot; /&gt;
     &lt;/div&gt;
     &lt;div class=&quot;form-row&quot;&gt;
         &lt;label for=&quot;passwordConfirm&quot;&gt;Confirm&lt;/label&gt;
-        &lt;input type=&quot;password&quot; 
-               data-field-type=&quot;passwordConfirm&quot; 
-               placeholder=&quot;Confirm Password&quot; 
+        &lt;input type=&quot;password&quot;
+               data-field-type=&quot;passwordConfirm&quot;
+               placeholder=&quot;Confirm Password&quot;
                name=&quot;passwordConfirm&quot; /&gt;
     &lt;/div&gt;
     &lt;div class=&quot;form-row&quot;&gt;
         &lt;label for=&quot;date&quot;&gt;Date&lt;/label&gt;
-        &lt;input type=&quot;text&quot; 
+        &lt;input type=&quot;text&quot;
                id=&quot;datepicker&quot;
                data-field-type=&quot;date&quot;
                data-allowed-date-error-message=&quot;Date is in the future. Not allowed.&quot;
-               placeholder=&quot;DD/MM/YYYY&quot; 
+               placeholder=&quot;DD/MM/YYYY&quot;
                name=&quot;date&quot; /&gt;
     &lt;/div&gt;
     &lt;div class=&quot;form-row&quot;&gt;
         &lt;label for=&quot;postcode&quot;&gt;Post Code&lt;/label&gt;
-        &lt;input type=&quot;text&quot; 
+        &lt;input type=&quot;text&quot;
                data-field-type=&quot;postCode&quot;
                data-invalid-error-message=&quot;Postcode is made up. Try again.&quot;
-               placeholder=&quot;Enter PostCode&quot; 
+               placeholder=&quot;Enter PostCode&quot;
                name=&quot;postCode&quot; /&gt;
     &lt;/div&gt;
     &lt;div class=&quot;form-row&quot;&gt;
         &lt;label for=&quot;numbers&quot;&gt;Number&lt;/label&gt;
-        &lt;input type=&quot;text&quot; 
+        &lt;input type=&quot;text&quot;
                data-field-type=&quot;numbers&quot;
                data-invalid-error-message=&quot;Do they look like numbers to you?&quot;
-               placeholder=&quot;Enter number&quot; 
+               placeholder=&quot;Enter number&quot;
                name=&quot;numbers&quot; /&gt;
     &lt;/div&gt;
     &lt;div class=&quot;form-row&quot;&gt;
@@ -316,6 +316,63 @@ $(&#39;#complex-form&#39;).isValid({
 });
                 </code>
             </pre>
+            </div>
+            <div class="clear"></div>
+            <h3>Validators</h3>
+            <p>
+              jQuery.isValid has the option for you to create your own custom fieldType and validator. The plugin offers a bunch of default options, however you may have a specific
+              fieldType like an ID Number or a Username which have a specific requirement for it to be valid. You can create your own validator and then the plugin will use that validator
+              and run it just like the default built in validators.
+            </p>
+            <p>So long as your validator matches the structure shown and returns the expected object type everything will work like it's part of the plugin! Example of an ID number are shown below:</p>
+            <div class="width-50">
+                <form id="validator-form">
+                    <div class="form-row">
+                        <label for="idNumber">ID Number</label>
+                        <input type="text"
+                               data-field-type="idNumber"
+                               placeholder="Enter ID Number"
+                               name="idNumber" />
+                    </div>
+                    <div class="form-row">
+                        <label>&nbsp;</label>
+                        <input type="submit" value="Submit" class="form-btn" />
+                    </div>
+                </form>
+            </div>
+            <div class="width-50">
+                <pre>
+                    <code>
+var validatorForm = $(&#39;#validator-form&#39;).isValid({
+      fieldTypes: {
+          idNumber: {
+              requiredErrorMessage: 'Please specify your ID Number',
+              formatErrorMessage: 'ID Number is incorrect format',
+              callbacks: {
+                  onValidated: function(event) {
+                      console.log(event);
+                  }
+              }
+          }
+      },
+      validators: {
+          idNumber: {
+              name: &#39;isIDNumberValid&#39;,
+              validate: function(field) {
+
+                  var validResult = field.val().length === 6 &amp;&amp; /^[0-9]+$/.test(field.val()),
+                      errorType = validResult ? &#39;&#39; : &#39;format&#39;;
+
+                  return {
+                      isValid: validResult,
+                      activeErrorType: errorType
+                  };
+              }
+          }
+      }
+  }).data('isValid');
+                    </code>
+                </pre>
             </div>
             <div class="clear"></div>
         </section>
@@ -662,13 +719,52 @@ $(&#39;#complex-form&#39;).isValid({
                 <div class="option-splitter"></div>
                 <div class="option-container">
                     <div class="option-col">
-                        <h4>showErrorMessage</h4>
+                        <h4>enableErrorMessages</h4>
                         <p><span class="bold">Type: </span>boolean</p>
                         <p>Global control to show or hide all error message for each field type.</p>
                     </div>
                     <div class="option-col option-descriptions">
-                        <p><span class="italic">showErrorMessage</span> - boolean</p>
+                        <p><span class="italic">enableErrorMessages</span> - boolean</p>
                         <p class="description">true</p>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="option-splitter"></div>
+                <div class="option-container">
+                    <div class="option-col">
+                        <h4>submitButton</h4>
+                        <p><span class="bold">Type: </span>boolean</p>
+                        <p>The submit button that should validate and submit the form. Initially null and uses the submit button found in the form if not specified.</p>
+                    </div>
+                    <div class="option-col option-descriptions">
+                        <p><span class="italic">submitButton</span> - null</p>
+                        <p class="description">null (uses default form submit unless specified)</p>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="option-splitter"></div>
+                <div class="option-container">
+                    <div class="option-col">
+                        <h4>errorTypes</h4>
+                        <p><span class="bold">Type: </span>object</p>
+                        <p>An object containing the various errorTypes that are used in the plugin and the value associated with each type. Custom ones can be created.</p>
+                    </div>
+                    <div class="option-col option-descriptions">
+                        <p><span class="italic">errorTypes</span> - {}</p>
+                        <p class="description">Default error types:<br/> required, invalid, format, domain, allowedDate</p>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="option-splitter"></div>
+                <div class="option-container">
+                    <div class="option-col">
+                        <h4>validators</h4>
+                        <p><span class="bold">Type: </span>object</p>
+                        <p>An object containing the fieldTypes that can be validated by the plugin. Includes all the default ones and the names of the methods it runs. Custom ones can be created, specifying the fieldType and then within that, the name and the validator method.</p>
+                    </div>
+                    <div class="option-col option-descriptions">
+                        <p><span class="italic">validators</span> - {}</p>
+                        <p class="description">Defaults include all fieldTypes, e.g.<br/> general: { name: 'isGeneralValid' }</p>
                     </div>
                     <div class="clear"></div>
                 </div>

@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    var simpleForm = $('.simple-form').isValid({
+    var simpleForm = $('#simple-form').isValid({
         fieldTypes: {
             general: {
               requiredErrorMessage: false,
@@ -22,7 +22,7 @@ $(document).ready(function() {
         errorTypes: {
             custom: 'customErrorMessage'
         },
-        validators: {
+        customValidators: {
             username: {
                 name: 'isUsernameValid',
                 validate: function(field) {

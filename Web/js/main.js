@@ -22,7 +22,7 @@ $(document).ready(function() {
         errorTypes: {
             custom: 'customErrorMessage'
         },
-        customValidators: {
+        validators: {
             username: {
                 name: 'isUsernameValid',
                 validate: function(field) {

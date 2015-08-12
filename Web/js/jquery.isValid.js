@@ -17,6 +17,7 @@
             this.FIELD_VALIDATED = 'isValid.fieldValidated';
             this.FIELD_INVALIDATED = 'isValid.fieldInvalidated';
             this.settings.submitButton = this.settings.submitButton !== null ? this.settings.submitButton : $(' :input[type="submit"]', this.$elem);
+            this.validators = this.settings.validators;
             this.formArray =
                 $(' :input[type="text"],' +
                 ' :input[type="email"],' +
@@ -29,6 +30,7 @@
                 ' select', this.$elem);
 
             addCallbacks(this.settings);
+            addValidators(this.validators);
         };
 
         this.isFormValidated = function () {
@@ -39,7 +41,7 @@
 
             var fieldType = field.attr('data-field-type');
 
-            if (field.prop('disabled') || field.attr('type') === 'hidden' || fieldType === "notrequired") {
+            if (field.prop('disabled') || field.attr('type') === 'hidden' || fieldType === 'notrequired') {
                 return true;
             } else {
                 var valMethodName = 'isEmpty',
@@ -50,14 +52,14 @@
 
                 if (!isEmpty) {
 
-                    if(this.settings.customValidators[fieldType].name) {
-                        valMethodName = this.settings.customValidators[fieldType].name;
+                    if(this.validators[fieldType].name) {
+                        valMethodName = this.validators[fieldType].name;
                     }
 
                     if(this[valMethodName] !== undefined) {
                         currentField = this[valMethodName](field);
                     } else {
-                        currentField = this.settings.customValidators[fieldType].validate(field);
+                        currentField = this.validators[fieldType].validate(field);
                     }
 
                     this.setActiveErrorMessageFor(field, fieldType, currentField.activeErrorType);
@@ -86,12 +88,8 @@
 
         this.isGeneralValid = function (field) {
 
-            var isEmpty = this.isEmpty(field),
-                errorType;
-
-            if (isEmpty) {
-                errorType = 'required';
-            }
+            var isEmpty = self.isEmpty(field),
+                errorType = isEmpty ? 'required' : '';
 
             return {
                 isValid: !isEmpty,
@@ -371,7 +369,7 @@
             }
         };
 
-        var addCallbacks= function(settings) {
+        var addCallbacks = function(settings) {
 
             var fieldTypes = settings.fieldTypes;
 
@@ -389,6 +387,16 @@
                     }
                 }
             });
+        };
+
+        var addValidators = function(validators) {
+
+          $.map(validators, function(validator, fieldType) {
+              var methodName = validators[fieldType].name;
+              if(validators[fieldType].validate === undefined) {
+                  validators[fieldType].validate = self[methodName];
+              }
+          });
         };
     };
 
@@ -585,58 +593,45 @@
             domain: 'domainErrorMessage',
             allowedDate: 'allowedDateErrorMessage',
         },
-        customValidators: {
+        validators: {
             general: {
-                name: 'isGeneralValid',
-                validate: function() {}
+                name: 'isGeneralValid'
             },
             password: {
-                name: 'isPasswordValid',
-                validate: function() {}
+                name: 'isPasswordValid'
             },
             passwordConfirm: {
-                name: 'isPasswordConfirmValid',
-                validate: function() {}
+                name: 'isPasswordConfirmValid'
             },
             email: {
-                name: 'isEmailValid',
-                validate: function () {}
+                name: 'isEmailValid'
             },
             emailConfirm: {
-                name: 'isEmailConfirmValid',
-                validate: function() {}
+                name: 'isEmailConfirmValid'
             },
             date: {
-                name: 'isDateValid',
-                validate: function() {}
+                name: 'isDateValid'
             },
             letters: {
-                name: 'isLetters',
-                validate: function() {}
+                name: 'isLetters'
             },
             numbers: {
-                name: 'isNumbers',
-                validate: function () {}
+                name: 'isNumbers'
             },
             age: {
-                name: 'isAgeValid',
-                validate: function() {}
+                name: 'isAgeValid'
             },
             decimals: {
-                name: 'isDecimals',
-                validate: function() {}
+                name: 'isDecimals'
             },
             postCode: {
-                name: 'isPostCodeValid',
-                validate: function() {}
+                name: 'isPostCodeValid'
             },
             select: {
-                name: 'isSelectChosen',
-                validate: function() {}
+                name: 'isSelectChosen'
             },
             checkbox: {
-                name: 'isCheckboxTicked',
-                validate: function() {}
+                name: 'isCheckboxTicked'
             }
         },
         onFormValidated: function () {},

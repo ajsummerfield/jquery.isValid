@@ -586,6 +586,58 @@
             allowedDate: 'allowedDateErrorMessage',
         },
         customValidators: {
+            general: {
+                name: 'isGeneralValid',
+                validate: function() {}
+            },
+            password: {
+                name: 'isPasswordValid',
+                validate: function() {}
+            },
+            passwordConfirm: {
+                name: 'isPasswordConfirmValid',
+                validate: function() {}
+            },
+            email: {
+                name: 'isEmailValid',
+                validate: function () {}
+            },
+            emailConfirm: {
+                name: 'isEmailConfirmValid',
+                validate: function() {}
+            },
+            date: {
+                name: 'isDateValid',
+                validate: function() {}
+            },
+            letters: {
+                name: 'isLetters',
+                validate: function() {}
+            },
+            numbers: {
+                name: 'isNumbers',
+                validate: function () {}
+            },
+            age: {
+                name: 'isAgeValid',
+                validate: function() {}
+            },
+            decimals: {
+                name: 'isDecimals',
+                validate: function() {}
+            },
+            postCode: {
+                name: 'isPostCodeValid',
+                validate: function() {}
+            },
+            select: {
+                name: 'isSelectChosen',
+                validate: function() {}
+            },
+            checkbox: {
+                name: 'isCheckboxTicked',
+                validate: function() {}
+            }
         },
         onFormValidated: function () {},
         onFormInvalidated: function () {},

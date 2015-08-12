@@ -12,11 +12,11 @@
             this.elem = element;
             this.$elem = $(element);
             this.settings = $.extend(true, {}, $.isValid.defaults, options);
-            this.formID = '#' + this.$elem.attr('id');
+            this.formID = this.$elem.attr('id') !== '' ? '#' + this.$elem.attr('id') : '';
             this.$elem.addClass('isValid');
             this.FIELD_VALIDATED = 'isValid.fieldValidated';
             this.FIELD_INVALIDATED = 'isValid.fieldInvalidated';
-            this.settings.submitButton = this.settings.submitButton !== null ? this.settings.submitButton : $(' :input[type="submit"]', this.formID);
+            this.settings.submitButton = this.settings.submitButton !== null ? this.settings.submitButton : $(' :input[type="submit"]', this.$elem);
             this.formArray =
                 $(' :input[type="text"],' +
                 ' :input[type="email"],' +
@@ -26,13 +26,13 @@
                 ' :input[type="date"],' +
                 ' :input[type="checkbox"],' +
                 ' textarea,' +
-                ' select', this.formID);
+                ' select', this.$elem);
 
             addCallbacks(this.settings);
         };
 
         this.isFormValidated = function () {
-            return ($(' .invalid', this.formID).length) ? false : true;
+            return ($(' .invalid', this.$elem).length) ? false : true;
         };
 
         this.isValidField = function (field) {
@@ -166,7 +166,7 @@
 
         this.isPasswordConfirmValid = function (field) {
 
-            var validResult = field.val() === $(' input[data-field-type="password"]', this.formID).val(),
+            var validResult = field.val() === $(' input[data-field-type="password"]', this.$elem).val(),
                 errorType = validResult ? '' : 'invalid';
 
             return {
@@ -202,7 +202,7 @@
 
         this.isEmailConfirmValid = function (field) {
 
-            var validResult = field.val() === $(' input[data-field-type="email"]', this.formID).val(),
+            var validResult = field.val() === $(' input[data-field-type="email"]', this.$elem).val(),
                 errorType = validResult ? '' : 'invalid';
 
             return {

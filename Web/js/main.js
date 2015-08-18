@@ -25,7 +25,7 @@ $(document).ready(function() {
         validators: {
             username: {
                 name: 'isUsernameValid',
-                method: function(field) {
+                validate: function(field) {
 
                     var validResult = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/.test(field.val()),
                         errorType = validResult ? '' : 'custom';
@@ -38,7 +38,7 @@ $(document).ready(function() {
             },
             idNumber: {
                 name: 'isIDNumberValid',
-                method: function(field) {
+                validate: function(field) {
 
                     var validResult = field.val().length === 6 && /^[0-9]+$/.test(field.val()),
                         errorType = validResult ? '' : 'format';

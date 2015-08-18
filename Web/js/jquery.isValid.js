@@ -12,11 +12,12 @@
             this.elem = element;
             this.$elem = $(element);
             this.settings = $.extend(true, {}, $.isValid.defaults, options);
-            this.formID = '#' + this.$elem.attr('id');
+            this.formID = this.$elem.attr('id') !== '' ? '#' + this.$elem.attr('id') : '';
             this.$elem.addClass('isValid');
             this.FIELD_VALIDATED = 'isValid.fieldValidated';
             this.FIELD_INVALIDATED = 'isValid.fieldInvalidated';
-            this.settings.submitButton = this.settings.submitButton !== null ? this.setting.submitButton : $(' :input[type="submit"]', this.formID);
+            this.settings.submitButton = this.settings.submitButton !== null ? this.settings.submitButton : $(' :input[type="submit"]', this.$elem);
+            this.validators = this.settings.validators;
             this.formArray =
                 $(' :input[type="text"],' +
                     ' :input[type="email"],' +
@@ -26,20 +27,21 @@
                     ' :input[type="date"],' +
                     ' :input[type="checkbox"],' +
                     ' textarea,' +
-                    ' select', this.formID);
+                    ' select', this.$elem);
 
             addCallbacks(this.settings);
+            addValidators(this.validators);
         };
 
         this.isFormValidated = function() {
-            return ($(' .invalid', this.formID).length) ? false : true;
+            return ($(' .invalid', this.$elem).length) ? false : true;
         };
 
         this.isValidField = function(field) {
 
             var fieldType = field.attr('data-field-type');
 
-            if (field.prop('disabled') || field.attr('type') == 'hidden' || fieldType === "notrequired") {
+            if (field.prop('disabled') || field.attr('type') === 'hidden' || fieldType === 'notrequired') {
                 return true;
             } else {
                 var valMethodName = 'isEmpty',
@@ -50,14 +52,14 @@
 
                 if (!isEmpty) {
 
-                    if (this.settings.validators[fieldType].name) {
-                        valMethodName = this.settings.validators[fieldType].name;
+                    if (this.validators[fieldType].name) {
+                        valMethodName = this.validators[fieldType].name;
                     }
 
                     if (this[valMethodName] !== undefined) {
                         currentField = this[valMethodName](field);
                     } else {
-                        currentField = this.settings.validators[fieldType].method(field);
+                        currentField = this.validators[fieldType].validate(field);
                     }
 
                     this.setActiveErrorMessageFor(field, fieldType, currentField.activeErrorType);
@@ -86,12 +88,8 @@
 
         this.isGeneralValid = function(field) {
 
-            var isEmpty = this.isEmpty(field),
-                errorType = '';
-
-            if (isEmpty) {
-                errorType = 'required';
-            }
+            var isEmpty = self.isEmpty(field),
+                errorType = isEmpty ? 'required' : '';
 
             return {
                 isValid: !isEmpty,
@@ -162,6 +160,7 @@
                 errorType = 'invalid';
             }
 
+
             return {
                 isValid: lengthResult && formatResult,
                 activeErrorType: errorType
@@ -170,7 +169,7 @@
 
         this.isPasswordConfirmValid = function(field) {
 
-            var validResult = field.val() === $(' input[data-field-type="password"]', this.formID).val(),
+            var validResult = field.val() === $(' input[data-field-type="password"]', this.$elem).val(),
                 errorType = validResult ? '' : 'invalid';
 
             return {
@@ -186,7 +185,7 @@
                 domainResult = true,
                 errorType = '';
 
-            // Remove whitespace as some mobiles/tablets put a space in if you use the autocomplete option on a the device
+            // Remove whitespace as some mobiles/tablets put a spacebar in if you use the autocomplete option on the device
             field.val(field.val().replace(/\s/g, ''));
 
             validResult = emailMatcher.test(field.val());
@@ -210,7 +209,7 @@
 
         this.isEmailConfirmValid = function(field) {
 
-            var validResult = field.val() === $(' input[data-field-type="email"]', this.formID).val(),
+            var validResult = field.val() === $(' input[data-field-type="email"]', this.$elem).val(),
                 errorType = validResult ? '' : 'invalid';
 
             return {
@@ -395,6 +394,16 @@
                     } else if (fieldTypes[fieldType].callbacks.onInvalidated === undefined) {
                         fieldTypes[fieldType].callbacks.onInvalidated = function(event) {};
                     }
+                }
+            });
+        };
+
+        var addValidators = function(validators) {
+
+            $.map(validators, function(validator, fieldType) {
+                var methodName = validators[fieldType].name;
+                if (validators[fieldType].validate === undefined) {
+                    validators[fieldType].validate = self[methodName];
                 }
             });
         };
@@ -595,56 +604,43 @@
         },
         validators: {
             general: {
-                name: 'isGeneralValid',
-                method: function() {}
+                name: 'isGeneralValid'
             },
             password: {
-                name: 'isPasswordValid',
-                method: function() {}
+                name: 'isPasswordValid'
             },
             passwordConfirm: {
-                name: 'isPasswordConfirmValid',
-                method: function() {}
+                name: 'isPasswordConfirmValid'
             },
             email: {
-                name: 'isEmailValid',
-                method: function() {}
+                name: 'isEmailValid'
             },
             emailConfirm: {
-                name: 'isEmailConfirmValid',
-                method: function() {}
+                name: 'isEmailConfirmValid'
             },
             date: {
-                name: 'isDateValid',
-                method: function() {}
+                name: 'isDateValid'
             },
             letters: {
-                name: 'isLetters',
-                method: function() {}
+                name: 'isLetters'
             },
             numbers: {
-                name: 'isNumbers',
-                method: function() {}
+                name: 'isNumbers'
             },
             age: {
-                name: 'isAgeValid',
-                method: function() {}
+                name: 'isAgeValid'
             },
             decimals: {
-                name: 'isDecimals',
-                method: function() {}
+                name: 'isDecimals'
             },
             postCode: {
-                name: 'isPostCodeValid',
-                method: function() {}
-            },
-            checkbox: {
-                name: 'isCheckboxTicked',
-                method: function() {}
+                name: 'isPostCodeValid'
             },
             select: {
-                name: 'isSelectChosen',
-                method: function() {}
+                name: 'isSelectChosen'
+            },
+            checkbox: {
+                name: 'isCheckboxTicked'
             }
         },
         onFormValidated: function() {},

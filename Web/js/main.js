@@ -3,7 +3,7 @@ $(document).ready(function() {
     var simpleForm = $('#simple-form').isValid({
         fieldTypes: {
             general: {
-              requiredErrorMessage: false,
+                requiredErrorMessage: false,
             },
             username: {
                 requiredErrorMessage: 'Username is required',

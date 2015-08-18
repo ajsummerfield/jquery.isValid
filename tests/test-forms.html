@@ -1,137 +1,91 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-    <head>
-        <title>isValid Form Plugin</title>
-    </head>
-    <body>
-      <form id="isValid-Test-Form" action="" method="post" class="left-col-50">
-          <div class="form-row">
-              <label for="generalOne">General 1</label>
-              <input id="general" type="text"
-                     data-field-type="general"
-                     name="generalOne" />
-          </div>
-          <div class="form-row">
-              <label for="username">Username</label>
-              <input id="username" type="text"
-                     data-field-type="username"
-                     data-custom-error-message="Username not allowed"
-                     name="username" />
-          </div>
-          <div class="form-row">
-              <label for="idNumber">ID Number</label>
-              <input id="idNumber" type="text"
-                     data-field-type="idNumber"
-                     placeholder="Enter ID Number"
-                     name="idNumber" />
-          </div>
-          <div class="form-row">
-              <label for="age">Age</label>
-              <input id="age" type="text"
-                     data-field-type="age"
-                     data-required-error-message="Please enter your age"
-                     name="age" />
-          </div>
-          <div class="form-row">
-              <label for="subject">Subject</label>
-              <select id="subject" name="subject" data-field-type="select">
-                  <option disabled selected>Choose Subject</option>
-                  <option value="Question">Question</option>
-                  <option value="Feedback">Feedback</option>
-                  <option value="Mentor">Want to be a Mentor</option>
-              </select>
-          </div>
-          <div class="form-row">
-              <label for="role">Role</label>
-              <select id="role"
-                      name="role"
-                      data-field-type="select"
-                      data-required-error-message="Choosing a role is mandatory" >
-                  <option disabled selected>Choose Role</option>
-                  <option value="Junior">Junior</option>
-                  <option value="Mid">Mid</option>
-                  <option value="Senior">Senior</option>
-              </select>
-          </div>
-          <div class="form-row">
-              <label for="email">Email</label>
-              <input id="email" type="text"
-                     data-field-type="email"
-                     placeholder="Enter email"
-                     name="email" />
-          </div>
-          <div class="form-row">
-              <label for="emailConfirm">Email</label>
-              <input id="emailConfirm" type="text"
-                     data-field-type="emailConfirm"
-                     placeholder="Confirm Email"
-                     name="emailConfirm" />
-          </div>
-          <div class="form-row">
-              <label for="password">Password</label>
-              <input id="password" type="password"
-                     data-field-type="password"
-                     data-format-error-message="Password is weak brah. Mix it up."
-                     placeholder="Enter Password"
-                     name="password" />
-          </div>
-          <div class="form-row">
-              <label for="passwordConfirm">Confirm</label>
-              <input id="passwordConfirm" type="password"
-                     data-field-type="passwordConfirm"
-                     placeholder="Confirm Password"
-                     name="passwordConfirm" />
-          </div>
-          <div class="form-row">
-              <label for="date">Date</label>
-              <input id="datepicker" type="text"
-                     data-field-type="date"
-                     data-allowed-date-error-message="Date is in the future. Not allowed."
-                     placeholder="DD/MM/YYYY"
-                     name="date" />
-          </div>
-          <div class="form-row">
-              <label for="postcode">Post Code</label>
-              <input id="postcode" type="text"
-                     data-field-type="postCode"
-                     data-invalid-error-message="Postcode is made up. Try again."
-                     placeholder="Enter PostCode"
-                     name="postCode" />
-          </div>
-          <div class="form-row">
-              <label for="numbers">Number</label>
-              <input id="numbers" type="text"
-                     data-field-type="numbers"
-                     data-invalid-error-message="Do they look like numbers to you?"
-                     placeholder="Enter number"
-                     name="numbers" />
-          </div>
-          <div class="form-row">
-              <label for="decimals">Decimals</label>
-              <input id="decimals" type="text"
-                     data-field-type="decimals"
-                     placeholder="Enter a decimal number"
-                     name="decimals" />
-          </div>
-          <div class="form-row">
-              <label for="letters">Letters</label>
-              <input id="letters" type="text"
-                     data-field-type="letters"
-                     data-invalid-error-message="Field only allows letters"
-                     placeholder="Enter letters"
-                     name="letters" />
-          </div>
-          <div class="form-row">
-              <label for="terms">Terms</label>
-              <input id="checkbox" type="checkbox"
-                     data-field-type="checkbox"
-                     data-required-error-message="Tick it fool. Tick it."
-                     name="terms" />
-          </div>
-          <div class="form-row">
-              <label>&nbsp;</label>
-              <input type="submit" value="Submit" class="form-btn" />
-          </div>
-      </form>
-    </body>
+
+<head>
+    <title>isValid Form Plugin</title>
+</head>
+
+<body>
+    <form id="isValid-Test-Form" action="" method="post" class="left-col-50">
+        <div class="form-row">
+            <label for="generalOne">General 1</label>
+            <input id="general" type="text" data-field-type="general" name="generalOne" />
+        </div>
+        <div class="form-row">
+            <label for="username">Username</label>
+            <input id="username" type="text" data-field-type="username" data-custom-error-message="Username not allowed" name="username" />
+        </div>
+        <div class="form-row">
+            <label for="idNumber">ID Number</label>
+            <input id="idNumber" type="text" data-field-type="idNumber" placeholder="Enter ID Number" name="idNumber" />
+        </div>
+        <div class="form-row">
+            <label for="age">Age</label>
+            <input id="age" type="text" data-field-type="age" data-required-error-message="Please enter your age" name="age" />
+        </div>
+        <div class="form-row">
+            <label for="subject">Subject</label>
+            <select id="subject" name="subject" data-field-type="select">
+                <option disabled selected>Choose Subject</option>
+                <option value="Question">Question</option>
+                <option value="Feedback">Feedback</option>
+                <option value="Mentor">Want to be a Mentor</option>
+            </select>
+        </div>
+        <div class="form-row">
+            <label for="role">Role</label>
+            <select id="role" name="role" data-field-type="select" data-required-error-message="Choosing a role is mandatory">
+                <option disabled selected>Choose Role</option>
+                <option value="Junior">Junior</option>
+                <option value="Mid">Mid</option>
+                <option value="Senior">Senior</option>
+            </select>
+        </div>
+        <div class="form-row">
+            <label for="email">Email</label>
+            <input id="email" type="text" data-field-type="email" placeholder="Enter email" name="email" />
+        </div>
+        <div class="form-row">
+            <label for="emailConfirm">Email</label>
+            <input id="emailConfirm" type="text" data-field-type="emailConfirm" placeholder="Confirm Email" name="emailConfirm" />
+        </div>
+        <div class="form-row">
+            <label for="password">Password</label>
+            <input id="password" type="password" data-field-type="password" data-format-error-message="Password is weak brah. Mix it up." placeholder="Enter Password" name="password" />
+        </div>
+        <div class="form-row">
+            <label for="passwordConfirm">Confirm</label>
+            <input id="passwordConfirm" type="password" data-field-type="passwordConfirm" placeholder="Confirm Password" name="passwordConfirm" />
+        </div>
+        <div class="form-row">
+            <label for="date">Date</label>
+            <input id="datepicker" type="text" data-field-type="date" data-allowed-date-error-message="Date is in the future. Not allowed." placeholder="DD/MM/YYYY" name="date" />
+        </div>
+        <div class="form-row">
+            <label for="postcode">Post Code</label>
+            <input id="postcode" type="text" data-field-type="postCode" data-invalid-error-message="Postcode is made up. Try again." placeholder="Enter PostCode" name="postCode" />
+        </div>
+        <div class="form-row">
+            <label for="numbers">Number</label>
+            <input id="numbers" type="text" data-field-type="numbers" data-invalid-error-message="Do they look like numbers to you?" placeholder="Enter number" name="numbers" />
+        </div>
+        <div class="form-row">
+            <label for="decimals">Decimals</label>
+            <input id="decimals" type="text" data-field-type="decimals" placeholder="Enter a decimal number" name="decimals" />
+        </div>
+        <div class="form-row">
+            <label for="letters">Letters</label>
+            <input id="letters" type="text" data-field-type="letters" data-invalid-error-message="Field only allows letters" placeholder="Enter letters" name="letters" />
+        </div>
+        <div class="form-row">
+            <label for="terms">Terms</label>
+            <input id="checkbox" type="checkbox" data-field-type="checkbox" data-required-error-message="Tick it fool. Tick it." name="terms" />
+        </div>
+        <div class="form-row">
+            <label>&nbsp;</label>
+            <input type="submit" value="Submit" class="form-btn" />
+        </div>
+    </form>
+</body>
+
 </html>

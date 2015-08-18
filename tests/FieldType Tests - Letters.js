@@ -2,7 +2,7 @@ describe('jQuery.isValid - FieldType: Letters', function() {
 
     var el, testForm;
 
-    beforeEach(function(){
+    beforeEach(function() {
         jasmine.getFixtures().fixturesPath = 'base/tests';
         loadFixtures('test-forms.html');
         el = $('#isValid-Test-Form');

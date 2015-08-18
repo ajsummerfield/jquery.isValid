@@ -1,11 +1,11 @@
-(function ($) {
+(function($) {
     "use strict";
 
-    $.isValid = function (element, options) {
+    $.isValid = function(element, options) {
 
         var self;
 
-        this.init = function () {
+        this.init = function() {
 
             self = this;
 
@@ -19,23 +19,23 @@
             this.settings.submitButton = this.settings.submitButton !== null ? this.setting.submitButton : $(' :input[type="submit"]', this.formID);
             this.formArray =
                 $(' :input[type="text"],' +
-                ' :input[type="email"],' +
-                ' :input[type="password"],' +
-                ' :input[type="tel"],' +
-                ' :input[type="number"],' +
-                ' :input[type="date"],' +
-                ' :input[type="checkbox"],' +
-                ' textarea,' +
-                ' select', this.formID);
+                    ' :input[type="email"],' +
+                    ' :input[type="password"],' +
+                    ' :input[type="tel"],' +
+                    ' :input[type="number"],' +
+                    ' :input[type="date"],' +
+                    ' :input[type="checkbox"],' +
+                    ' textarea,' +
+                    ' select', this.formID);
 
             addCallbacks(this.settings);
         };
 
-        this.isFormValidated = function () {
+        this.isFormValidated = function() {
             return ($(' .invalid', this.formID).length) ? false : true;
         };
 
-        this.isValidField = function (field) {
+        this.isValidField = function(field) {
 
             var fieldType = field.attr('data-field-type');
 
@@ -50,11 +50,11 @@
 
                 if (!isEmpty) {
 
-                    if(this.settings.validators[fieldType].name) {
+                    if (this.settings.validators[fieldType].name) {
                         valMethodName = this.settings.validators[fieldType].name;
                     }
 
-                    if(this[valMethodName] !== undefined) {
+                    if (this[valMethodName] !== undefined) {
                         currentField = this[valMethodName](field);
                     } else {
                         currentField = this.settings.validators[fieldType].method(field);
@@ -71,20 +71,20 @@
             }
         };
 
-        this.isEmpty = function (field) {
+        this.isEmpty = function(field) {
 
-            if(field.val() === undefined) {
+            if (field.val() === undefined) {
                 return true;
             }
 
-            if(field.val() === null) {
+            if (field.val() === null) {
                 return true;
             }
 
             return (field.val().length === 0);
         };
 
-        this.isGeneralValid = function (field) {
+        this.isGeneralValid = function(field) {
 
             var isEmpty = this.isEmpty(field),
                 errorType = '';
@@ -99,7 +99,7 @@
             };
         };
 
-        this.isLetters = function (field) {
+        this.isLetters = function(field) {
 
             var validResult = /^[A-Za-z ]+$/.test(field.val()),
                 errorType = validResult ? '' : 'invalid';
@@ -110,7 +110,7 @@
             };
         };
 
-        this.isNumbers = function (field) {
+        this.isNumbers = function(field) {
 
             var validResult = /^[0-9 ]+$/.test(field.val()),
                 errorType = validResult ? '' : 'invalid';
@@ -132,7 +132,7 @@
             };
         };
 
-        this.isDecimals = function (field) {
+        this.isDecimals = function(field) {
 
             var validResult = /^(\d+\.?\d*|\.\d+)$/.test(field.val()),
                 errorType = validResult ? '' : 'invalid';
@@ -143,7 +143,7 @@
             };
         };
 
-        this.isPasswordValid = function (field) {
+        this.isPasswordValid = function(field) {
 
             var passwordMatcher = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/,
                 lengthResult,
@@ -156,9 +156,9 @@
                 formatResult = passwordMatcher.test(field.val());
             }
 
-            if(lengthResult && !formatResult) {
+            if (lengthResult && !formatResult) {
                 errorType = 'format';
-            } else if(!lengthResult || !lengthResult && formatResult) {
+            } else if (!lengthResult || !lengthResult && formatResult) {
                 errorType = 'invalid';
             }
 
@@ -168,7 +168,7 @@
             };
         };
 
-        this.isPasswordConfirmValid = function (field) {
+        this.isPasswordConfirmValid = function(field) {
 
             var validResult = field.val() === $(' input[data-field-type="password"]', this.formID).val(),
                 errorType = validResult ? '' : 'invalid';
@@ -179,7 +179,7 @@
             };
         };
 
-        this.isEmailValid = function (field) {
+        this.isEmailValid = function(field) {
 
             var emailMatcher = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
                 validResult,
@@ -196,9 +196,9 @@
                 domainResult = regExp.test(field.val());
             }
 
-            if(validResult && !domainResult) {
+            if (validResult && !domainResult) {
                 errorType = 'domain';
-            } else if(!validResult || !validResult && domainResult) {
+            } else if (!validResult || !validResult && domainResult) {
                 errorType = 'invalid';
             }
 
@@ -208,7 +208,7 @@
             };
         };
 
-        this.isEmailConfirmValid = function (field) {
+        this.isEmailConfirmValid = function(field) {
 
             var validResult = field.val() === $(' input[data-field-type="email"]', this.formID).val(),
                 errorType = validResult ? '' : 'invalid';
@@ -219,7 +219,7 @@
             };
         };
 
-        this.isDateValid = function (field) {
+        this.isDateValid = function(field) {
 
             var date = field.val(),
                 validResult,
@@ -265,7 +265,7 @@
             };
         };
 
-        this.isPostCodeValid = function (field) {
+        this.isPostCodeValid = function(field) {
 
             var validResult = checkPostCode(field.val()),
                 errorType = validResult.length > 0 ? '' : 'invalid';
@@ -276,7 +276,7 @@
             };
         };
 
-        this.isSelectChosen = function (field) {
+        this.isSelectChosen = function(field) {
 
             var validResult = true,
                 errorType = '';
@@ -293,7 +293,7 @@
             };
         };
 
-        this.isCheckboxTicked = function (field) {
+        this.isCheckboxTicked = function(field) {
 
             var validResult = field.is(':checked'),
                 errorType = '';
@@ -304,7 +304,7 @@
             };
         };
 
-        this.getErrorMessage = function (field, errorType) {
+        this.getErrorMessage = function(field, errorType) {
 
             var fieldData = field.data(),
                 errorMessageType = this.settings.errorTypes[errorType];
@@ -320,13 +320,13 @@
             this.settings.fieldTypes[fieldType].activeErrorMessage = this.getErrorMessage(field, errorType);
         };
 
-        this.showErrorFor = function (field) {
+        this.showErrorFor = function(field) {
 
             if (this.settings.enableErrorMessages) {
 
                 var errorMessage = this.settings.fieldTypes[field.data().fieldType].activeErrorMessage;
 
-                if(errorMessage) {
+                if (errorMessage) {
 
                     if (field.siblings('.form-error').length) {
                         updateErrorContainer(field, errorMessage);
@@ -344,18 +344,18 @@
             field.trigger(self.FIELD_INVALIDATED);
         };
 
-        this.hideErrorFor = function (field) {
+        this.hideErrorFor = function(field) {
             field.removeClass('invalid');
             field.siblings('.form-error').remove();
 
             field.trigger(self.FIELD_VALIDATED);
         };
 
-        var isBetween = function (val, min, max) {
+        var isBetween = function(val, min, max) {
             return (val >= min && val <= max);
         };
 
-        var createErrorContainer = function (field, errorMessage) {
+        var createErrorContainer = function(field, errorMessage) {
             return '<div class="form-error">' + errorMessage + '</div>';
         };
 
@@ -364,54 +364,54 @@
             field.siblings('.form-error').css('width', errorContainerWidth + 'px').css('margin-left', field.position().left + 'px');
         };
 
-        var updateErrorContainer = function (field, errorMessage) {
+        var updateErrorContainer = function(field, errorMessage) {
             field.siblings('.form-error').text(errorMessage);
         };
 
-        var getErrorContainerWidth = function (field) {
+        var getErrorContainerWidth = function(field) {
 
             if (field.attr('aria-hidden') === undefined && field.is(':visible')) {
                 return field.outerWidth();
             } else {
-                return Math.max.apply(Math, field.parent().children().map(function () {
+                return Math.max.apply(Math, field.parent().children().map(function() {
                     return $(this).width();
                 }).get());
             }
         };
 
-        var addCallbacks= function(settings) {
+        var addCallbacks = function(settings) {
 
             var fieldTypes = settings.fieldTypes;
 
             $.map(fieldTypes, function(field, fieldType) {
-                if(fieldTypes[fieldType].callbacks === undefined) {
+                if (fieldTypes[fieldType].callbacks === undefined) {
                     fieldTypes[fieldType].callbacks = {
-                        onValidated: function (event) {},
-                        onInvalidated: function (event) {}
+                        onValidated: function(event) {},
+                        onInvalidated: function(event) {}
                     };
                 } else {
-                    if(fieldTypes[fieldType].callbacks.onValidated === undefined) {
-                        fieldTypes[fieldType].callbacks.onValidated = function (event) {};
-                    } else if(fieldTypes[fieldType].callbacks.onInvalidated === undefined) {
-                        fieldTypes[fieldType].callbacks.onInvalidated = function (event) {};
+                    if (fieldTypes[fieldType].callbacks.onValidated === undefined) {
+                        fieldTypes[fieldType].callbacks.onValidated = function(event) {};
+                    } else if (fieldTypes[fieldType].callbacks.onInvalidated === undefined) {
+                        fieldTypes[fieldType].callbacks.onInvalidated = function(event) {};
                     }
                 }
             });
         };
     };
 
-    $.fn.isValid = function (options) {
+    $.fn.isValid = function(options) {
 
-        return this.each(function () {
+        return this.each(function() {
 
             var isValid = new $.isValid(this, options);
             $(this).data('isValid', isValid);
 
             isValid.init();
 
-            isValid.settings.submitButton.click(function (e) {
+            isValid.settings.submitButton.click(function(e) {
 
-                isValid.formArray.each(function (index, field) {
+                isValid.formArray.each(function(index, field) {
 
                     if (!isValid.isValidField($(field))) {
                         isValid.showErrorFor($(field));
@@ -427,10 +427,10 @@
                 });
             });
 
-            isValid.formArray.each(function (index, field) {
+            isValid.formArray.each(function(index, field) {
 
                 if (isValid.settings.validateOnBlur) {
-                    $(field).on('blur change', function () {
+                    $(field).on('blur change', function() {
 
                         if (!isValid.isValidField($(field))) {
                             isValid.showErrorFor($(field));
@@ -440,7 +440,7 @@
                     });
                 }
 
-                $(field).on(isValid.FIELD_INVALIDATED, function (event) {
+                $(field).on(isValid.FIELD_INVALIDATED, function(event) {
 
                     var eventObject = {
                         isValid: false,
@@ -451,7 +451,7 @@
                     isValid.settings.fieldTypes[$(field).data().fieldType].callbacks.onInvalidated(eventObject);
                 });
 
-                $(field).on(isValid.FIELD_VALIDATED, function (event) {
+                $(field).on(isValid.FIELD_VALIDATED, function(event) {
 
                     var eventObject = {
                         isValid: true,
@@ -471,40 +471,40 @@
             general: {
                 requiredErrorMessage: 'Field is required',
                 callbacks: {
-                    onValidated: function (event) {},
-                    onInvalidated: function (event) {}
+                    onValidated: function(event) {},
+                    onInvalidated: function(event) {}
                 }
             },
             letters: {
                 requiredErrorMessage: 'Field is required',
                 invalidErrorMessage: 'Field is letters only',
                 callbacks: {
-                    onValidated: function (event) {},
-                    onInvalidated: function (event) {}
+                    onValidated: function(event) {},
+                    onInvalidated: function(event) {}
                 }
             },
             numbers: {
                 requiredErrorMessage: 'Field is required',
                 invalidErrorMessage: 'Field is numbers only',
                 callbacks: {
-                    onValidated: function (event) {},
-                    onInvalidated: function (event) {}
+                    onValidated: function(event) {},
+                    onInvalidated: function(event) {}
                 }
             },
             age: {
                 requiredErrorMessage: 'Field is required',
                 invalidErrorMessage: 'Age is invalid',
                 callbacks: {
-                    onValidated: function (event) {},
-                    onInvalidated: function (event) {}
+                    onValidated: function(event) {},
+                    onInvalidated: function(event) {}
                 }
             },
             decimals: {
                 requiredErrorMessage: 'Field is required',
                 invalidErrorMessage: 'Field is decimals only',
                 callbacks: {
-                    onValidated: function (event) {},
-                    onInvalidated: function (event) {}
+                    onValidated: function(event) {},
+                    onInvalidated: function(event) {}
                 }
             },
             password: {
@@ -517,16 +517,16 @@
                 formatErrorMessage: 'Password should contain numbers and letters',
                 invalidErrorMessage: 'Password should be more than 6 characters',
                 callbacks: {
-                    onValidated: function (event) {},
-                    onInvalidated: function (event) {}
+                    onValidated: function(event) {},
+                    onInvalidated: function(event) {}
                 }
             },
             passwordConfirm: {
                 requiredErrorMessage: 'Confirming your Password is required',
                 invalidErrorMessage: 'Passwords do not match',
                 callbacks: {
-                    onValidated: function (event) {},
-                    onInvalidated: function (event) {}
+                    onValidated: function(event) {},
+                    onInvalidated: function(event) {}
                 }
             },
             email: {
@@ -536,16 +536,16 @@
                 domainErrorMessage: 'Email domain should be @xxxx.com',
                 invalidErrorMessage: 'Please enter a valid email address',
                 callbacks: {
-                    onValidated: function (event) {},
-                    onInvalidated: function (event) {}
+                    onValidated: function(event) {},
+                    onInvalidated: function(event) {}
                 }
             },
             emailConfirm: {
                 requiredErrorMessage: 'Confirming your Email is required',
                 invalidErrorMessage: 'Email addresses do not match',
                 callbacks: {
-                    onValidated: function (event) {},
-                    onInvalidated: function (event) {}
+                    onValidated: function(event) {},
+                    onInvalidated: function(event) {}
                 }
             },
             date: {
@@ -556,30 +556,30 @@
                 invalidErrorMessage: 'Please enter a valid Date',
                 allowedDateErrorMessage: 'Date not allowed',
                 callbacks: {
-                    onValidated: function (event) {},
-                    onInvalidated: function (event) {}
+                    onValidated: function(event) {},
+                    onInvalidated: function(event) {}
                 }
             },
             postCode: {
                 requiredErrorMessage: 'Post Code is required',
                 invalidErrorMessage: 'Please enter a valid Post Code',
                 callbacks: {
-                    onValidated: function (event) {},
-                    onInvalidated: function (event) {}
+                    onValidated: function(event) {},
+                    onInvalidated: function(event) {}
                 }
             },
             select: {
                 requiredErrorMessage: 'Choosing an option is required',
                 callbacks: {
-                    onValidated: function (event) {},
-                    onInvalidated: function (event) {}
+                    onValidated: function(event) {},
+                    onInvalidated: function(event) {}
                 }
             },
             checkbox: {
                 requiredErrorMessage: 'Checkbox is required',
                 callbacks: {
-                    onValidated: function (event) {},
-                    onInvalidated: function (event) {}
+                    onValidated: function(event) {},
+                    onInvalidated: function(event) {}
                 }
             }
         },
@@ -608,7 +608,7 @@
             },
             email: {
                 name: 'isEmailValid',
-                method: function () {}
+                method: function() {}
             },
             emailConfirm: {
                 name: 'isEmailConfirmValid',
@@ -624,7 +624,7 @@
             },
             numbers: {
                 name: 'isNumbers',
-                method: function () {}
+                method: function() {}
             },
             age: {
                 name: 'isAgeValid',
@@ -647,8 +647,8 @@
                 method: function() {}
             }
         },
-        onFormValidated: function () {},
-        onFormInvalidated: function () {},
+        onFormValidated: function() {},
+        onFormInvalidated: function() {},
     };
 
 })(jQuery);

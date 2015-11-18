@@ -278,8 +278,11 @@
             }
             
             for(var i = 0; i < field.children().length; i++) {
-                if(!$(field.children()[i]).attr('selected')) {
+                if($(field.children()[i]).attr('selected') === undefined) {
                     validResult = false;
+                } else {
+                    validResult = true;
+                    break;
                 }
             }
 

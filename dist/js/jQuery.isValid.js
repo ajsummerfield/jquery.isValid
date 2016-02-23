@@ -456,8 +456,12 @@
                         fieldElement: $(event.currentTarget),
                         fieldData: $(event.currentTarget).data()
                     };
-
-                    isValid.settings.fieldTypes[$(field).data().fieldType].callbacks.onInvalidated(eventObject);
+                    
+                    var fieldType = $(field).data().fieldType;
+                    
+                    if (fieldType !== "notrequired") {
+                        isValid.settings.fieldTypes[$(field).data().fieldType].callbacks.onInvalidated(eventObject);
+                    }
                 });
 
                 $(field).on(isValid.FIELD_VALIDATED, function (event) {
@@ -468,7 +472,11 @@
                         fieldData: $(event.currentTarget).data()
                     };
 
-                    isValid.settings.fieldTypes[$(field).data().fieldType].callbacks.onValidated(eventObject);
+                    var fieldType = $(field).data().fieldType;
+
+                    if (fieldType !== "notrequired") {
+                        isValid.settings.fieldTypes[$(field).data().fieldType].callbacks.onValidated(eventObject);
+                    }
                 });
 
             });

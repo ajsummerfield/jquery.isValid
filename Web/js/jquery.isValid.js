@@ -46,9 +46,16 @@
             } else {
                 var valMethodName = 'isEmpty',
                     currentField,
+                    isRequired,
                     isEmpty;
-
+                
+                isRequired = this.settings.fieldTypes[fieldType].required ? true : false;
+                
                 isEmpty = this[valMethodName](field);
+                
+                if(!isRequired && isEmpty) {
+                    return true;
+                }
 
                 if (!isEmpty) {
 
@@ -67,7 +74,10 @@
                     return currentField.isValid;
                 }
 
-                this.setActiveErrorMessageFor(field, fieldType, 'required');
+                if(isRequired) {
+                    this.setActiveErrorMessageFor(field, fieldType, 'required');
+                    return false;
+                }
 
                 return !isEmpty;
             }
@@ -486,6 +496,7 @@
     $.isValid.defaults = {
         fieldTypes: {
             general: {
+                required: true,
                 requiredErrorMessage: 'Field is required',
                 callbacks: {
                     onValidated: function (event) {},
@@ -493,6 +504,7 @@
                 }
             },
             letters: {
+                required: true,
                 requiredErrorMessage: 'Field is required',
                 invalidErrorMessage: 'Field is letters only',
                 callbacks: {
@@ -501,6 +513,7 @@
                 }
             },
             numbers: {
+                required: true,
                 requiredErrorMessage: 'Field is required',
                 invalidErrorMessage: 'Field is numbers only',
                 callbacks: {
@@ -509,6 +522,7 @@
                 }
             },
             age: {
+                required: true,
                 requiredErrorMessage: 'Field is required',
                 invalidErrorMessage: 'Age is invalid',
                 callbacks: {
@@ -517,6 +531,7 @@
                 }
             },
             decimals: {
+                required: true,
                 requiredErrorMessage: 'Field is required',
                 invalidErrorMessage: 'Field is decimals only',
                 callbacks: {
@@ -525,6 +540,7 @@
                 }
             },
             password: {
+                required: true,
                 minLength: 6,
                 maxLength: 100,
                 numbers: false,
@@ -539,6 +555,7 @@
                 }
             },
             passwordConfirm: {
+                required: false,
                 requiredErrorMessage: 'Confirming your Password is required',
                 invalidErrorMessage: 'Passwords do not match',
                 callbacks: {
@@ -547,6 +564,7 @@
                 }
             },
             email: {
+                required: true,
                 domain: '',
                 emailConfirm: false,
                 requiredErrorMessage: 'Email is required',
@@ -558,6 +576,7 @@
                 }
             },
             emailConfirm: {
+                required: false,
                 requiredErrorMessage: 'Confirming your Email is required',
                 invalidErrorMessage: 'Email addresses do not match',
                 callbacks: {
@@ -566,6 +585,7 @@
                 }
             },
             date: {
+                required: true,
                 format: 'DD/MM/YYYY',
                 allowFutureDates: true,
                 requiredErrorMessage: 'Date is required',
@@ -578,6 +598,7 @@
                 }
             },
             postCode: {
+                required: true,
                 requiredErrorMessage: 'Post Code is required',
                 invalidErrorMessage: 'Please enter a valid Post Code',
                 callbacks: {
@@ -586,6 +607,7 @@
                 }
             },
             select: {
+                required: true,
                 requiredErrorMessage: 'Choosing an option is required',
                 callbacks: {
                     onValidated: function (event) {},
@@ -593,6 +615,7 @@
                 }
             },
             checkbox: {
+                required: true,
                 requiredErrorMessage: 'Checkbox is required',
                 callbacks: {
                     onValidated: function (event) {},

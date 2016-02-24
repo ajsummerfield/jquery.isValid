@@ -55,7 +55,10 @@ $(document).ready(function() {
                 }
             }
         },
-        enableErrorMessages: true
+        enableErrorMessages: true,
+        onFormInvalidated: function() {
+            alert("kjashdkjashd");
+        }
     }).data('isValid');
 
 

@@ -444,6 +444,12 @@
                         e.preventDefault();
                     }
                 });
+                
+                if(isValid.isFormValid) {
+                    isValid.settings.onFormValidated();
+                } else {
+                    isValid.settings.onFormInvalidated();
+                }
             });
 
             isValid.formArray.each(function (index, field) {

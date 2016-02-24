@@ -3,13 +3,18 @@ $(document).ready(function() {
     var simpleForm = $('#simple-form').isValid({
         fieldTypes: {
             general: {
-              requiredErrorMessage: false,
+                requiredErrorMessage: false,
+            },
+            email: {
+                required: false
             },
             username: {
+                required: true,
                 requiredErrorMessage: 'Username is required',
                 customErrorMessage: 'Username should include more characters',
             },
             idNumber: {
+                required: true,
                 requiredErrorMessage: 'Please specify your ID Number',
                 formatErrorMessage: 'ID Number is incorrect format',
                 callbacks: {
@@ -50,7 +55,10 @@ $(document).ready(function() {
                 }
             }
         },
-        enableErrorMessages: true
+        enableErrorMessages: true,
+        onFormInvalidated: function() {
+            alert("kjashdkjashd");
+        }
     }).data('isValid');
 
 
@@ -70,6 +78,9 @@ $(document).ready(function() {
             date: {
                 allowFutureDates: false,
                 invalidErrorMessage: 'Invalid Date entered'
+            },
+            postCode: {
+                required: false
             }
         }
     });

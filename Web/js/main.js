@@ -65,7 +65,7 @@ $(document).ready(function() {
     var formOne = $('#form-one').isValid({
         fieldTypes: {
             password: {
-                numbers: true,
+                specialChars: true,
                 passwordConfirm: true
             },
             email: {

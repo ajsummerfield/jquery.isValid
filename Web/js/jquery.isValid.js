@@ -153,16 +153,32 @@
 
         this.isPasswordValid = function (field) {
 
-            var passwordMatcher = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/,
+            var passwordMatcher = '',
                 lengthResult,
                 formatResult = true,
                 errorType;
 
             lengthResult = isBetween(field.val().length, this.settings.fieldTypes.password.minLength, this.settings.fieldTypes.password.maxLength);
-
-            if (this.settings.fieldTypes.password.numbers && this.settings.fieldTypes.password.letters) {
-                formatResult = passwordMatcher.test(field.val());
+            
+            if (this.settings.fieldTypes.password.lowercase) {
+                passwordMatcher += '(?=.*[a-z])';
             }
+            
+            if (this.settings.fieldTypes.password.uppercase) {
+                passwordMatcher += '(?=.*[A-Z])';
+            }
+            
+            if (this.settings.fieldTypes.password.numbers) {
+                passwordMatcher += '(?=.*[0-9])';
+            }
+            
+            if (this.settings.fieldTypes.password.specialChars) {
+                passwordMatcher += '(?=.*[!@#$%^&*_\\-\\+\\=\\.])';
+            }
+            
+            passwordMatcher = new RegExp('^' + passwordMatcher + '(?=.{' + this.settings.fieldTypes.password.minLength + ',' + this.settings.fieldTypes.password.maxLength + '})');
+            
+            formatResult = passwordMatcher.test(field.val());
 
             errorType = lengthResult && !formatResult ? 'format' : 'invalid';
 
@@ -547,10 +563,12 @@
             },
             password: {
                 required: true,
-                minLength: 6,
+                minLength: 8,
                 maxLength: 100,
-                numbers: false,
-                letters: true,
+                numbers: true,
+                uppercase: true,
+                lowercase: true,
+                specialChars: false,
                 passwordConfirm: false,
                 requiredErrorMessage: 'Password is required',
                 formatErrorMessage: 'Password should contain numbers and letters',

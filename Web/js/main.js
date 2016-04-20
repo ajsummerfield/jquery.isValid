@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    var simpleForm = $('#simple-form').isValid({
+        var simpleForm = $('#simple-form').isValid({
         fieldTypes: {
             general: {
                 requiredErrorMessage: false,

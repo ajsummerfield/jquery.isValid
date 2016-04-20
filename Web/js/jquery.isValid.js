@@ -492,7 +492,9 @@
                     var fieldType = $(field).data().fieldType;
                     
                     if (fieldType !== "notrequired") {
-                        isValid.settings.fieldTypes[$(field).data().fieldType].callbacks.onInvalidated(eventObject);
+                        if(isValid.settings.fieldTypes[$(field).data().fieldType].callbacks.onInvalidated !== undefined) {
+                            isValid.settings.fieldTypes[$(field).data().fieldType].callbacks.onInvalidated(eventObject);    
+                        }
                     }
                 });
 
@@ -507,7 +509,9 @@
                     var fieldType = $(field).data().fieldType;
 
                     if (fieldType !== "notrequired") {
-                        isValid.settings.fieldTypes[$(field).data().fieldType].callbacks.onValidated(eventObject);
+                        if(isValid.settings.fieldTypes[$(field).data().fieldType].callbacks.onValidated !== undefined) {
+                            isValid.settings.fieldTypes[$(field).data().fieldType].callbacks.onValidated(eventObject);   
+                        }
                     }
                 });
 

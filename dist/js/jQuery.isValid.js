@@ -376,6 +376,28 @@
             field.trigger(self.FIELD_VALIDATED);
         };
 
+        this.validateForm = function() {
+            
+            self.formArray.each(function (index, field) {
+
+                if (!self.isValidField($(field))) {
+                    self.showErrorFor($(field));
+                } else {
+                    self.hideErrorFor($(field));
+                }
+
+                self.isFormValid = self.isFormValidated();
+            });
+
+            if(self.isFormValid) {
+                self.settings.onFormValidated();
+                return true;
+            } else {
+                self.settings.onFormInvalidated();
+                return false;
+            }
+        };
+        
         var isBetween = function (val, min, max) {
             return (val >= min && val <= max);
         };
@@ -492,7 +514,9 @@
                     var fieldType = $(field).data().fieldType;
                     
                     if (fieldType !== "notrequired") {
-                        isValid.settings.fieldTypes[$(field).data().fieldType].callbacks.onInvalidated(eventObject);
+                        if(isValid.settings.fieldTypes[$(field).data().fieldType].callbacks.onInvalidated !== undefined) {
+                            isValid.settings.fieldTypes[$(field).data().fieldType].callbacks.onInvalidated(eventObject);    
+                        }
                     }
                 });
 
@@ -507,7 +531,9 @@
                     var fieldType = $(field).data().fieldType;
 
                     if (fieldType !== "notrequired") {
-                        isValid.settings.fieldTypes[$(field).data().fieldType].callbacks.onValidated(eventObject);
+                        if(isValid.settings.fieldTypes[$(field).data().fieldType].callbacks.onValidated !== undefined) {
+                            isValid.settings.fieldTypes[$(field).data().fieldType].callbacks.onValidated(eventObject);   
+                        }
                     }
                 });
 

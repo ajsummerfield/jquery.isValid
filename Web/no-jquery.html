@@ -7,6 +7,7 @@
         <meta name="description" content="" />
         <title>isValid Form Plugin</title>
         <link href='http://fonts.googleapis.com/css?family=Raleway:400,200,300,500,600,700' rel='stylesheet' type='text/css'>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" media="screen" type="text/css" />
         <link href="css/libs/select2.min.css" rel="stylesheet" media="screen" type="text/css" />
         <link href="css/libs/selectize.default.css" rel="stylesheet" media="screen" type="text/css" />
         <link href="css/libs/jquery-ui.css" rel="stylesheet" media="screen" type="text/css" />
@@ -17,29 +18,115 @@
         <div id="page-container">
             <div id="container">
                 <div id="header">
-                    <div class="wrapper">
-                        <h1>jQuery.isValid</h1>
-                        <p>A simple jQuery form validation plugin</p>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h1>jQuery.isValid</h1>
+                                <p>A simple jQuery form validation plugin</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div id="main">
-                    <div class="wrapper">
-
-                        <form id="simple-form" class="left-col-50" action="" method="POST">
-                            <div class="form-row">
-                                <label for="generalOne">General 1</label>
-                                <input type="text"
-                                       id="generalOne"
-                                       data-field-type="general"
-                                       data-error-message="General field is required!"
-                                       name="generalOne" />
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <form id="simple-form" class="form-horizontal" action="" method="POST">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <div class="col-sm-2">
+                                                    <label for="general">General</label>
+                                                </div>
+                                                <div class="col-sm-10">
+                                                    <input type="text"
+                                                        id="general"
+                                                        class="form-control"
+                                                        data-field-type="general"
+                                                        data-required-error-message="General field is required!"
+                                                        name="general" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-2">
+                                                    <label for="disabled">Disabled</label>
+                                                </div>
+                                                <div class="col-sm-10">
+                                                    <input type="text"
+                                                        id="disabled"
+                                                        disabled
+                                                        class="form-control"
+                                                        name="disabled" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-2">
+                                                    <label for="hidden">Hidden</label>
+                                                </div>
+                                                <div class="col-sm-10">
+                                                    <input type="hidden"
+                                                        id="hidden"
+                                                        class="form-control"
+                                                        name="hidden" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-2">
+                                                    <label for="letters">Letters</label>
+                                                </div>
+                                                <div class="col-sm-10">
+                                                    <input type="text"
+                                                        id="letters"
+                                                        class="form-control"
+                                                        data-field-type="letters"
+                                                        data-format-error-message="Letters field should be letters only!"
+                                                        data-required-error-message="Letters field is required!"
+                                                        name="letters" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-2">
+                                                    <label for="numbers">Numbers</label>
+                                                </div>
+                                                <div class="col-sm-10">
+                                                    <input type="text"
+                                                        id="numbers"
+                                                        class="form-control"
+                                                        data-field-type="numbers"
+                                                        data-format-error-message="Numbers field should be whole numbers only!"
+                                                        data-required-error-message="Numbers field is required!"
+                                                        name="numbers" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-2">
+                                                    <label for="decimal">Decimals</label>
+                                                </div>
+                                                <div class="col-sm-10">
+                                                    <input type="text"
+                                                        id="decimals"
+                                                        class="form-control"
+                                                        data-field-type="decimals"
+                                                        data-format-error-message="Decimals field should be decimals or whole numbers only!"
+                                                        data-required-error-message="Decimals field is required!"
+                                                        name="decimals" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-1"></div>
+                                        <div class="col-sm-5">
+                                            <button class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                            <div class="form-row">
-                                <label>&nbsp;</label>
-                                <button>Submit</button>
-                            </div>
-                        </form>
-                        <div class="clear"></div>
+                        </div>
                     </div>
                 </div>
             </div>

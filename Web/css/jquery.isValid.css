@@ -18,13 +18,11 @@ form.isValid .invalid {
 }
 
 form.isValid .form-error {
-    font-weight: bold;
     margin: 10px 0;
     font-size: 14px;
-    line-height: 22px;
     background-color: #E5BFBF;
     border: 1px solid #C0848E;
-    border-radius: 5px;
-    padding: 12px 10px 10px 10px;
+    border-radius: 3px;
+    padding: 6px 12px;
     box-sizing: border-box;
 }

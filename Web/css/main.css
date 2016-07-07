@@ -33,13 +33,6 @@ html, body {
     width: 100%;
 }
 
-.wrapper {
-    width: 990px;
-    position: relative;
-    margin: 0 auto;
-    padding: 15px;
-}
-
 .clear {
     clear: both;
 }
@@ -62,26 +55,6 @@ html, body {
     line-height: 24px;
 }
 
-.left-col-50 {
-    float: left;
-    width: 50%;
-}
-
-.right-col-50 {
-    float: right;
-    width: 50%;
-}
-
-.left-col-75 {
-    float: left;
-    width: 75%;
-}
-
-.right-col-75 {
-    float: right;
-    width: 75%;
-}
-
 select {
     height: 40px;
     max-width: 300px;
@@ -90,82 +63,4 @@ select {
     border-radius: 5px;
     padding: 0 10px;
     margin-top: -5px;
-}
-
-form {
-    padding-bottom: 25px;
-}
-
-form .form-row {
-    position: relative;
-    margin-bottom: 25px;
-}
-
-form .form-row label {
-    display: inline-block;
-    min-width: 160px;
-    margin-right: 20px;
-    font-size: 25px;
-}
-
-form .form-row input {
-    height: 40px;
-    max-width: 300px;
-    font-size: 20px;
-    border: 1px solid #999999;
-    border-radius: 5px;
-    padding: 0 10px;
-    margin-top: -5px;
-}
-
-form .form-row input[type="checkbox"] {
-    width: auto;
-    height: auto;
-    border: none;
-    padding: 0;
-    margin: 0;
-}
-
-form .form-row input.small-input {
-    width: 50px;
-}
-
-form .form-row textarea {
-    border: 1px solid #999999;
-    border-radius: 5px;
-    width: 475px;
-    height: 300px;
-    font-size: 18px;
-    padding: 10px;
-    resize: none;
-}
-
-form .form-row input:focus,
-form .form-row textarea:focus,
-form .form-row input[type="checkbox"] {
-    outline: none;
-    border-color: #9ECAED;
-    box-shadow: 0 0 10px #9ECAED;
-}
-
-form .form-row input.invalid:focus,
-form .form-row textarea.invalid:focus,
-form .form-row input[type="checkbox"].invalid {
-    border-color: #c4c4c4;
-    box-shadow: 0 0 10px #c4c4c4;
-}
-
-form .form-row input.form-btn {
-    min-width: 100px;
-    background-color: buttonface;
-}
-
-form .form-row input.form-btn:focus {
-    border-color: darkgray;
-    box-shadow: none;
-}
-
-form .form-row input.form-btn:hover {
-    cursor: pointer;
-    background-color: darkgray;
 }

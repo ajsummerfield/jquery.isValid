@@ -25,11 +25,11 @@ jIsValid.prototype = {
             var el = this.formElements[i];
 
             el.addEventListener('blur', function(e) {
-                self.runValidation(el);
+                self.runValidation(e.target);
             });
 
             el.addEventListener('keyup', function(e) {
-                self.runValidation(el);
+                self.runValidation(e.target);
             });
         }
     },
@@ -48,13 +48,21 @@ jIsValid.prototype = {
         if (result.isValid) {
             this.hideError(el);
         } else {
-            this.showError(el);
+            this.showError(el, result.errorType);
         }
     },
 
     isValidField: function(el) {
-        var fieldType = el.attributes['data-field-type'].value;
-        return this.validators.isGeneralValid(el);
+        var fieldType = el.attributes['data-field-type'] ? el.attributes['data-field-type'].value : '';
+
+        if (el.disabled || el.attributes.type.value === 'hidden' || fieldType === 'not-required' || fieldType === '') {
+            return {
+                isValid: true
+            };
+        }
+
+        var methodName = 'is' + this._capitalise(fieldType) + 'Valid';
+        return this.validators[methodName](el);
     },
 
     isFormValid: function() {
@@ -62,7 +70,7 @@ jIsValid.prototype = {
     },
 
     hideError: function(el) {
-        var errorContainer = el.parentElement.querySelector('.error-message');
+        var errorContainer = el.parentElement.querySelector('.form-error');
         el.classList.remove('invalid');
 
         if (errorContainer) {
@@ -70,13 +78,13 @@ jIsValid.prototype = {
         }
     },
 
-    showError: function(el) {
-        var errorContainer = el.parentElement.querySelector('.error-message');
+    showError: function(el, errorType) {
+        var errorContainer = el.parentElement.querySelector('.form-error');
 
         if (errorContainer) {
-            errorContainer = this._updateErrorContainer(el, errorContainer);
+            errorContainer = this._updateErrorContainer(el, errorContainer, errorType);
         } else {
-            errorContainer = this._createErrorContainer(el);
+            errorContainer = this._createErrorContainer(el, errorType);
         }
 
         el.parentElement.appendChild(errorContainer);
@@ -92,22 +100,56 @@ jIsValid.prototype = {
                 isValid: !isEmpty,
                 errorType: errorType
             };
+        },
+
+        isLettersValid: function (el) {
+            var validResult = /^[A-Za-z ]+$/.test(el.value),
+                errorType = validResult ? '' : 'format';
+
+            return {
+                isValid: validResult,
+                errorType: errorType
+            };
+        },
+
+        isNumbersValid: function(el) {
+            var validResult = /^[0-9 ]+$/.test(el.value),
+                errorType = validResult ? '' : 'format';
+
+            return {
+                isValid: validResult,
+                errorType: errorType
+            };
+        },
+
+        isDecimalsValid: function(el) {
+            var validResult = /^(\d+\.?\d*|\.\d+)$/.test(el.value),
+                errorType = validResult ? '' : 'format';
+
+            return {
+                isValid: validResult,
+                errorType: errorType
+            };
         }
     },
 
-    _createErrorContainer: function(el) {
+    _createErrorContainer: function(el, errorType) {
         var errorContainer = document.createElement('div');
-        var errorMessage = el.attributes['data-error-message'].value;
-        errorContainer.setAttribute('class', 'error-message');
+        var errorMessage = el.attributes['data-' + errorType + '-error-message'].value;
+        errorContainer.setAttribute('class', 'form-error');
         errorContainer.innerHTML = errorMessage;
 
         return errorContainer;
     },
 
-    _updateErrorContainer: function(el, errorContainer) {
-        var errorMessage = el.attributes['data-error-message'].value;
+    _updateErrorContainer: function(el, errorContainer, errorType) {
+        var errorMessage = el.attributes['data-' + errorType + '-error-message'].value;
         errorContainer.innerHTML = errorMessage;
 
         return errorContainer;
+    },
+
+    _capitalise: function(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
     }
 };

@@ -215,6 +215,37 @@ jIsValid.prototype = {
                 isValid: validResult,
                 errorType: validResult ? '' : 'required'
             };
+        },
+
+        isPasswordValid: function(el) {
+            var passwordMatcher = '',
+            validResult = true,
+            errorType;
+
+            if (this.options.fieldTypes.password.lowercase) {
+                passwordMatcher += '(?=.*[a-z])';
+            }
+            
+            if (this.options.fieldTypes.password.uppercase) {
+                passwordMatcher += '(?=.*[A-Z])';
+            }
+            
+            if (this.options.fieldTypes.password.numbers) {
+                passwordMatcher += '(?=.*[0-9])';
+            }
+            
+            if (this.options.fieldTypes.password.specialChars) {
+                passwordMatcher += '(?=.*[!@#$%^&*_\\-\\+\\=\\.])';
+            }
+            
+            passwordMatcher = new RegExp('^' + passwordMatcher + '(?=.{' + this.options.fieldTypes.password.minLength + ',' + this.options.fieldTypes.password.maxLength + '})');
+            
+            validResult = passwordMatcher.test(el.value);
+
+            return {
+                isValid: validResult,
+                errorType: validResult ? '' : 'format'
+            };
         }
     },
 
@@ -306,6 +337,17 @@ jIsValid.prototype = {
                 required: true,
                 requiredErrorMessage: 'Field is required'
             },
+            password: {
+                required: true,
+                minLength: 8,
+                maxLength: 100,
+                numbers: true,
+                uppercase: true,
+                lowercase: true,
+                specialChars: false,
+                requiredErrorMessage: 'Password is required',
+                formatErrorMessage: 'Password should contain numbers and both upper and lowercase letters'
+            }
         }
     }
 };

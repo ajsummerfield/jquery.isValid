@@ -11,12 +11,12 @@ var jIsValid = function(element, options) {
 jIsValid.prototype = {
 
     init: function() {
-        let self = this;
+        var self = this;
         this.element.classList.add('isValid');
         this.formId = this.element.id;
         this.validators.settings = this.options.fieldTypes;
-        let inputElements = this.element.getElementsByTagName('input');
-        let selectElements = this.element.getElementsByTagName('select');
+        var inputElements = this.element.getElementsByTagName('input');
+        var selectElements = this.element.getElementsByTagName('select');
         this.formElements = [];
         for (var i = 0; i < inputElements.length; i++) {
             this.formElements.push(inputElements[i]);
@@ -117,7 +117,7 @@ jIsValid.prototype = {
         el.classList.remove('invalid');
 
         if (errorContainer) {
-            errorContainer.remove();
+            el.parentElement.removeChild(errorContainer);
         }
     },
 
@@ -132,6 +132,19 @@ jIsValid.prototype = {
 
         el.parentElement.appendChild(errorContainer);
         el.classList.add('invalid');
+    },
+
+    reset: function() {
+        for (var i = 0; i < this.formElements.length; i++) {
+            var el = this.formElements[i],
+                errorContainer = el.parentElement.querySelector('.form-error');
+
+            el.classList.remove('invalid');
+            
+            if (errorContainer) {
+                el.parentElement.removeChild(errorContainer);
+            }
+        }
     },
 
     validators: {

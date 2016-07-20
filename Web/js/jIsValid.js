@@ -14,6 +14,7 @@ jIsValid.prototype = {
         let self = this;
         this.element.classList.add('isValid');
         this.formId = this.element.id;
+        this.validators.settings = this.options.fieldTypes;
         let inputElements = this.element.getElementsByTagName('input');
         let selectElements = this.element.getElementsByTagName('select');
         this.formElements = [];
@@ -222,23 +223,23 @@ jIsValid.prototype = {
             validResult = true,
             errorType;
 
-            if (this.options.fieldTypes.password.lowercase) {
+            if (this.settings.password.lowercase) {
                 passwordMatcher += '(?=.*[a-z])';
             }
             
-            if (this.options.fieldTypes.password.uppercase) {
+            if (this.settings.password.uppercase) {
                 passwordMatcher += '(?=.*[A-Z])';
             }
             
-            if (this.options.fieldTypes.password.numbers) {
+            if (this.settings.password.numbers) {
                 passwordMatcher += '(?=.*[0-9])';
             }
             
-            if (this.options.fieldTypes.password.specialChars) {
+            if (this.settings.password.specialChars) {
                 passwordMatcher += '(?=.*[!@#$%^&*_\\-\\+\\=\\.])';
             }
             
-            passwordMatcher = new RegExp('^' + passwordMatcher + '(?=.{' + this.options.fieldTypes.password.minLength + ',' + this.options.fieldTypes.password.maxLength + '})');
+            passwordMatcher = new RegExp('^' + passwordMatcher + '(?=.{' + this.settings.password.minLength + ',' + this.settings.password.maxLength + '})');
             
             validResult = passwordMatcher.test(el.value);
 

@@ -218,6 +218,26 @@ jIsValid.prototype = {
             };
         },
 
+        isCheckboxValid: function(el) {
+            var validResult = el.checked,
+                errorType;
+
+            return {
+                isValid: validResult,
+                errorType: validResult ? '' : 'required'
+            };
+        },
+
+        isRadioValid: function(el) {
+            var validResult = el.checked,
+                errorType;
+
+            return {
+                isValid: validResult,
+                errorType: validResult ? '' : 'required'
+            };
+        },
+
         isPasswordValid: function(el) {
             var passwordMatcher = '',
             validResult = true,

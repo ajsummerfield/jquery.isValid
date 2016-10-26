@@ -15,6 +15,7 @@ jIsValid.prototype = {
         this.element.classList.add('isValid');
         this.formId = this.element.id;
         this.validators.settings = this.options.fieldTypes;
+        this.validators.form = this.element;
         var inputElements = this.element.getElementsByTagName('input');
         var selectElements = this.element.getElementsByTagName('select');
         this.formElements = [];
@@ -206,6 +207,16 @@ jIsValid.prototype = {
             };
         },
 
+        isEmailConfirmValid: function(el) {
+            var validResult = el.value === this.form.querySelector(' input[data-field-type="email"]').value,
+                errorType = validResult ? '' : 'format';
+
+            return {
+                isValid: validResult,
+                errorType: errorType
+            };
+        },
+
         isSelectValid: function(el) {
             var validResult = true,
                 errorType;
@@ -253,8 +264,8 @@ jIsValid.prototype = {
 
         isPasswordValid: function(el) {
             var passwordMatcher = '',
-            validResult = true,
-            errorType;
+                validResult = true,
+                errorType;
 
             if (this.settings.password.lowercase) {
                 passwordMatcher += '(?=.*[a-z])';
@@ -279,6 +290,16 @@ jIsValid.prototype = {
             return {
                 isValid: validResult,
                 errorType: validResult ? '' : 'format'
+            };
+        },
+
+        isPasswordConfirmValid: function(el) {
+            var validResult = el.value === this.form.querySelector(' input[data-field-type="password"]').value,
+                errorType = validResult ? '' : 'format';
+
+            return {
+                isValid: validResult,
+                errorType: errorType
             };
         }
     },
@@ -367,6 +388,11 @@ jIsValid.prototype = {
                 requiredErrorMessage: 'Field is required',
                 formatErrorMessage: 'Field should be a valid email address'
             },
+            emailConfirm: {
+                required: true,
+                requiredErrorMessage: 'Field is required',
+                formatErrorMessage: 'Field should match entered email address'
+            },
             select: {
                 required: true,
                 requiredErrorMessage: 'Field is required'
@@ -381,6 +407,11 @@ jIsValid.prototype = {
                 specialChars: false,
                 requiredErrorMessage: 'Password is required',
                 formatErrorMessage: 'Password should contain numbers and both upper and lowercase letters'
+            },
+            passwordConfirm: {
+                required: true,
+                requiredErrorMessage: 'Field is required',
+                formatErrorMessage: 'Field should match entered password'
             }
         }
     }

@@ -63,15 +63,25 @@ jIsValid.prototype = {
             this.runValidation(el);
         }
 
-        return this.isFormValid();
+        var isFormValid = this.isFormValid();
+
+        if(isFormValid) {
+            this.options.onFormValidated();
+            return true;
+        } else {
+            this.options.onFormInvalidated();
+            return false;
+        }
     },
 
     runValidation: function(el) {
         var result = this.isValidField(el);
         if (result.isValid) {
             this.hideError(el);
+            this.options.onFieldValidated(el)
         } else {
             this.showError(el, result.errorType);
+            this.options.onFieldInvalidated(el, result);
         }
     },
 
@@ -123,15 +133,18 @@ jIsValid.prototype = {
     },
 
     showError: function(el, errorType) {
-        var errorContainer = el.parentElement.querySelector('.form-error');
+        if (this.options.enableErrorMessages) {
+            var errorContainer = el.parentElement.querySelector('.form-error');
 
-        if (errorContainer) {
-            errorContainer = this._updateErrorContainer(el, errorContainer, errorType);
-        } else {
-            errorContainer = this._createErrorContainer(el, errorType);
+            if (errorContainer) {
+                errorContainer = this._updateErrorContainer(el, errorContainer, errorType);
+            } else {
+                errorContainer = this._createErrorContainer(el, errorType);
+            }
+
+            el.parentElement.appendChild(errorContainer);
         }
 
-        el.parentElement.appendChild(errorContainer);
         el.classList.add('invalid');
     },
 
@@ -363,6 +376,7 @@ jIsValid.prototype = {
     options: {
         validateOnBlur: true,
         validateOnKeyUp: true,
+        enableErrorMessages: true,
         fieldTypes: {
             general: {
                 required: true,
@@ -413,6 +427,10 @@ jIsValid.prototype = {
                 requiredErrorMessage: 'Field is required',
                 formatErrorMessage: 'Field should match entered password'
             }
-        }
+        },
+        onFieldValidated: function (el) {},
+        onFieldInvalidated: function (el, error) {},
+        onFormValidated: function () {},
+        onFormInvalidated: function () {},
     }
 };
